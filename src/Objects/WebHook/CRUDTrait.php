@@ -152,9 +152,9 @@ trait CRUDTrait
      *
      * @param string $webhookUrl
      *
-     * @return null|stdClass
+     * @return stdClass
      */
-    private static function getWebHooksConfiguration(string $webhookUrl) : ?stdClass
+    private static function getWebHooksConfiguration(string $webhookUrl) : stdClass
     {
         $webhook = new stdClass();
         $webhook->type = "marketing";
@@ -162,5 +162,7 @@ trait CRUDTrait
         $webhook->url = $webhookUrl;
 //        $webhook->events = array("delivered", "click", "opened", "unsubscribed", "listAddition");
         $webhook->events = array("unsubscribed", "listAddition");
+
+        return $webhook;
     }
 }
