@@ -25,7 +25,7 @@ trait CoreTrait
     /**
      * @var false|string
      */
-    protected $emailChanged = false;    
+    protected $emailChanged = false;
     
     /**
      * Build Core Fields using FieldFactory
@@ -104,7 +104,8 @@ trait CoreTrait
                     //  Update Field Data
                     $this->object->email = $fieldData;
                     $this->needUpdate();
-                }                
+                }
+
                 break;
             case 'emailBlacklisted':
             case 'smsBlacklisted':

@@ -252,7 +252,7 @@ class SendInBlueHelper
         if (true == SPLASH_DEBUG) {
             Splash::log()->www("[SendInBlue] Full Response", $response);
         }
-        if ($response->hasBody()) {
+        if ($response->hasBody() && ($response->body instanceof stdClass)) {
             //====================================================================//
             // Contact Already Exists
             if (isset($response->body->code) && ("duplicate_parameter" == $response->body->code)) {
