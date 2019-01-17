@@ -17,6 +17,7 @@ namespace Splash\Connectors\SendInBlue\Controller;
 
 use Psr\Log\LoggerInterface;
 use Splash\Bundle\Models\AbstractConnector;
+use Splash\Connectors\SendInBlue\Objects\ThirdParty;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,7 +47,7 @@ class WebHooksController extends Controller
     {
         //====================================================================//
         // For SendInBlue Ping Test
-        if ($request->get('email') == "example@example.com") {
+        if ("example@example.com" == $request->get('email')) {
             $logger->notice(__CLASS__.'::'.__FUNCTION__.' SendInBlue Ping.', $request->attributes->all());
 
             return $this->prepareResponse(200);
@@ -89,12 +90,12 @@ class WebHooksController extends Controller
         //==============================================================================
         // Commit Changes to Splash
         $connector->commit(
-                'ThirdParty', 
-                ThirdParty::encodeContactId($eventData['email']), 
-                SPL_A_UPDATE, 
-                "SendInBlue API",
-                'Contact has been Updated'
-            );
+            'ThirdParty',
+            ThirdParty::encodeContactId($eventData['email']),
+            SPL_A_UPDATE,
+            "SendInBlue API",
+            'Contact has been Updated'
+        );
     }
     
     /**

@@ -73,7 +73,7 @@ class ThirdParty extends AbstractStandaloneObject
      *
      * @return string
      */
-    protected static function encodeContactId(string $email)
+    public static function encodeContactId(string $email)
     {
         return base64_encode(strtolower($email));
     }
