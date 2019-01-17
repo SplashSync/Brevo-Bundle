@@ -254,6 +254,13 @@ class SendInBlueHelper
         }
         if ($response->hasBody()) {
             //====================================================================//
+            // Contact Already Exists
+            if (isset($response->body->code) && ("duplicate_parameter" == $response->body->code)) {
+                $response->body->id = true;
+
+                return true;
+            }
+            //====================================================================//
             // Store SendInBlue Errors if present
             if (isset($response->body->code, $response->body->message)) {
                 Splash::log()->err($response->body->code." => ".$response->body->message);

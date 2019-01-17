@@ -42,7 +42,7 @@ trait ObjectsListTrait
         $rawData  =   API::get('contacts/lists/'.API::getList().'/contacts', $body);
         //====================================================================//
         // Request Failed
-        if (null == $rawData) {
+        if ((null == $rawData) || !isset($rawData->contacts)) {
             return array( 'meta'    => array('current' => 0, 'total' => 0));
         }
         //====================================================================//

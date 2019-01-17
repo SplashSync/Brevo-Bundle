@@ -66,16 +66,16 @@ trait CRUDTrait
         // Init Object
         $postData = array(
             'email' => $this->in["email"],
-            'listIds' => array(API::getList()),
+            'listIds' => array((int) API::getList()),
         );
         //====================================================================//
         // Create New Contact
         $response = API::post(self::getUri(), (object) $postData);
-        if (is_null($response) || empty($response->email)) {
+        if (is_null($response) || empty($response->id)) {
             return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to Create Member (".$this->in["email"].").");
         }
-
-        return $this->load(self::encodeContactId($response->email));
+        
+        return $this->load(self::encodeContactId($this->in["email"]));
     }
     
     /**
@@ -84,7 +84,6 @@ trait CRUDTrait
      * @param bool $needed Is This Update Needed
      *
      * @return false|string Object Id of False if Failed to Update
-     *
      */
     public function update(bool $needed)
     {
@@ -96,6 +95,30 @@ trait CRUDTrait
         if (!$needed) {
             return self::encodeContactId($this->object->email);
         }
+        
+        //====================================================================//
+        // Replace Contact
+        if ($this->emailChanged) {
+            //====================================================================//
+            // Delete Contact
+            $this->delete(self::encodeContactId($this->emailChanged));
+            //====================================================================//
+            // Create New Contact
+            $response = API::post(self::getUri(), $this->object);
+            if (is_null($response) || empty($response->id)) {
+                return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to Create Member (".$this->object->email.").");
+            }
+            //====================================================================//
+            // Dispatch Object Id Updated Event
+            $this->connector->objectIdChanged(
+                "ThirdParty",
+                self::encodeContactId($this->emailChanged),
+                self::encodeContactId($this->object->email)
+            );
+
+            return self::encodeContactId($this->object->email);
+        }
+            
         //====================================================================//
         // Update Contact
         $response = API::put(self::getUri($this->object->email), $this->object);
@@ -124,7 +147,7 @@ trait CRUDTrait
         //====================================================================//
         // Delete Contact from Api
         $result = API::delete(self::getUri(self::decodeContactId($objectId)));
-        if (true !== $result) {
+        if (is_null($result)) {
             return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to Delete Contact (".self::decodeContactId($objectId).").");
         }
         
@@ -146,5 +169,17 @@ trait CRUDTrait
         }
 
         return $baseUri;
+    }
+    
+    /**
+     * Get Object CRUD List Uri
+     *
+     * @param string $action
+     *
+     * @return string
+     */
+    private static function getListUri(string $action) : string
+    {
+        return 'contacts/lists/'.API::getList().'/contacts/'.$action;
     }
 }

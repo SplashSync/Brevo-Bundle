@@ -23,6 +23,11 @@ use Splash\Connectors\SendInBlue\Models\SendInBlueHelper as API;
 trait CoreTrait
 {
     /**
+     * @var false|string
+     */
+    protected $emailChanged = false;    
+    
+    /**
      * Build Core Fields using FieldFactory
      */
     protected function buildCoreFields()
@@ -91,6 +96,15 @@ trait CoreTrait
     {
         switch ($fieldName) {
             case 'email':
+                if ($this->object->email != $fieldData) {
+                    //====================================================================//
+                    //  Mark for Update Object Id In DataBase
+                    $this->emailChanged  =   $this->object->email;
+                    //====================================================================//
+                    //  Update Field Data
+                    $this->object->email = $fieldData;
+                    $this->needUpdate();
+                }                
                 break;
             case 'emailBlacklisted':
             case 'smsBlacklisted':

@@ -65,7 +65,7 @@ trait CRUDTrait
         if (empty($url) && empty($this->in["url"])) {
             return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "url");
         }
-        $webhookUrl = empty($url) ? $this->in["Url"] : $url;
+        $webhookUrl = empty($url) ? $this->in["url"] : $url;
         //====================================================================//
         // Create Object
         $response = API::post(self::getUri(), self::getWebHooksConfiguration($webhookUrl));

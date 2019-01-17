@@ -41,7 +41,6 @@ class SendInBlueConnector extends AbstractConnector
      */
     protected static $objectsMap = array(
         "ThirdParty" => "Splash\\Connectors\\SendInBlue\\Objects\\ThirdParty",
-        "WebHook" => "Splash\\Connectors\\SendInBlue\\Objects\\WebHook",
     );
 
     /**
