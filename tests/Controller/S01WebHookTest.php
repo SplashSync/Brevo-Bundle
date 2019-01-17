@@ -166,7 +166,7 @@ class S01WebHookTest extends TestCase
                 SPL_A_UPDATE,
                 ThirdParty::encodeContactId($randEmail),
             );
-        }        
+        }
         
         return $hooks;
     }
