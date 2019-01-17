@@ -16,6 +16,7 @@
 namespace Splash\Connectors\SendInBlue\Models;
 
 use Httpful\Exception\ConnectionErrorException;
+use Httpful\Mime;
 use Httpful\Request;
 use Httpful\Response;
 use Splash\Core\SplashCore as Splash;
@@ -63,13 +64,11 @@ class SendInBlueHelper
         self::$apiList = is_string($apiList) ? $apiList : "";
         //====================================================================//
         // Configure API Template Request
-        $template = Request::init()
+        $template = Request::init(null, Mime::JSON)
             ->addHeaders(array(
-                    'Content-Type'  => 'application/json', 
-                    'api-key' => $apiKey,
-                ))
-            ->sendsJson()
-            ->expectsJson()
+                'Content-Type'  => 'application/json',
+                'api-key' => $apiKey,
+            ))
             ->timeout(3)
             ;
         // Set it as a template
@@ -256,8 +255,8 @@ class SendInBlueHelper
         if ($response->hasBody()) {
             //====================================================================//
             // Store SendInBlue Errors if present
-            if (isset($response->body->code)) {
-                Splash::log()->err($response->body->code ." => ". $response->body->message);
+            if (isset($response->body->code, $response->body->message)) {
+                Splash::log()->err($response->body->code." => ".$response->body->message);
             }
         }
 
