@@ -110,7 +110,7 @@ class SendInBlueConnector extends AbstractConnector
         }
         //====================================================================//
         // Get List Detailed Informations
-        $details  =   API::get('account');      
+        $details  =   API::get('account');
         if (is_null($details)) {
             return $informations;
         }
@@ -456,7 +456,8 @@ class SendInBlueConnector extends AbstractConnector
         // @codingStandardsIgnoreEnd
         //====================================================================//
         // Update Connector Settings
-        $this->updateConfiguration();    
+        $this->updateConfiguration();
+
         return true;
     }
 }
