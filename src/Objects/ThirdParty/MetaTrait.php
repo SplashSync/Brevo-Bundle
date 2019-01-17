@@ -24,11 +24,10 @@ use Splash\Core\SplashCore      as Splash;
 trait MetaTrait
 {
     /**
-    * Build Fields using FieldFactory
-    */
+     * Build Fields using FieldFactory
+     */
     protected function buildMetaFields()
     {
-        
         //====================================================================//
         // TRACEABILITY INFORMATIONS
         //====================================================================//
@@ -36,33 +35,33 @@ trait MetaTrait
         //====================================================================//
         // Last Change Date
         $this->fieldsFactory()->create(SPL_T_DATETIME)
-                ->Identifier("modifiedAt")
-                ->Name("Last modification")
-                ->Group("Meta")
-                ->MicroData("http://schema.org/DataFeedItem", "dateModified")
-                ->isListed()
-                ->isReadOnly();
+            ->Identifier("modifiedAt")
+            ->Name("Last modification")
+            ->Group("Meta")
+            ->MicroData("http://schema.org/DataFeedItem", "dateModified")
+            ->isListed()
+            ->isReadOnly();
     }
     
     /**
      * Read requested Field
      *
-     * @param        string $key       Input List Key
-     * @param        string $fieldName Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     * @return         none
+     * @return void
      */
     protected function getMetaFields($key, $fieldName)
     {
         //====================================================================//
         // Does the Field Exists?
-        if (!in_array($fieldName, ['modifiedAt'])) {
+        if (!in_array($fieldName, array('modifiedAt'), true)) {
             return;
         }
         //====================================================================//
-        // Insert in Response      
-        $Date = new DateTime($this->object->$fieldName);
-        $this->out[$fieldName] = $Date->format(SPL_T_DATETIMECAST);
+        // Insert in Response
+        $date = new DateTime($this->object->{$fieldName});
+        $this->out[$fieldName] = $date->format(SPL_T_DATETIMECAST);
         //====================================================================//
         // Clear Key Flag
         unset($this->in[$key]);

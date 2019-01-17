@@ -106,7 +106,7 @@ trait AttributesTrait
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
      *
-     * @return none
+     * @return void
      */
     protected function getAttributesFields($key, $fieldName)
     {
@@ -148,7 +148,7 @@ trait AttributesTrait
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
      *
-     * @return none
+     * @return void
      */
     protected function setAttributesFields($fieldName, $fieldData)
     {
@@ -195,7 +195,7 @@ trait AttributesTrait
         //====================================================================//
         // Walk On Contacts Attributes
         foreach ($this->attrCache as $attr) {
-            if ($fieldName == strtolower($attr->name)) {
+            if (strtolower($attr->name) == $fieldName) {
                 return $attr;
             }
         }
@@ -206,7 +206,7 @@ trait AttributesTrait
     /**
      * Check if this Attribute is To Sync
      *
-     * @param array $attribute
+     * @param stdClass $attribute
      *
      * @return bool
      */

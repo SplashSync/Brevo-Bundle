@@ -66,14 +66,27 @@ class ThirdParty extends AbstractStandaloneObject
         $this->connector  =   $parentConnector;
     }
     
-    protected static function encodeContactId(string $Email)
+    /**
+     * Encode Contact Email to Splash Id String
+     *
+     * @param string $email
+     *
+     * @return string
+     */
+    protected static function encodeContactId(string $email)
     {
-        return base64_encode(strtolower($Email));
+        return base64_encode(strtolower($email));
     }
     
-    protected static function decodeContactId(string $ContactId)
+    /**
+     * Decode Contact Email from Splash Id String
+     *
+     * @param string $contactId
+     *
+     * @return string
+     */
+    protected static function decodeContactId(string $contactId)
     {
-        return base64_decode($ContactId);
-    }    
-    
+        return (string) base64_decode($contactId, true);
+    }
 }

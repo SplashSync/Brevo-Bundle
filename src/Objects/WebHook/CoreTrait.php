@@ -38,7 +38,7 @@ trait CoreTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->Identifier("description")
             ->Name("Description")
-            ->isListed();        
+            ->isListed();
     }
 
     /**

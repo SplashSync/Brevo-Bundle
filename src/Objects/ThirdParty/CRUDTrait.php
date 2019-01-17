@@ -24,7 +24,6 @@ use stdClass;
  */
 trait CRUDTrait
 {
-    
     /**
      * Load Request Object
      *
@@ -44,6 +43,7 @@ trait CRUDTrait
         if ((null == $sibObject) || !isset($sibObject->email)) {
             return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load Contact (".self::decodeContactId($objectId).").");
         }
+
         return $sibObject;
     }
 
@@ -74,6 +74,7 @@ trait CRUDTrait
         if (is_null($response) || empty($response->email)) {
             return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to Create Member (".$this->in["email"].").");
         }
+
         return $this->load(self::encodeContactId($response->email));
     }
     
@@ -102,13 +103,13 @@ trait CRUDTrait
             return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to Update Member (".$this->object->email.").");
         }
         
-        return self::encodeContactId($this->object->email);       
+        return self::encodeContactId($this->object->email);
     }
     
     /**
      * Delete requested Object
      *
-     * @param int $objectId Object Id
+     * @param null|string $objectId Object Id
      *
      * @return bool
      */
@@ -117,13 +118,15 @@ trait CRUDTrait
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
-        
+        if (is_null($objectId)) {
+            return true;
+        }
         //====================================================================//
         // Delete Contact from Api
         $result = API::delete(self::getUri(self::decodeContactId($objectId)));
         if (true !== $result) {
             return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to Delete Contact (".self::decodeContactId($objectId).").");
-        }        
+        }
         
         return true;
     }
