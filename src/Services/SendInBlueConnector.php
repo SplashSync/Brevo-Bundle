@@ -126,7 +126,7 @@ class SendInBlueConnector extends AbstractConnector
         $informations->zip              =   $details->address->zipCode;
         $informations->town             =   $details->address->city;
         $informations->country          =   $details->address->country;
-        $informations->www              =   "";
+        $informations->www              =   "www.sendinblue.com";
         $informations->email            =   $details->email;
         $informations->phone            =   "";
         //====================================================================//
