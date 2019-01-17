@@ -45,8 +45,8 @@ class WebHooksController extends Controller
     public function indexAction(LoggerInterface $logger, Request $request, AbstractConnector $connector)
     {
         //====================================================================//
-        // For SendInBlue ping GET
-        if ($request->isMethod('GET')) {
+        // For SendInBlue Ping Test
+        if ($request->get('email') == "example@example.com") {
             $logger->notice(__CLASS__.'::'.__FUNCTION__.' SendInBlue Ping.', $request->attributes->all());
 
             return $this->prepareResponse(200);
@@ -78,23 +78,23 @@ class WebHooksController extends Controller
     private function executeCommits(AbstractConnector $connector, $eventData) : void
     {
         //==============================================================================
-        // Filter on Unsub Events
-        if (!isset($eventData['event']) || ("unsub" != $eventData['event'])) {
+        // Check Infos are Available
+        if (empty($eventData['email']) || empty($eventData['event'])) {
             return;
         }
         //==============================================================================
         // Check is in Selected List
-        if (!isset($eventData['mj_list_id']) || ($eventData['mj_list_id'] != $connector->getParameter('ApiList'))) {
-            return;
-        }
-        //==============================================================================
-        // Check Contact ID provided & Valid
-        if (!isset($eventData['mj_contact_id']) || empty($eventData['mj_contact_id']) || !is_scalar($eventData['mj_contact_id'])) {
-            return;
-        }
+        // TODO
+
         //==============================================================================
         // Commit Changes to Splash
-        $connector->commit('ThirdParty', (string) $eventData['mj_contact_id'], SPL_A_UPDATE, "SendInBlue API", "SendInBlue Contact has Unsubscribed");
+        $connector->commit(
+                'ThirdParty', 
+                ThirdParty::encodeContactId($eventData['email']), 
+                SPL_A_UPDATE, 
+                "SendInBlue API",
+                'Contact has been Updated'
+            );
     }
     
     /**
@@ -119,7 +119,7 @@ class WebHooksController extends Controller
         $requestData = $request->request->all();
         //==============================================================================
         // Safety Check => Data are here
-        if (empty($requestData) || !isset($requestData['event'])) {
+        if (empty($requestData) || !isset($requestData['event']) || !isset($requestData['email'])) {
             throw new BadRequestHttpException('Malformatted or missing data');
         }
         //==============================================================================
