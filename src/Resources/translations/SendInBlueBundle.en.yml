@@ -1,0 +1,28 @@
+
+## Node Variables 
+var:
+    apikey:
+        label:  API Key V3
+        desc:   "API keys provide full access to your account, so keep them safe."
+
+    list:
+        label:  List
+        desc:   "The SendInBlue list you want to synchronize with Splash."
+
+## Node Profile
+profile:
+    connection:
+        title: API Connection
+    card:   
+        title:  SendInBlue API V3
+        label:  Connect your SendInBlue Account to Sync your Customer with your Subscriber Lists
+
+## Node Api Actions
+admin:
+    selftest:   SendInBlue Connector Configuration
+    connect:    Connect to SendInBlue API V3    
+    webhooks:
+        label:  Update of WebHooks
+        desc:   Detect & Update Splash Sync WebHooks Configuration
+        msg:    WebHook Configuration Updated
+        err:    Update of WebHooks Configuration Failled

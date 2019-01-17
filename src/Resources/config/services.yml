@@ -1,0 +1,15 @@
+services:
+    ################################################################################
+    # SPLASH SendInBlue Connector Service
+    splash.connectors.sendinblue:
+        class: Splash\Connectors\SendInBlue\Services\SendInBlueConnector
+        arguments:  [ "@event_dispatcher", "@logger" ]
+        tags:       
+            - { name: "splash.connector"}
+
+    ################################################################################
+    # Enables Dependency Injection in Controller Actions
+    Splash\Connectors\SendInBlue\Controller\:
+        resource: '../../Controller'
+        public: true
+        tags: ['controller.service_arguments']
