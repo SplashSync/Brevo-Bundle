@@ -96,7 +96,7 @@ trait CoreTrait
     {
         switch ($fieldName) {
             case 'email':
-                if ($this->object->email != $fieldData) {
+                if ($this->object->email != strtolower($fieldData)) {
                     //====================================================================//
                     //  Mark for Update Object Id In DataBase
                     $this->emailChanged  =   $this->object->email;
