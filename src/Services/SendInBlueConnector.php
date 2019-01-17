@@ -128,7 +128,7 @@ class SendInBlueConnector extends AbstractConnector
         $informations->country          =   $details->address->country;
         $informations->www              =   "www.sendinblue.com";
         $informations->email            =   $details->email;
-        $informations->phone            =   "";
+        $informations->phone            =   "~";
         //====================================================================//
         // Server Logo & Ico
         $informations->icoraw           =   Splash::file()->readFileContents(dirname(dirname(__FILE__))."/Resources/public/img/SendInBlue-Logo.jpg");
