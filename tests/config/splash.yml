@@ -4,7 +4,7 @@
 splash:
     connections:
 
-        SendInBlue:
+        sendinblue:
             id:                 ThisIsSendInBlueWsId
             key:                ThisIsNotASecretKeyForSendInBlue
             name:               Serveur 1 (SendInBlue)
