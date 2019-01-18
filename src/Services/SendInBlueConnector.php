@@ -211,9 +211,9 @@ class SendInBlueConnector extends AbstractConnector
             'connector' =>      'splash.connectors.sendinblue',         // Connector Symfony Service
             'title'     =>      'profile.card.title',                   // Public short name
             'label'     =>      'profile.card.label',                   // Public long name
-            'domain'    =>      'SendInBlueBundle',                        // Translation domain for names
-            'ico'       =>      '/bundles/sendinblue/img/SendInBlue-Icon.png', // Public Icon path
-            'www'       =>      'www.SendInBlue.com',                      // Website Url
+            'domain'    =>      'SendInBlueBundle',                     // Translation domain for names
+            'ico'       =>      '/bundles/sendinblue/img/SendInBlue-Logo.jpg', // Public Icon path
+            'www'       =>      'www.SendInBlue.com',                   // Website Url
         );
     }
     
