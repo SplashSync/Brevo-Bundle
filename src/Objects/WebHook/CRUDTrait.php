@@ -35,16 +35,16 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
         //====================================================================//
         // Execute Read Request
         $sibWebHook = API::get(self::getUri($objectId));
         //====================================================================//
         // Fetch Object
         if (null == $sibWebHook) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load WebHook (".$objectId.").");
+            return Splash::log()->errTrace("Unable to load WebHook (".$objectId.").");
         }
-        
+
         return $sibWebHook;
     }
 
@@ -59,7 +59,7 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
         //====================================================================//
         // Check Customer Name is given
         if (empty($url) && empty($this->in["url"])) {
@@ -70,12 +70,12 @@ trait CRUDTrait
         // Create Object
         $response = API::post(self::getUri(), self::getWebHooksConfiguration($webhookUrl));
         if (is_null($response) || !($response instanceof stdClass) || empty($response->id)) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to Create WebHook");
+            return Splash::log()->errTrace("Unable to Create WebHook");
         }
 
         return $response;
     }
-    
+
     /**
      * Update Request Object
      *
@@ -87,27 +87,39 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
         if (!$needed) {
-            return (string) $this->object->id;
+            return $this->getObjectIdentifier();
         }
-        
+
         //====================================================================//
         // Update WebHook
         if (true == SPLASH_DEBUG) {
             $response = API::put(self::getUri($this->object->id), $this->object);
             if (true !== $response) {
-                return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to Update WebHook (".$this->object->id.").");
+                return Splash::log()->errTrace("Unable to Update WebHook (".$this->object->id.").");
             }
         }
-        
+
         //====================================================================//
         // Update Not Allowed
-        Splash::log()->war("ErrLocalTpl", __CLASS__, __FUNCTION__, " WebHook Update is disabled.");
-        
+        Splash::log()->warTrace("WebHook Update is disabled.");
+
+        return $this->getObjectIdentifier();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getObjectIdentifier()
+    {
+        if (!isset($this->object->id)) {
+            return false;
+        }
+
         return (string) $this->object->id;
     }
-    
+
     /**
      * Delete requested Object
      *
@@ -119,17 +131,17 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
         //====================================================================//
         // Delete Object
         $response = API::delete(self::getUri($objectId));
         if (null === $response) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to Delete WebHook (".$objectId.").");
+            return Splash::log()->errTrace("Unable to Delete WebHook (".$objectId.").");
         }
 
         return true;
     }
-    
+
     /**
      * Get Object CRUD Uri
      *
@@ -146,7 +158,7 @@ trait CRUDTrait
 
         return $baseUri;
     }
-    
+
     /**
      * Get New WebHooks Configuration
      *

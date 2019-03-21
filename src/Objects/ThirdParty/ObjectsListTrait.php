@@ -32,36 +32,36 @@ trait ObjectsListTrait
     {
         //====================================================================//
         // Prepare Parameters
-        $body     =    array();
+        $body = array();
         if (isset($params["max"], $params["offset"])) {
-            $body['limit']    =   $params["max"];
-            $body['offset']   =   $params["offset"];
+            $body['limit'] = $params["max"];
+            $body['offset'] = $params["offset"];
         }
         //====================================================================//
         // Get User Lists from Api
-        $rawData  =   API::get('contacts/lists/'.API::getList().'/contacts', $body);
+        $rawData = API::get('contacts/lists/'.API::getList().'/contacts', $body);
         //====================================================================//
         // Request Failed
         if ((null == $rawData) || !isset($rawData->contacts)) {
-            return array( 'meta'    => array('current' => 0, 'total' => 0));
+            return array( 'meta' => array('current' => 0, 'total' => 0));
         }
         //====================================================================//
         // Compute Totals
-        $response   =   array(
-            'meta'  => array('current' => count($rawData->contacts), 'total' => $rawData->count),
+        $response = array(
+            'meta' => array('current' => count($rawData->contacts), 'total' => $rawData->count),
         );
         //====================================================================//
         // Parse Data in response
         foreach ($rawData->contacts as $member) {
-            $response[]   = array(
-                'id'                        =>      self::encodeContactId($member->email),
-                'email'                     =>      $member->email,
-                'emailBlacklisted'          =>      $member->emailBlacklisted,
-                'smsBlacklisted'            =>      $member->smsBlacklisted,
-                'modifiedAt'                =>      (new DateTime($member->modifiedAt))->format(SPL_T_DATETIMECAST),
+            $response[] = array(
+                'id' => self::encodeContactId($member->email),
+                'email' => $member->email,
+                'emailBlacklisted' => $member->emailBlacklisted,
+                'smsBlacklisted' => $member->smsBlacklisted,
+                'modifiedAt' => (new DateTime($member->modifiedAt))->format(SPL_T_DATETIMECAST),
             );
         }
-        
+
         return $response;
     }
 }

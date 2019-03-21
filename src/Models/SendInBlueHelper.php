@@ -33,12 +33,12 @@ class SendInBlueHelper
      * @var string
      */
     const ENDPOINT = "https://api.sendinblue.com/v3/";
-    
+
     /**
      * @var string
      */
     private static $apiList;
-    
+
     /**
      * Get Current SendInBlue List
      *
@@ -48,7 +48,7 @@ class SendInBlueHelper
     {
         return self::$apiList;
     }
-    
+
     /**
      * Configure SendInBlue REST API
      *
@@ -66,7 +66,7 @@ class SendInBlueHelper
         // Configure API Template Request
         $template = Request::init(null, Mime::JSON)
             ->addHeaders(array(
-                'Content-Type'  => 'application/json',
+                'Content-Type' => 'application/json',
                 'api-key' => $apiKey,
             ))
             ->timeout(3)
@@ -76,7 +76,7 @@ class SendInBlueHelper
 
         return true;
     }
-    
+
     /**
      * Ping SendInBlue API Url as Annonymous User
      *
@@ -94,14 +94,14 @@ class SendInBlueHelper
 
             return false;
         }
-        
+
         if (($response->code >= 200) && ($response->code < 500)) {
             return true;
         }
 
         return false;
     }
-    
+
     /**
      * Ping SendInBlue API Url with API Key (Logged User)
      *
@@ -126,7 +126,7 @@ class SendInBlueHelper
         // Return Connect Result
         return (200 == $response->code);
     }
-    
+
     /**
      * SendInBlue API GET Request
      *
@@ -157,7 +157,7 @@ class SendInBlueHelper
         // Catch Errors inResponse
         return self::catchErrors($response) ? $response->body : null;
     }
-    
+
     /**
      * SendInBlue API PUT Request
      *
@@ -183,7 +183,7 @@ class SendInBlueHelper
         // Catch Errors inResponse
         return self::catchErrors($response);
     }
-    
+
     /**
      * SendInBlue API POST Request
      *
@@ -209,7 +209,7 @@ class SendInBlueHelper
         // Catch Errors inResponse
         return self::catchErrors($response) ? $response->body : null;
     }
-    
+
     /**
      * SendInBlue API DELETE Request
      *
@@ -232,7 +232,7 @@ class SendInBlueHelper
         // Catch Errors in Response
         return self::catchErrors($response) ? true : false;
     }
-    
+
     /**
      * Analyze SendInBlue Api Response & Push Errors to Splash Log
      *

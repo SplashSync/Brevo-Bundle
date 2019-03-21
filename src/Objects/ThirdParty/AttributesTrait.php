@@ -29,12 +29,12 @@ trait AttributesTrait
      *
      * @var array
      */
-    public static $knowAttributes  =   array(
+    public static $knowAttributes = array(
         "nom" => array("http://schema.org/Person", "familyName"),
         "prenom" => array("http://schema.org/Person", "givenName"),
         "sms" => array("http://schema.org/Person", "telephone"),
     );
-    
+
     /**
      * Attributes Type <> Splash Type Mapping
      *
@@ -46,16 +46,16 @@ trait AttributesTrait
         "boolean" => SPL_T_BOOL,
         "date" => SPL_T_DATE,
     );
-    
+
     /**
      * Base Attributes Metadata Item Name
      *
      * @var string
      */
     private static $baseProp = "http://meta.schema.org/additionalType";
-    
+
     private $attrCache;
-    
+
     /**
      * Build Fields using FieldFactory
      */
@@ -63,11 +63,11 @@ trait AttributesTrait
     {
         //====================================================================//
         // Load Attributes List
-        $attributes     =  $this->getParameter("ContactAttributes");
+        $attributes = $this->getParameter("ContactAttributes");
         if (!is_iterable($attributes)) {
             return;
         }
-        
+
         //====================================================================//
         // Create Attributes Fields
         $factory = $this->fieldsFactory();
@@ -84,7 +84,7 @@ trait AttributesTrait
                 ->Identifier(strtolower($attr->name))
                 ->Name($attr->name)
                 ->Group("Attributes");
-            
+
             //====================================================================//
             // Add Attribute MicroData
             $attrCode = strtolower($attr->name);
@@ -105,14 +105,12 @@ trait AttributesTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     protected function getAttributesFields($key, $fieldName)
     {
         //====================================================================//
         // Field is not an Attribute
-        $attr   =   $this->isAttribute($fieldName);
+        $attr = $this->isAttribute($fieldName);
         if (!$attr) {
             return;
         }
@@ -125,36 +123,34 @@ trait AttributesTrait
             // Extract Attribute Value
             switch ($attr->type) {
                 case 'float':
-                    $fieldData  =   (float) $this->object->attributes->{$attrName};
+                    $fieldData = (float) $this->object->attributes->{$attrName};
 
                     break;
                 default:
-                    $fieldData  =   $this->object->attributes->{$attrName};
+                    $fieldData = $this->object->attributes->{$attrName};
 
                     break;
             }
         }
         //====================================================================//
         // Store Value
-        $this->out[$fieldName]  =   $fieldData;
+        $this->out[$fieldName] = $fieldData;
         //====================================================================//
         // Clear Key Flag
         unset($this->in[$key]);
     }
-    
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     protected function setAttributesFields($fieldName, $fieldData)
     {
         //====================================================================//
         // Field is not an Attribute
-        $attr   =   $this->isAttribute($fieldName);
+        $attr = $this->isAttribute($fieldName);
         if (!$attr) {
             return;
         }
@@ -202,7 +198,7 @@ trait AttributesTrait
 
         return null;
     }
-    
+
     /**
      * Check if this Attribute is To Sync
      *
@@ -218,7 +214,7 @@ trait AttributesTrait
 
         return false;
     }
-    
+
     /**
      * Get Splash Attribute Type Name
      *

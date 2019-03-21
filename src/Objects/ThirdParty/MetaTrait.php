@@ -31,7 +31,7 @@ trait MetaTrait
         //====================================================================//
         // TRACEABILITY INFORMATIONS
         //====================================================================//
-        
+
         //====================================================================//
         // Last Change Date
         $this->fieldsFactory()->create(SPL_T_DATETIME)
@@ -42,14 +42,12 @@ trait MetaTrait
             ->isListed()
             ->isReadOnly();
     }
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     protected function getMetaFields($key, $fieldName)
     {

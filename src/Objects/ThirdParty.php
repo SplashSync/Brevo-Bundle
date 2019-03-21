@@ -17,7 +17,6 @@ namespace Splash\Connectors\SendInBlue\Objects;
 
 use Splash\Bundle\Models\AbstractStandaloneObject;
 use Splash\Connectors\SendInBlue\Services\SendInBlueConnector;
-use Splash\Models\AbstractObject;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
 
@@ -33,29 +32,29 @@ class ThirdParty extends AbstractStandaloneObject
     use ThirdParty\CoreTrait;
     use ThirdParty\AttributesTrait;
     use ThirdParty\MetaTrait;
-    
+
     /**
      *  Object Disable Flag. Override this flag to disable Object.
      */
-    protected static $DISABLED        =  false;
+    protected static $DISABLED = false;
     /**
      *  Object Name
      */
-    protected static $NAME            =  "Customer";
+    protected static $NAME = "Customer";
     /**
      *  Object Description
      */
-    protected static $DESCRIPTION     =  "SendInBlue Contact";
+    protected static $DESCRIPTION = "SendInBlue Contact";
     /**
      *  Object Icon (FontAwesome or Glyph ico tag)
      */
-    protected static $ICO     =  "fa fa-user";
-    
+    protected static $ICO = "fa fa-user";
+
     /**
      * @var SendInBlueConnector
      */
     protected $connector;
-    
+
     /**
      * Class Constructor
      *
@@ -63,9 +62,9 @@ class ThirdParty extends AbstractStandaloneObject
      */
     public function __construct(SendInBlueConnector $parentConnector)
     {
-        $this->connector  =   $parentConnector;
+        $this->connector = $parentConnector;
     }
-    
+
     /**
      * Encode Contact Email to Splash Id String
      *
@@ -77,7 +76,7 @@ class ThirdParty extends AbstractStandaloneObject
     {
         return base64_encode(strtolower($email));
     }
-    
+
     /**
      * Decode Contact Email from Splash Id String
      *

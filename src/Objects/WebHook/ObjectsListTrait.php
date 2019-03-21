@@ -31,24 +31,24 @@ trait ObjectsListTrait
     {
         //====================================================================//
         // Get User Lists from Api
-        $rawData  =   API::get('webhooks', array("type" => "marketing"));
+        $rawData = API::get('webhooks', array("type" => "marketing"));
         //====================================================================//
         // Request Failed
         if (null == $rawData) {
-            return array( 'meta'    => array('current' => 0, 'total' => 0));
+            return array( 'meta' => array('current' => 0, 'total' => 0));
         }
         //====================================================================//
         // Compute Totals
-        $response   =   array(
-            'meta'  => array('current' => count($rawData->webhooks), 'total' => count($rawData->webhooks)),
+        $response = array(
+            'meta' => array('current' => count($rawData->webhooks), 'total' => count($rawData->webhooks)),
         );
         //====================================================================//
         // Parse Data in response
         foreach ($rawData->webhooks as $webhook) {
-            $response[]   = array(
-                'id'                =>      $webhook->id,
-                'description'       =>      $webhook->description,
-                'url'               =>      $webhook->url,
+            $response[] = array(
+                'id' => $webhook->id,
+                'description' => $webhook->description,
+                'url' => $webhook->url,
             );
         }
 

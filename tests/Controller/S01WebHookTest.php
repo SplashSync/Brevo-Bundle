@@ -27,7 +27,7 @@ class S01WebHookTest extends TestCase
     const PING_RESPONSE = '{"success":true}';
     const MEMBER = "ThirdParty";
     const FAKE_EMAIL = "fake@exemple.com";
-   
+
     /**
      * Test WebHook For Ping
      */
@@ -37,12 +37,12 @@ class S01WebHookTest extends TestCase
         // Load Connector
         $connector = $this->getConnector("sendinblue");
         $this->assertInstanceOf(SendInBlueConnector::class, $connector);
-        
+
         //====================================================================//
         // Ping Action -> POST -> KO
         $this->assertPublicActionWorks($connector, null, array("email" => "example@example.com"), "POST");
         $this->assertEquals(self::PING_RESPONSE, $this->getResponseContents());
-        
+
         //====================================================================//
         // Ping Action -> POST -> KO
         $this->assertPublicActionFail($connector, null, array(), "POST");
@@ -69,7 +69,7 @@ class S01WebHookTest extends TestCase
         //====================================================================//
 
         $this->assertPublicActionFail($connector, null, array(), "POST");
-        
+
         //====================================================================//
         // EVENT BUT NO EMAIL
         //====================================================================//
@@ -99,7 +99,7 @@ class S01WebHookTest extends TestCase
         // Load Connector
         $connector = $this->getConnector("sendinblue");
         $this->assertInstanceOf(SendInBlueConnector::class, $connector);
-        
+
         //====================================================================//
         // Prepare Request
 //        $post  = array_replace_recursive(
@@ -129,7 +129,7 @@ class S01WebHookTest extends TestCase
     public function webHooksInputsProvider()
     {
         $hooks = array();
-        
+
         //====================================================================//
         // Generate Subscribe Events
         for ($i = 0; $i < 10; $i++) {
@@ -148,7 +148,7 @@ class S01WebHookTest extends TestCase
                 ThirdParty::encodeContactId($randEmail),
             );
         }
-        
+
         //====================================================================//
         // Generate Add To List Events
         for ($i = 0; $i < 10; $i++) {
@@ -167,7 +167,7 @@ class S01WebHookTest extends TestCase
                 ThirdParty::encodeContactId($randEmail),
             );
         }
-        
+
         return $hooks;
     }
 }

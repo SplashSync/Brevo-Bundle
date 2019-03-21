@@ -41,16 +41,16 @@ abstract class AbstractSendInBlueType extends AbstractType
             //==============================================================================
             // SendInBlue Api Key Option Authentification
             ->add('ApiKey', TextType::class, array(
-                'label'                     => "var.apikey.label",
-                'help_block'                => "var.apikey.desc",
-                'required'                  => true,
-                'translation_domain'        => "SendInBlueBundle",
+                'label' => "var.apikey.label",
+                'help_block' => "var.apikey.desc",
+                'required' => true,
+                'translation_domain' => "SendInBlueBundle",
             ))
         ;
-        
+
         return $this;
     }
-    
+
     /**
      * Add List Selector Field to FormBuilder
      *
@@ -66,17 +66,17 @@ abstract class AbstractSendInBlueType extends AbstractType
         if (empty($options["data"]["ApiListsIndex"])) {
             return $this;
         }
-        
+
         $builder
             //==============================================================================
             // SendInBlue List Option Selector
             ->add('ApiList', ChoiceType::class, array(
-                'label'                     => "var.list.label",
-                'help_block'                => "var.list.desc",
-                'required'                  => true,
-                'translation_domain'        => "SendInBlueBundle",
+                'label' => "var.list.label",
+                'help_block' => "var.list.desc",
+                'required' => true,
+                'translation_domain' => "SendInBlueBundle",
                 'choice_translation_domain' => false,
-                'choices'                   => array_flip($options["data"]["ApiListsIndex"]),
+                'choices' => array_flip($options["data"]["ApiListsIndex"]),
             ))
         ;
 

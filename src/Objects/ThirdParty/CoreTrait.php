@@ -15,8 +15,6 @@
 
 namespace Splash\Connectors\SendInBlue\Objects\ThirdParty;
 
-use Splash\Connectors\SendInBlue\Models\SendInBlueHelper as API;
-
 /**
  * SendInBlue ThirdParty Core Fields (Required)
  */
@@ -26,7 +24,7 @@ trait CoreTrait
      * @var false|string
      */
     protected $emailChanged = false;
-    
+
     /**
      * Build Core Fields using FieldFactory
      */
@@ -41,7 +39,7 @@ trait CoreTrait
             ->isRequired()
             ->isListed()
             ->isNotTested();
-        
+
         //====================================================================//
         // Excluded from Email Campaigns
         $this->fieldsFactory()->create(SPL_T_BOOL)
@@ -49,7 +47,7 @@ trait CoreTrait
             ->Name("Is Exluded from Emails Campaigns")
             ->MicroData("http://schema.org/Organization", "excluded")
             ->isListed();
-        
+
         //====================================================================//
         // Excluded from SMS Campaigns
         $this->fieldsFactory()->create(SPL_T_BOOL)
@@ -64,8 +62,6 @@ trait CoreTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     protected function getCoreFields($key, $fieldName)
     {
@@ -83,14 +79,12 @@ trait CoreTrait
         // Clear Key Flag
         unset($this->in[$key]);
     }
-    
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     protected function setCoreFields($fieldName, $fieldData)
     {
@@ -99,7 +93,7 @@ trait CoreTrait
                 if ($this->object->email != strtolower($fieldData)) {
                     //====================================================================//
                     //  Mark for Update Object Id In DataBase
-                    $this->emailChanged  =   $this->object->email;
+                    $this->emailChanged = $this->object->email;
                     //====================================================================//
                     //  Update Field Data
                     $this->object->email = $fieldData;

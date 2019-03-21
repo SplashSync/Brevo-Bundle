@@ -33,7 +33,7 @@ class SendInBlueConnector extends AbstractConnector
 {
     use \Splash\Bundle\Models\Connectors\GenericObjectMapperTrait;
     use \Splash\Bundle\Models\Connectors\GenericWidgetMapperTrait;
-    
+
     /**
      * Objects Type Class Map
      *
@@ -92,10 +92,10 @@ class SendInBlueConnector extends AbstractConnector
         if (!$this->fetchAttributesLists()) {
             return false;
         }
-        
+
         return true;
     }
-        
+
     /**
      * {@inheritdoc}
      */
@@ -109,49 +109,49 @@ class SendInBlueConnector extends AbstractConnector
         }
         //====================================================================//
         // Get List Detailed Informations
-        $details  =   API::get('account');
+        $details = API::get('account');
         if (is_null($details)) {
             return $informations;
         }
 
         //====================================================================//
         // Server General Description
-        $informations->shortdesc        =   "SendInBlue";
-        $informations->longdesc         =   "Splash Integration for SendInBlue's Api V3.0";
+        $informations->shortdesc = "SendInBlue";
+        $informations->longdesc = "Splash Integration for SendInBlue's Api V3.0";
         //====================================================================//
         // Company Informations
-        $informations->company          =   $details->companyName;
-        $informations->address          =   $details->address->street;
-        $informations->zip              =   $details->address->zipCode;
-        $informations->town             =   $details->address->city;
-        $informations->country          =   $details->address->country;
-        $informations->www              =   "www.sendinblue.com";
-        $informations->email            =   $details->email;
-        $informations->phone            =   "~";
+        $informations->company = $details->companyName;
+        $informations->address = $details->address->street;
+        $informations->zip = $details->address->zipCode;
+        $informations->town = $details->address->city;
+        $informations->country = $details->address->country;
+        $informations->www = "www.sendinblue.com";
+        $informations->email = $details->email;
+        $informations->phone = "~";
         //====================================================================//
         // Server Logo & Ico
-        $informations->icoraw           =   Splash::file()->readFileContents(dirname(dirname(__FILE__))."/Resources/public/img/SendInBlue-Logo.jpg");
-        $informations->logourl          =   null;
-        $informations->logoraw          =   Splash::file()->readFileContents(dirname(dirname(__FILE__))."/Resources/public/img/SendInBlue-Logo.jpg");
+        $informations->icoraw = Splash::file()->readFileContents(dirname(dirname(__FILE__))."/Resources/public/img/SendInBlue-Logo.jpg");
+        $informations->logourl = null;
+        $informations->logoraw = Splash::file()->readFileContents(dirname(dirname(__FILE__))."/Resources/public/img/SendInBlue-Logo.jpg");
         //====================================================================//
         // Server Informations
-        $informations->servertype       =   "SendInBlue REST Api V3";
-        $informations->serverurl        =   API::ENDPOINT;
+        $informations->servertype = "SendInBlue REST Api V3";
+        $informations->serverurl = API::ENDPOINT;
         //====================================================================//
         // Module Informations
-        $informations->moduleauthor     =   SPLASH_AUTHOR;
-        $informations->moduleversion    =   "master";
+        $informations->moduleauthor = SPLASH_AUTHOR;
+        $informations->moduleversion = "master";
 
         return $informations;
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function selfTest() : bool
     {
         $config = $this->getConfiguration();
-        
+
         //====================================================================//
         // Verify Api Key is Set
         //====================================================================//
@@ -160,7 +160,7 @@ class SendInBlueConnector extends AbstractConnector
 
             return false;
         }
-        
+
         //====================================================================//
         // Configure Rest API
         return API::configure(
@@ -168,15 +168,15 @@ class SendInBlueConnector extends AbstractConnector
             isset($config["ApiList"]) ? $config["ApiList"] : null
         );
     }
-    
+
     //====================================================================//
     // Objects Interfaces
     //====================================================================//
-    
+
     //====================================================================//
     // Files Interfaces
     //====================================================================//
-    
+
     /**
      * {@inheritdoc}
      */
@@ -191,11 +191,11 @@ class SendInBlueConnector extends AbstractConnector
 
         return false;
     }
-    
+
     //====================================================================//
     // Profile Interfaces
     //====================================================================//
-    
+
     /**
      * @abstract   Get Connector Profile Informations
      *
@@ -204,19 +204,19 @@ class SendInBlueConnector extends AbstractConnector
     public function getProfile() : array
     {
         return array(
-            'enabled'   =>      true,                                   // is Connector Enabled
-            'beta'      =>      false,                                  // is this a Beta release
-            'type'      =>      self::TYPE_ACCOUNT,                     // Connector Type or Mode
-            'name'      =>      'sendinblue',                           // Connector code (lowercase, no space allowed)
-            'connector' =>      'splash.connectors.sendinblue',         // Connector Symfony Service
-            'title'     =>      'profile.card.title',                   // Public short name
-            'label'     =>      'profile.card.label',                   // Public long name
-            'domain'    =>      'SendInBlueBundle',                     // Translation domain for names
-            'ico'       =>      '/bundles/sendinblue/img/SendInBlue-Logo.jpg', // Public Icon path
-            'www'       =>      'www.SendInBlue.com',                   // Website Url
+            'enabled' => true,                                   // is Connector Enabled
+            'beta' => false,                                  // is this a Beta release
+            'type' => self::TYPE_ACCOUNT,                     // Connector Type or Mode
+            'name' => 'sendinblue',                           // Connector code (lowercase, no space allowed)
+            'connector' => 'splash.connectors.sendinblue',         // Connector Symfony Service
+            'title' => 'profile.card.title',                   // Public short name
+            'label' => 'profile.card.label',                   // Public long name
+            'domain' => 'SendInBlueBundle',                     // Translation domain for names
+            'ico' => '/bundles/sendinblue/img/SendInBlue-Logo.jpg', // Public Icon path
+            'www' => 'www.SendInBlue.com',                   // Website Url
         );
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -240,7 +240,7 @@ class SendInBlueConnector extends AbstractConnector
     {
         return "@SendInBlue/Profile/new.html.twig";
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -256,7 +256,7 @@ class SendInBlueConnector extends AbstractConnector
     {
         return null;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -276,11 +276,11 @@ class SendInBlueConnector extends AbstractConnector
             "webhooks" => "SendInBlueBundle:Actions:webhooks",
         );
     }
-    
+
     //====================================================================//
     //  HIGH LEVEL WEBSERVICE CALLS
     //====================================================================//
-    
+
     /**
      * Check & Update SendInBlue Api Account WebHooks.
      *
@@ -295,11 +295,11 @@ class SendInBlueConnector extends AbstractConnector
         }
         //====================================================================//
         // Generate WebHook Url
-        $webHookServer  =   filter_input(INPUT_SERVER, 'SERVER_NAME');
+        $webHookServer = filter_input(INPUT_SERVER, 'SERVER_NAME');
         //====================================================================//
         // When Running on a Local Server
         if (false !== strpos("localhost", $webHookServer)) {
-            $webHookServer  =   "www.splashsync.com";
+            $webHookServer = "www.splashsync.com";
         }
         //====================================================================//
         // Create Object Class
@@ -307,7 +307,7 @@ class SendInBlueConnector extends AbstractConnector
         $webHookManager->configure("webhook", $this->getWebserviceId(), $this->getConfiguration());
         //====================================================================//
         // Get List Of WebHooks for this List
-        $webHooks       =   $webHookManager->objectsList();
+        $webHooks = $webHookManager->objectsList();
         if (isset($webHooks["meta"])) {
             unset($webHooks["meta"]);
         }
@@ -341,8 +341,8 @@ class SendInBlueConnector extends AbstractConnector
         }
         //====================================================================//
         // Generate WebHook Url
-        $webHookServer  =   filter_input(INPUT_SERVER, 'SERVER_NAME');
-        $webHookUrl     =   $router->generate(
+        $webHookServer = filter_input(INPUT_SERVER, 'SERVER_NAME');
+        $webHookUrl = $router->generate(
             'splash_connector_action',
             array(
                 'connectorName' => $this->getProfile()["name"],
@@ -353,8 +353,8 @@ class SendInBlueConnector extends AbstractConnector
         //====================================================================//
         // When Running on a Local Server
         if (false !== strpos("localhost", $webHookServer)) {
-            $webHookServer  =   "www.splashsync.com";
-            $webHookUrl     =   "https://www.splashsync.com/en/ws/SendInBlue/123456";
+            $webHookServer = "www.splashsync.com";
+            $webHookUrl = "https://www.splashsync.com/en/ws/SendInBlue/123456";
         }
         //====================================================================//
         // Create Object Class
@@ -362,18 +362,18 @@ class SendInBlueConnector extends AbstractConnector
         $webHookManager->configure("webhook", $this->getWebserviceId(), $this->getConfiguration());
         //====================================================================//
         // Get List Of WebHooks for this List
-        $webHooks       =   $webHookManager->objectsList();
+        $webHooks = $webHookManager->objectsList();
         if (isset($webHooks["meta"])) {
             unset($webHooks["meta"]);
         }
         //====================================================================//
         // Filter & Clean List Of WebHooks
-        $foundWebHook   =    false;
+        $foundWebHook = false;
         foreach ($webHooks as $webHook) {
             //====================================================================//
             // This is Current Node WebHooks
-            if (trim($webHook['url']) ==  $webHookUrl) {
-                $foundWebHook   =   true;
+            if (trim($webHook['url']) == $webHookUrl) {
+                $foundWebHook = true;
 
                 continue;
             }
@@ -392,11 +392,11 @@ class SendInBlueConnector extends AbstractConnector
         // Add Splash WebHooks
         return (false !== $webHookManager->create($webHookUrl));
     }
-    
+
     //====================================================================//
     //  LOW LEVEL PRIVATE FUNCTIONS
     //====================================================================//
-    
+
     /**
      * Get SendInBlue User Lists
      *
@@ -406,7 +406,7 @@ class SendInBlueConnector extends AbstractConnector
     {
         //====================================================================//
         // Get User Lists from Api
-        $response  =   API::get('contacts/lists');
+        $response = API::get('contacts/lists');
         if (is_null($response)) {
             return false;
         }
@@ -419,7 +419,7 @@ class SendInBlueConnector extends AbstractConnector
         foreach ($response->lists as $listDetails) {
             //====================================================================//
             // Add List Index
-            $listIndex[$listDetails->id]  =   $listDetails->name;
+            $listIndex[$listDetails->id] = $listDetails->name;
         }
         //====================================================================//
         // Store in Connector Settings
@@ -428,10 +428,10 @@ class SendInBlueConnector extends AbstractConnector
         //====================================================================//
         // Update Connector Settings
         $this->updateConfiguration();
-        
+
         return true;
     }
-    
+
     /**
      * Get SendInBlue User Attributes Lists
      *
@@ -441,7 +441,7 @@ class SendInBlueConnector extends AbstractConnector
     {
         //====================================================================//
         // Get User Lists from Api
-        $response  =   API::get('contacts/attributes');
+        $response = API::get('contacts/attributes');
         if (is_null($response)) {
             return false;
         }

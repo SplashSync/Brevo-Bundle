@@ -31,7 +31,7 @@ class WebHooksController extends Controller
     //====================================================================//
     //  SendInBlue WEBHOOKS MANAGEMENT
     //====================================================================//
-   
+
     /**
      * Execute WebHook Actions for A SendInBlue Connector
      *
@@ -52,7 +52,7 @@ class WebHooksController extends Controller
 
             return $this->prepareResponse(200);
         }
-        
+
         //====================================================================//
         // Read, Validate & Extract Request Parameters
         $eventData = $this->extractData($request);
@@ -60,21 +60,19 @@ class WebHooksController extends Controller
         //====================================================================//
         // Log SendInBlue Request
         $logger->error(__CLASS__.'::'.__FUNCTION__.' SendInBlue WebHook Received ', (is_array($eventData) ? $eventData : array()));
-        
+
         //==============================================================================
         // Commit Changes
         $this->executeCommits($connector, $eventData);
-        
+
         return $this->prepareResponse(200);
     }
-    
+
     /**
      * Execute Changes Commits
      *
      * @param AbstractConnector $connector
      * @param array             $eventData
-     *
-     * @return void
      */
     private function executeCommits(AbstractConnector $connector, $eventData) : void
     {
@@ -97,7 +95,7 @@ class WebHooksController extends Controller
             'Contact has been Updated'
         );
     }
-    
+
     /**
      * Extract Data from Resquest
      *
@@ -106,7 +104,6 @@ class WebHooksController extends Controller
      * @throws BadRequestHttpException
      *
      * @return array
-     *
      */
     private function extractData(Request $request): array
     {
@@ -127,7 +124,7 @@ class WebHooksController extends Controller
         // Return Request Data
         return $requestData;
     }
-    
+
     /**
      * Preapare REST Json Response
      *
