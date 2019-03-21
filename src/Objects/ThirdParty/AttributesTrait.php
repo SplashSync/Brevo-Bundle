@@ -73,6 +73,11 @@ trait AttributesTrait
         $factory = $this->fieldsFactory();
         foreach ($attributes as $attr) {
             //====================================================================//
+            // Safety Check => Attributes List was Updated to New Format
+            if (!($attr instanceof stdClass)) {
+                continue;
+            }
+            //====================================================================//
             // Attributes Not Used
             if (!$this->isAvailable($attr)) {
                 continue;
