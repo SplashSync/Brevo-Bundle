@@ -37,7 +37,7 @@ before_install:
 # Install composer dependencies,
 # Create database, schema and fixtures
 install:   
-#    # Setup MailChimp Connector
+    # Setup SendInBlue Connector
     - sed -i -e 's/ThisIsSecretApiKey/'$SIB_API_KEY'/g' tests/config/splash.yml >/dev/null 2>&1
     - sed -i -e 's/ThisIsSecretApiList/'$SIB_API_LIST'/g' tests/config/splash.yml >/dev/null 2>&1
 
