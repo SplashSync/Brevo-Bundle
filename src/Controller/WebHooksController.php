@@ -59,7 +59,7 @@ class WebHooksController extends Controller
 
         //====================================================================//
         // Log SendInBlue Request
-        $logger->error(__CLASS__.'::'.__FUNCTION__.' SendInBlue WebHook Received ', (is_array($eventData) ? $eventData : array()));
+        $logger->error(__CLASS__.'::'.__FUNCTION__.' SendInBlue WebHook Received ', $eventData);
 
         //==============================================================================
         // Commit Changes

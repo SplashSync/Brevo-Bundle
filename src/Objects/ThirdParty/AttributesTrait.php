@@ -54,12 +54,17 @@ trait AttributesTrait
      */
     private static $baseProp = "http://meta.schema.org/additionalType";
 
+    /**
+     * @var array
+     */
     private $attrCache;
 
     /**
      * Build Fields using FieldFactory
+     *
+     * @return void
      */
-    protected function buildAttributesFields()
+    protected function buildAttributesFields(): void
     {
         //====================================================================//
         // Load Attributes List
@@ -110,8 +115,10 @@ trait AttributesTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
-    protected function getAttributesFields($key, $fieldName)
+    protected function getAttributesFields($key, $fieldName): void
     {
         //====================================================================//
         // Field is not an Attribute
@@ -150,8 +157,10 @@ trait AttributesTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
-    protected function setAttributesFields($fieldName, $fieldData)
+    protected function setAttributesFields($fieldName, $fieldData): void
     {
         //====================================================================//
         // Field is not an Attribute

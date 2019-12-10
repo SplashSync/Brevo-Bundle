@@ -30,6 +30,8 @@ class S01WebHookTest extends TestCase
 
     /**
      * Test WebHook For Ping
+     *
+     * @return void
      */
     public function testWebhookPing()
     {
@@ -56,6 +58,8 @@ class S01WebHookTest extends TestCase
 
     /**
      * Test WebHook with Errors
+     *
+     * @return void
      */
     public function testWebhookErrors()
     {
@@ -92,6 +96,8 @@ class S01WebHookTest extends TestCase
      * @param string $objectType
      * @param string $action
      * @param string $objectId
+     *
+     * @return void
      */
     public function testWebhookRequest(array $data, string $objectType, string $action, string $objectId)
     {

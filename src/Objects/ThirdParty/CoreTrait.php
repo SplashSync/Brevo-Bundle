@@ -27,8 +27,10 @@ trait CoreTrait
 
     /**
      * Build Core Fields using FieldFactory
+     *
+     * @return void
      */
-    protected function buildCoreFields()
+    protected function buildCoreFields(): void
     {
         //====================================================================//
         // Email
@@ -62,8 +64,10 @@ trait CoreTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
-    protected function getCoreFields($key, $fieldName)
+    protected function getCoreFields($key, $fieldName): void
     {
         switch ($fieldName) {
             case 'email':
@@ -85,8 +89,10 @@ trait CoreTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
-    protected function setCoreFields($fieldName, $fieldData)
+    protected function setCoreFields($fieldName, $fieldData): void
     {
         switch ($fieldName) {
             case 'email':

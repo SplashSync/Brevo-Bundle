@@ -249,7 +249,7 @@ class SendInBlueHelper
         }
         //====================================================================//
         //  Debug Informations
-        if (true == SPLASH_DEBUG) {
+        if (Splash::isDebugMode()) {
             Splash::log()->www("[SendInBlue] Full Response", $response);
         }
         if ($response->hasBody() && ($response->body instanceof stdClass)) {

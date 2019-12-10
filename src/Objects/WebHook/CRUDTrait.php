@@ -94,7 +94,7 @@ trait CRUDTrait
 
         //====================================================================//
         // Update WebHook
-        if (true == SPLASH_DEBUG) {
+        if (Splash::isDebugMode()) {
             $response = API::put(self::getUri($this->object->id), $this->object);
             if (true !== $response) {
                 return Splash::log()->errTrace("Unable to Update WebHook (".$this->object->id.").");
