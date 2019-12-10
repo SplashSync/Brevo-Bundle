@@ -10,3 +10,6 @@
 /.web-server-pid
 /tests/config/parameters.yml
 /public/
+/.gh-pages/
+/docs/yarn.lock
+/docs/assets/vendor/tiny-emitter/yarn.lock
