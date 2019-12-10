@@ -69,7 +69,7 @@ class SendInBlueHelper
                 'Content-Type' => 'application/json',
                 'api-key' => $apiKey,
             ))
-            ->timeout(3)
+            ->timeout(Splash::isDebugMode() ? 15 : 3)
             ;
         // Set it as a template
         Request::ini($template);
