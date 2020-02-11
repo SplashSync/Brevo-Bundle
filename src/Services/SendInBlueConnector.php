@@ -101,6 +101,24 @@ class SendInBlueConnector extends AbstractConnector
      */
     public function informations(ArrayObject  $informations) : ArrayObject
     {
+        //====================================================================//
+        // Server General Description
+        $informations->shortdesc = "SendInBlue";
+        $informations->longdesc = "Splash Integration for SendInBlue's Api V3.0";
+        //====================================================================//
+        // Server Logo & Ico
+        $informations->icoraw = Splash::file()->readFileContents(dirname(dirname(__FILE__))."/Resources/public/img/SendInBlue-Logo.jpg");
+        $informations->logourl = null;
+        $informations->logoraw = Splash::file()->readFileContents(dirname(dirname(__FILE__))."/Resources/public/img/SendInBlue-Logo.jpg");
+        //====================================================================//
+        // Server Informations
+        $informations->servertype = "SendInBlue REST Api V3";
+        $informations->serverurl = API::ENDPOINT;
+        //====================================================================//
+        // Module Informations
+        $informations->moduleauthor = SPLASH_AUTHOR;
+        $informations->moduleversion = "master";
+
         $config = $this->getConfiguration();
         //====================================================================//
         // Safety Check => Verify Selftest Pass
@@ -115,10 +133,6 @@ class SendInBlueConnector extends AbstractConnector
         }
 
         //====================================================================//
-        // Server General Description
-        $informations->shortdesc = "SendInBlue";
-        $informations->longdesc = "Splash Integration for SendInBlue's Api V3.0";
-        //====================================================================//
         // Company Informations
         $informations->company = $details->companyName;
         $informations->address = $details->address->street;
@@ -128,19 +142,6 @@ class SendInBlueConnector extends AbstractConnector
         $informations->www = "www.sendinblue.com";
         $informations->email = $details->email;
         $informations->phone = "~";
-        //====================================================================//
-        // Server Logo & Ico
-        $informations->icoraw = Splash::file()->readFileContents(dirname(dirname(__FILE__))."/Resources/public/img/SendInBlue-Logo.jpg");
-        $informations->logourl = null;
-        $informations->logoraw = Splash::file()->readFileContents(dirname(dirname(__FILE__))."/Resources/public/img/SendInBlue-Logo.jpg");
-        //====================================================================//
-        // Server Informations
-        $informations->servertype = "SendInBlue REST Api V3";
-        $informations->serverurl = API::ENDPOINT;
-        //====================================================================//
-        // Module Informations
-        $informations->moduleauthor = SPLASH_AUTHOR;
-        $informations->moduleversion = "master";
 
         return $informations;
     }
