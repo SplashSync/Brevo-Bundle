@@ -28,6 +28,16 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
  */
 class WebHooksController extends Controller
 {
+    /**
+     * @var string
+     */
+    const USER = "SendInBlue API";
+
+    /**
+     * @var string
+     */
+    const COMMENT = 'Contact has been Updated';
+
     //====================================================================//
     //  SendInBlue WEBHOOKS MANAGEMENT
     //====================================================================//
@@ -86,14 +96,19 @@ class WebHooksController extends Controller
         // TODO
 
         //==============================================================================
-        // Commit Changes to Splash
-        $connector->commit(
-            'ThirdParty',
-            ThirdParty::encodeContactId($eventData['email']),
-            SPL_A_UPDATE,
-            "SendInBlue API",
-            'Contact has been Updated'
-        );
+        // Commit Multiple Changes to Splash
+        if (is_array($eventData['email'])) {
+            foreach ($eventData['email'] as $eventEmail) {
+                $email = ThirdParty::encodeContactId($eventEmail);
+                $connector->commit('ThirdParty', $email, SPL_A_UPDATE, self::USER, self::COMMENT);
+            }
+
+            return;
+        }
+        //==============================================================================
+        // Commit Single Changes to Splash
+        $email = ThirdParty::encodeContactId($eventData['email']);
+        $connector->commit('ThirdParty', $email, SPL_A_UPDATE, self::USER, self::COMMENT);
     }
 
     /**
