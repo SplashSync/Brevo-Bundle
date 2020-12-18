@@ -17,6 +17,8 @@ namespace Splash\Connectors\SendInBlue\Services;
 
 use ArrayObject;
 use Splash\Bundle\Models\AbstractConnector;
+use Splash\Bundle\Models\Connectors\GenericObjectMapperTrait;
+use Splash\Bundle\Models\Connectors\GenericWidgetMapperTrait;
 use Splash\Connectors\SendInBlue\Form\EditFormType;
 use Splash\Connectors\SendInBlue\Form\NewFormType;
 use Splash\Connectors\SendInBlue\Models\SendInBlueHelper as API;
@@ -31,8 +33,8 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class SendInBlueConnector extends AbstractConnector
 {
-    use \Splash\Bundle\Models\Connectors\GenericObjectMapperTrait;
-    use \Splash\Bundle\Models\Connectors\GenericWidgetMapperTrait;
+    use GenericObjectMapperTrait;
+    use GenericWidgetMapperTrait;
 
     /**
      * Objects Type Class Map
@@ -107,15 +109,19 @@ class SendInBlueConnector extends AbstractConnector
         $informations->longdesc = "Splash Integration for SendInBlue's Api V3.0";
         //====================================================================//
         // Server Logo & Ico
-        $informations->icoraw = Splash::file()->readFileContents(dirname(dirname(__FILE__))."/Resources/public/img/SendInBlue-Logo.jpg");
+        $informations->icoraw = Splash::file()->readFileContents(
+            dirname(dirname(__FILE__))."/Resources/public/img/SendInBlue-Logo.jpg"
+        );
         $informations->logourl = null;
-        $informations->logoraw = Splash::file()->readFileContents(dirname(dirname(__FILE__))."/Resources/public/img/SendInBlue-Logo.jpg");
+        $informations->logoraw = Splash::file()->readFileContents(
+            dirname(dirname(__FILE__))."/Resources/public/img/SendInBlue-Logo.jpg"
+        );
         //====================================================================//
-        // Server Informations
+        // Server Information
         $informations->servertype = "SendInBlue REST Api V3";
         $informations->serverurl = API::ENDPOINT;
         //====================================================================//
-        // Module Informations
+        // Module Information
         $informations->moduleauthor = SPLASH_AUTHOR;
         $informations->moduleversion = "master";
 
@@ -126,14 +132,14 @@ class SendInBlueConnector extends AbstractConnector
             return $informations;
         }
         //====================================================================//
-        // Get List Detailed Informations
+        // Get List Detailed Information
         $details = API::get('account');
         if (is_null($details)) {
             return $informations;
         }
 
         //====================================================================//
-        // Company Informations
+        // Company Information
         $informations->company = $details->companyName;
         $informations->address = $details->address->street;
         $informations->zip = $details->address->zipCode;
@@ -253,7 +259,7 @@ class SendInBlueConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    public function getMasterAction()
+    public function getMasterAction(): ?string
     {
         return null;
     }
@@ -403,7 +409,7 @@ class SendInBlueConnector extends AbstractConnector
      *
      * @return bool
      */
-    private function fetchMailingLists()
+    private function fetchMailingLists(): bool
     {
         //====================================================================//
         // Get User Lists from Api
@@ -438,7 +444,7 @@ class SendInBlueConnector extends AbstractConnector
      *
      * @return bool
      */
-    private function fetchAttributesLists()
+    private function fetchAttributesLists(): bool
     {
         //====================================================================//
         // Get User Lists from Api
