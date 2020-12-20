@@ -21,9 +21,10 @@
 
 # Title of the Bundle / Module
 title: SendInBlue Connector
-# Subtitle of the Site (Generaly DOC)
+repository: SplashSync/SendInBlue-Bundle
+# Subtitle of the Site (Generally DOC)
 subtitle: DOC
-# the subpath of your site, e.g. /blog
+# the sub-path of your site, e.g. /blog
 baseurl: "/SendInBlue-Bundle" 
 # Description of the Bundle/Module
 description:    "SendInBlue Connectors for Splash Sync."
