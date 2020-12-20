@@ -8,7 +8,7 @@ To try it, use [Splash Toolkit](https://github.com/SplashSync/Toolkit)
 
 ## Documentation
 
-For the configuration guide and reference, see: [SendInBlue Connector Documentation](https://splashsync.github.io/SendInBlue-Bundle/)
+For the configuration guide and reference, see: [SendInBlue Connector Documentation](https://splashsync.gitlab.io/SendInBlue-Bundle/)
 
 ## Contributing
 
