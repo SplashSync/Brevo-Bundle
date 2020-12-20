@@ -23,7 +23,7 @@
 #
 # For a faster access to you container, you can add this IP to /etc/hosts
 # 
-# 172.112.0.100         docker.sendinblue.local
+# 172.112.0.100         toolkit.sendinblue.local
 #
 ################################################################################
 
@@ -42,10 +42,10 @@ services:
             - './docker/toolkit/splash.yml:/app/config/packages/splash.yml:ro'
             # Uncomment to use Local Sources instead of Release
             # - './src/:/app/vendor/splash/sendinblue/src/:ro'
-        hostname:           toolkit.mailjet.local
+        hostname:           toolkit.sendinblue.local
         networks:
             sendinblue:     { ipv4_address: 172.112.0.100, aliases: [ toolkit.sendinblue.local ] }
-            splashsync:     { aliases: [ toolkit.mailjet.local ] }
+            splashsync:     { aliases: [ toolkit.sendinblue.local ] }
             
 networks:
     ################################################################################
