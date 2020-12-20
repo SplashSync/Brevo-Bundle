@@ -42,7 +42,7 @@ abstract class AbstractSendInBlueType extends AbstractType
             // SendInBlue Api Key Option Authentification
             ->add('ApiKey', TextType::class, array(
                 'label' => "var.apikey.label",
-                //                'help_block' => "var.apikey.desc",
+                'help' => "var.apikey.desc",
                 'required' => true,
                 'translation_domain' => "SendInBlueBundle",
             ))
@@ -72,7 +72,7 @@ abstract class AbstractSendInBlueType extends AbstractType
             // SendInBlue List Option Selector
             ->add('ApiList', ChoiceType::class, array(
                 'label' => "var.list.label",
-                //                'help_block' => "var.list.desc",
+                'help' => "var.list.desc",
                 'required' => true,
                 'translation_domain' => "SendInBlueBundle",
                 'choice_translation_domain' => false,
