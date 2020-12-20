@@ -66,7 +66,6 @@ class SendInBlueHelper
         // Configure API Template Request
         $template = Request::init(null, Mime::JSON)
             ->addHeaders(array(
-                'Content-Type' => 'application/json',
                 'api-key' => $apiKey,
             ))
             ->timeout(Splash::isDebugMode() ? 15 : 3)
@@ -78,7 +77,7 @@ class SendInBlueHelper
     }
 
     /**
-     * Ping SendInBlue API Url as Annonymous User
+     * Ping SendInBlue API Url as Anonymous User
      *
      * @return bool
      */
@@ -130,8 +129,8 @@ class SendInBlueHelper
     /**
      * SendInBlue API GET Request
      *
-     * @param string $path API REST Path
-     * @param array  $body Request Data
+     * @param string     $path API REST Path
+     * @param null|array $body Request Data
      *
      * @return null|stdClass
      */

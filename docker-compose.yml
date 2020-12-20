@@ -18,7 +18,7 @@
 ################################################################################
 # Docker Compose File
 #
-# This Docker File intend to Create a Complete Dev Envirenement 
+# This Docker File intend to Create a Complete Dev Environment
 # for Splash SendInBlue Connector
 #
 # For a faster access to you container, you can add this IP to /etc/hosts
