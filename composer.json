@@ -43,6 +43,7 @@
     },
     
     "require-dev": {
+        "ext-json":                                     "*",
         "badpixxel/php-sdk":                            "dev-main",
         "splash/console":                               "dev-master",
 

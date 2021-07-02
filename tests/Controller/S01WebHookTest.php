@@ -15,6 +15,7 @@
 
 namespace Splash\Connectors\SendInBlue\Test\Controller;
 
+use Exception;
 use Splash\Connectors\SendInBlue\Objects\ThirdParty;
 use Splash\Connectors\SendInBlue\Services\SendInBlueConnector;
 use Splash\Tests\Tools\TestCase;
@@ -30,6 +31,8 @@ class S01WebHookTest extends TestCase
 
     /**
      * Test WebHook For Ping
+     *
+     * @throws Exception
      *
      * @return void
      */
@@ -50,7 +53,7 @@ class S01WebHookTest extends TestCase
         $this->assertPublicActionFail($connector, null, array(), "POST");
         //====================================================================//
         // Ping Action -> GET -> KO
-        $this->assertPublicActionFail($connector, null, array(), "GET");
+        $this->assertPublicActionFail($connector, null, array());
         //====================================================================//
         // Ping Action -> PUT -> KO
         $this->assertPublicActionFail($connector, null, array(), "PUT");
@@ -58,6 +61,8 @@ class S01WebHookTest extends TestCase
 
     /**
      * Test WebHook with Errors
+     *
+     * @throws Exception
      *
      * @return void
      */
@@ -97,6 +102,8 @@ class S01WebHookTest extends TestCase
      * @param string $action
      * @param string $objectId
      *
+     * @throws Exception
+     *
      * @return void
      */
     public function testWebhookRequest(array $data, string $objectType, string $action, string $objectId)
@@ -124,7 +131,7 @@ class S01WebHookTest extends TestCase
 
         //====================================================================//
         // Verify Response
-        $this->assertIsLastCommited($action, $objectType, $objectId);
+        $this->assertIsLastCommitted($action, $objectType, $objectId);
     }
 
     /**
@@ -132,7 +139,7 @@ class S01WebHookTest extends TestCase
      *
      * @return array
      */
-    public function webHooksInputsProvider()
+    public function webHooksInputsProvider(): array
     {
         $hooks = array();
 
