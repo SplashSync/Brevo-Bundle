@@ -52,7 +52,7 @@
         "symfony/phpunit-bridge":                       "*",
         "monolog/monolog":                              "^1.0",
         
-        "doctrine/doctrine-bundle":                     "^1.6|^2.0",
+        "doctrine/doctrine-bundle":                     "^2.6",
         "doctrine/orm":                                 "^2.5"
     },
 
