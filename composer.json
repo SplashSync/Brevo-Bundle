@@ -38,12 +38,12 @@
     
     "require": {
         "php":                                          "^7.2|^8.0",
+        "ext-json":                                     "*",
         "splash/php-bundle":                            "dev-master",
         "nategood/httpful":                             "^0.2|^0.3"
     },
     
     "require-dev": {
-        "ext-json":                                     "*",
         "badpixxel/php-sdk":                            "dev-main",
         "splash/console":                               "dev-master",
 

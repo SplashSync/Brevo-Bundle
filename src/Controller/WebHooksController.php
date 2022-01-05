@@ -112,7 +112,7 @@ class WebHooksController extends Controller
     }
 
     /**
-     * Extract Data from Resquest
+     * Extract Data from Request
      *
      * @param Request $request
      *
@@ -125,15 +125,18 @@ class WebHooksController extends Controller
         //==============================================================================
         // Safety Check => Data are here
         if (!$request->isMethod('POST')) {
-            throw new BadRequestHttpException('Malformatted or missing data');
+            throw new BadRequestHttpException('Malformed or missing data');
         }
         //==============================================================================
         // Decode Received Data
-        $requestData = $request->request->all();
+        $requestData = empty($request->request->all())
+            ? json_decode($request->getContent(), true, 512, \JSON_BIGINT_AS_STRING)
+            : $request->request->all()
+        ;
         //==============================================================================
         // Safety Check => Data are here
         if (empty($requestData) || !isset($requestData['event']) || !isset($requestData['email'])) {
-            throw new BadRequestHttpException('Malformatted or missing data');
+            throw new BadRequestHttpException('Malformed or missing data');
         }
         //==============================================================================
         // Return Request Data
@@ -141,7 +144,7 @@ class WebHooksController extends Controller
     }
 
     /**
-     * Preapare REST Json Response
+     * Prepare REST Json Response
      *
      * @param int $status
      *
