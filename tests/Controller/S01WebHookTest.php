@@ -28,6 +28,7 @@ class S01WebHookTest extends TestCase
     const PING_RESPONSE = '{"success":true}';
     const MEMBER = "ThirdParty";
     const FAKE_EMAIL = "fake@exemple.com";
+    const METHOD = "JSON";
 
     /**
      * Test WebHook For Ping
@@ -36,7 +37,7 @@ class S01WebHookTest extends TestCase
      *
      * @return void
      */
-    public function testWebhookPing()
+    public function testWebhookPing(): void
     {
         //====================================================================//
         // Load Connector
@@ -50,7 +51,7 @@ class S01WebHookTest extends TestCase
 
         //====================================================================//
         // Ping Action -> POST -> KO
-        $this->assertPublicActionFail($connector, null, array(), "POST");
+        $this->assertPublicActionFail($connector, null, array(), self::METHOD);
         //====================================================================//
         // Ping Action -> GET -> KO
         $this->assertPublicActionFail($connector, null, array());
@@ -66,7 +67,7 @@ class S01WebHookTest extends TestCase
      *
      * @return void
      */
-    public function testWebhookErrors()
+    public function testWebhookErrors(): void
     {
         //====================================================================//
         // Load Connector
@@ -77,19 +78,19 @@ class S01WebHookTest extends TestCase
         // Empty Contents
         //====================================================================//
 
-        $this->assertPublicActionFail($connector, null, array(), "POST");
+        $this->assertPublicActionFail($connector, null, array(), self::METHOD);
 
         //====================================================================//
         // EVENT BUT NO EMAIL
         //====================================================================//
 
-        $this->assertPublicActionFail($connector, null, array("event" => "unsubscribed"), "POST");
+        $this->assertPublicActionFail($connector, null, array("event" => "unsubscribed"), self::METHOD);
 
         //====================================================================//
-        // EMAIOL BUT NO EVENT
+        // EMAIL BUT NO EVENT
         //====================================================================//
 
-        $this->assertPublicActionFail($connector, null, array("email" => self::FAKE_EMAIL), "POST");
+        $this->assertPublicActionFail($connector, null, array("email" => self::FAKE_EMAIL), self::METHOD);
     }
 
     /**
@@ -106,7 +107,7 @@ class S01WebHookTest extends TestCase
      *
      * @return void
      */
-    public function testWebhookRequest(array $data, string $objectType, string $action, string $objectId)
+    public function testWebhookRequest(array $data, string $objectType, string $action, string $objectId): void
     {
         //====================================================================//
         // Load Connector
@@ -114,28 +115,30 @@ class S01WebHookTest extends TestCase
         $this->assertInstanceOf(SendInBlueConnector::class, $connector);
 
         //====================================================================//
-        // Prepare Request
-//        $post  = array_replace_recursive(
-//            array("mj_list_id" => $connector->getParameter("ApiList")),
-//            $data
-//        );
-        $post = $data;
-
-        //====================================================================//
-        // Touch Url
-        $this->assertPublicActionWorks($connector, null, $post, "POST");
+        // FORM POST MODE
+        $this->assertPublicActionWorks($connector, null, $data, "POST");
         $this->assertEquals(
             json_encode(array("success" => true)),
             $this->getResponseContents()
         );
+        //====================================================================//
+        // Verify Response
+        $this->assertIsLastCommitted($action, $objectType, $objectId);
 
+        //====================================================================//
+        // JSON MODE
+        $this->assertPublicActionWorks($connector, null, $data, self::METHOD);
+        $this->assertEquals(
+            json_encode(array("success" => true)),
+            $this->getResponseContents()
+        );
         //====================================================================//
         // Verify Response
         $this->assertIsLastCommitted($action, $objectType, $objectId);
     }
 
     /**
-     * Generate Fake Inputs for WebHook Requets
+     * Generate Fake Inputs for WebHook Request
      *
      * @return array
      */
