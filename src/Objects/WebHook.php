@@ -22,6 +22,8 @@ use Splash\Models\Objects\SimpleFieldsTrait;
 
 /**
  * SendInBlue Implementation of WebHooks
+ *
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class WebHook extends AbstractStandaloneObject
 {

@@ -21,7 +21,9 @@ use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
 
 /**
- * SendInBlue Implementation of ThirParty
+ * SendInBlue Implementation of ThirdParty
+ *
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class ThirdParty extends AbstractStandaloneObject
 {
