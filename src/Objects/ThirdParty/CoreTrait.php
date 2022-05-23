@@ -35,28 +35,29 @@ trait CoreTrait
         //====================================================================//
         // Email
         $this->fieldsFactory()->create(SPL_T_EMAIL)
-            ->Identifier("email")
-            ->Name("Email")
-            ->MicroData("http://schema.org/ContactPoint", "email")
+            ->identifier("email")
+            ->name("Email")
+            ->microData("http://schema.org/ContactPoint", "email")
             ->isRequired()
             ->isListed()
-            ->isNotTested();
-
+            ->isNotTested()
+        ;
         //====================================================================//
         // Excluded from Email Campaigns
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->Identifier("emailBlacklisted")
-            ->Name("Is Exluded from Emails Campaigns")
-            ->MicroData("http://schema.org/Organization", "excluded")
-            ->isListed();
-
+            ->identifier("emailBlacklisted")
+            ->name("Is Exluded from Emails Campaigns")
+            ->microData("http://schema.org/Organization", "excluded")
+            ->isListed()
+        ;
         //====================================================================//
         // Excluded from SMS Campaigns
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->Identifier("smsBlacklisted")
-            ->Name("Is Exluded from Sms Campaigns")
-            ->MicroData("http://schema.org/Organization", "excludedSms")
-            ->isListed();
+            ->identifier("smsBlacklisted")
+            ->name("Is Exluded from Sms Campaigns")
+            ->microData("http://schema.org/Organization", "excludedSms")
+            ->isListed()
+        ;
     }
 
     /**
@@ -67,7 +68,7 @@ trait CoreTrait
      *
      * @return void
      */
-    protected function getCoreFields($key, $fieldName): void
+    protected function getCoreFields(string $key, string $fieldName): void
     {
         switch ($fieldName) {
             case 'email':
@@ -88,15 +89,15 @@ trait CoreTrait
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param bool|string|null $fieldData Field Data
      *
      * @return void
      */
-    protected function setCoreFields($fieldName, $fieldData): void
+    protected function setCoreFields(string $fieldName, bool|string|null $fieldData): void
     {
         switch ($fieldName) {
             case 'email':
-                if ($this->object->email != strtolower($fieldData)) {
+                if ($this->object->email != strtolower((string) $fieldData)) {
                     //====================================================================//
                     //  Mark for Update Object Id In DataBase
                     $this->emailChanged = $this->object->email;
@@ -109,7 +110,7 @@ trait CoreTrait
                 break;
             case 'emailBlacklisted':
             case 'smsBlacklisted':
-                $this->setSimple($fieldName, $fieldData ? true : false);
+                $this->setSimple($fieldName, (bool) $fieldData);
 
                 break;
             default:

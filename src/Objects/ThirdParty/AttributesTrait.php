@@ -15,6 +15,7 @@
 
 namespace Splash\Connectors\SendInBlue\Objects\ThirdParty;
 
+use phpDocumentor\Reflection\Types\Self_;
 use stdClass;
 
 /**
@@ -25,11 +26,11 @@ trait AttributesTrait
     /**
      * Collection of Known Attributes Names with Spacial Mapping
      *
-     * This Collection is Public to Allow External Additons
+     * This Collection is Public to Allow External Additions
      *
      * @var array
      */
-    public static $knowAttributes = array(
+    public static array $knowAttributes = array(
         "nom" => array("http://schema.org/Person", "familyName"),
         "prenom" => array("http://schema.org/Person", "givenName"),
         "sms" => array("http://schema.org/Person", "telephone"),
@@ -40,7 +41,7 @@ trait AttributesTrait
      *
      * @var array
      */
-    private static $attrType = array(
+    private static array $attrType = array(
         "text" => SPL_T_VARCHAR,
         "float" => SPL_T_DOUBLE,
         "boolean" => SPL_T_BOOL,
@@ -52,12 +53,12 @@ trait AttributesTrait
      *
      * @var string
      */
-    private static $baseProp = "http://meta.schema.org/additionalType";
+    private static string $baseProp = "http://meta.schema.org/additionalType";
 
     /**
-     * @var array
+     * @var null|array
      */
-    private $attrCache;
+    private ?array $attrCache;
 
     /**
      * Build Fields using FieldFactory
@@ -91,22 +92,22 @@ trait AttributesTrait
             // Add Attribute to Fields
             $factory
                 ->create(self::toSplashType($attr))
-                ->Identifier(strtolower($attr->name))
-                ->Name($attr->name)
-                ->Group("Attributes");
-
-            //====================================================================//
+                ->identifier(strtolower($attr->name))
+                ->name($attr->name)
+                ->group("Attributes")
+            ;
+           //====================================================================//
             // Add Attribute MicroData
             $attrCode = strtolower($attr->name);
             if (isset(static::$knowAttributes[$attrCode])) {
-                $factory->MicroData(
-                    static::$knowAttributes[$attrCode][0],
-                    static::$knowAttributes[$attrCode][1]
+                $factory->microData(
+                    self::$knowAttributes[$attrCode][0],
+                    self::$knowAttributes[$attrCode][1]
                 );
 
                 continue;
             }
-            $factory->MicroData(static::$baseProp, strtolower($attr->name));
+            $factory->microData(self::$baseProp, strtolower($attr->name));
         }
     }
 
@@ -118,7 +119,7 @@ trait AttributesTrait
      *
      * @return void
      */
-    protected function getAttributesFields($key, $fieldName): void
+    protected function getAttributesFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // Field is not an Attribute
@@ -160,7 +161,7 @@ trait AttributesTrait
      *
      * @return void
      */
-    protected function setAttributesFields($fieldName, $fieldData): void
+    protected function setAttributesFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // Field is not an Attribute
@@ -197,10 +198,11 @@ trait AttributesTrait
         //====================================================================//
         // Safety Check => Attributes Are Loaded
         if (empty($this->attrCache)) {
-            $this->attrCache = $this->getParameter("ContactAttributes");
-            if (empty($this->attrCache) || !is_iterable($this->attrCache)) {
+            $attributes = $this->getParameter("ContactAttributes");
+            if (empty($attributes) || !is_array($attributes)) {
                 return null;
             }
+            $this->attrCache = $attributes;
         }
         //====================================================================//
         // Walk On Contacts Attributes
@@ -220,7 +222,7 @@ trait AttributesTrait
      *
      * @return bool
      */
-    private function isAvailable($attribute)
+    private function isAvailable(stdClass $attribute): bool
     {
         if ("normal" == $attribute->category) {
             return true;
@@ -236,7 +238,7 @@ trait AttributesTrait
      *
      * @return string
      */
-    private static function toSplashType($attribute)
+    private static function toSplashType(stdClass $attribute): string
     {
         //====================================================================//
         // Special => PHONE
@@ -245,8 +247,8 @@ trait AttributesTrait
         }
         //====================================================================//
         // From mapping
-        if (isset(static::$attrType[$attribute->type])) {
-            return static::$attrType[$attribute->type];
+        if (isset(self::$attrType[$attribute->type])) {
+            return self::$attrType[$attribute->type];
         }
         //====================================================================//
         // Default Type

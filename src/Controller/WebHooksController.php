@@ -18,7 +18,7 @@ namespace Splash\Connectors\SendInBlue\Controller;
 use Psr\Log\LoggerInterface;
 use Splash\Bundle\Models\AbstractConnector;
 use Splash\Connectors\SendInBlue\Objects\ThirdParty;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -26,7 +26,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 /**
  * Splash SendInBlue WebHooks Actions Controller
  */
-class WebHooksController extends Controller
+class WebHooksController extends AbstractController
 {
     /**
      * @var string
@@ -53,7 +53,7 @@ class WebHooksController extends Controller
      *
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
-    public function indexAction(LoggerInterface $logger, Request $request, AbstractConnector $connector)
+    public function indexAction(LoggerInterface $logger, Request $request, AbstractConnector $connector): JsonResponse
     {
         //====================================================================//
         // For SendInBlue Ping Test
@@ -135,7 +135,7 @@ class WebHooksController extends Controller
         ;
         //==============================================================================
         // Safety Check => Data are here
-        if (empty($requestData) || !isset($requestData['event']) || !isset($requestData['email'])) {
+        if (!is_array($requestData) || !isset($requestData['event']) || !isset($requestData['email'])) {
             throw new BadRequestHttpException('Malformed or missing data');
         }
         //==============================================================================

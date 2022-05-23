@@ -29,9 +29,9 @@ trait CRUDTrait
      *
      * @param string $objectId Object id
      *
-     * @return mixed
+     * @return null|stdClass
      */
-    public function load($objectId)
+    public function load(string $objectId): ?stdClass
     {
         //====================================================================//
         // Stack Trace
@@ -41,7 +41,7 @@ trait CRUDTrait
         // Get Contact Infos from Api
         $sibObject = API::get(self::getUri(self::decodeContactId($objectId)));
         if ((null == $sibObject) || !isset($sibObject->email)) {
-            return Splash::log()->errTrace("Unable to load Contact (".self::decodeContactId($objectId).").");
+            return Splash::log()->errNull("Unable to load Contact (".self::decodeContactId($objectId).").");
         }
 
         return $sibObject;
@@ -50,17 +50,19 @@ trait CRUDTrait
     /**
      * Create Request Object
      *
-     * @return false|stdClass New Object
+     * @return null|stdClass New Object
      */
-    public function create()
+    public function create(): ?stdClass
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace();
         //====================================================================//
         // Check Customer Name is given
-        if (empty($this->in["email"])) {
-            return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "email");
+        if (empty($this->in["email"]) || !is_string($this->in["email"])) {
+            Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "email");
+
+            return null;
         }
         //====================================================================//
         // Init Object
@@ -72,7 +74,7 @@ trait CRUDTrait
         // Create New Contact
         $response = API::post(self::getUri(), (object) $postData);
         if (is_null($response) || empty($response->id)) {
-            return Splash::log()->errTrace("Unable to Create Member (".$this->in["email"].").");
+            return Splash::log()->errNull("Unable to Create Member (".$this->in["email"].").");
         }
 
         return $this->load(self::encodeContactId($this->in["email"]));
@@ -83,9 +85,9 @@ trait CRUDTrait
      *
      * @param bool $needed Is This Update Needed
      *
-     * @return false|string Object Id of False if Failed to Update
+     * @return null|string Object ID of NULL if Failed to Update
      */
-    public function update(bool $needed)
+    public function update(bool $needed): ?string
     {
         //====================================================================//
         // Stack Trace
@@ -106,7 +108,7 @@ trait CRUDTrait
             // Create New Contact
             $response = API::post(self::getUri(), $this->object);
             if (is_null($response) || empty($response->id)) {
-                return Splash::log()->errTrace("Unable to Create Member (".$this->object->email.").");
+                return Splash::log()->errNull("Unable to Create Member (".$this->object->email.").");
             }
             //====================================================================//
             // Dispatch Object Id Updated Event
@@ -123,25 +125,21 @@ trait CRUDTrait
         // Update Contact
         $response = API::put(self::getUri($this->object->email), $this->object);
         if (true !== $response) {
-            return Splash::log()->errTrace("Unable to Update Member (".$this->object->email.").");
+            return Splash::log()->errNull("Unable to Update Member (".$this->object->email.").");
         }
 
         return $this->getObjectIdentifier();
     }
 
     /**
-     * Delete requested Object
-     *
-     * @param null|string $objectId Object Id
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function delete($objectId = null)
+    public function delete(string $objectId): bool
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace();
-        if (is_null($objectId)) {
+        if (empty($objectId)) {
             return true;
         }
         //====================================================================//
@@ -157,10 +155,10 @@ trait CRUDTrait
     /**
      * {@inheritdoc}
      */
-    public function getObjectIdentifier()
+    public function getObjectIdentifier(): ?string
     {
         if (!isset($this->object->email)) {
-            return false;
+            return null;
         }
 
         return self::encodeContactId($this->object->email);
@@ -169,7 +167,7 @@ trait CRUDTrait
     /**
      * Get Object CRUD Base Uri
      *
-     * @param string $objectId
+     * @param string|null $objectId
      *
      * @return string
      */

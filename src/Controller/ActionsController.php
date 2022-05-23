@@ -18,7 +18,7 @@ namespace Splash\Connectors\SendInBlue\Controller;
 use Splash\Bundle\Models\AbstractConnector;
 use Splash\Bundle\Models\Local\ActionsTrait;
 use Splash\Connectors\SendInBlue\Services\SendInBlueConnector;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,7 +28,7 @@ use Symfony\Component\Translation\Translator;
 /**
  * Splash SendInBlue Connector Actions Controller
  */
-class ActionsController extends Controller
+class ActionsController extends AbstractController
 {
     use ActionsTrait;
 
@@ -40,7 +40,7 @@ class ActionsController extends Controller
      *
      * @return Response
      */
-    public function webhooksAction(Request $request, AbstractConnector $connector)
+    public function webhooksAction(Request $request, AbstractConnector $connector): Response
     {
         $result = false;
         //====================================================================//

@@ -19,11 +19,10 @@ use Splash\Bundle\Models\AbstractStandaloneObject;
 use Splash\Connectors\SendInBlue\Services\SendInBlueConnector;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
+use stdClass;
 
 /**
  * SendInBlue Implementation of ThirdParty
- *
- * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class ThirdParty extends AbstractStandaloneObject
 {
@@ -38,27 +37,32 @@ class ThirdParty extends AbstractStandaloneObject
     /**
      * {@inheritdoc}
      */
-    protected static $DISABLED = false;
+    protected static bool $disabled = false;
 
     /**
      * {@inheritdoc}
      */
-    protected static $NAME = "Customer";
+    protected static string $name = "Customer";
 
     /**
      * {@inheritdoc}
      */
-    protected static $DESCRIPTION = "SendInBlue Contact";
+    protected static string $description = "SendInBlue Contact";
 
     /**
      * {@inheritdoc}
      */
-    protected static $ICO = "fa fa-user";
+    protected static string $ico = "fa fa-user";
+
+    /**
+     * @phpstan-var stdClass
+     */
+    protected object $object;
 
     /**
      * @var SendInBlueConnector
      */
-    protected $connector;
+    protected SendInBlueConnector $connector;
 
     /**
      * Class Constructor

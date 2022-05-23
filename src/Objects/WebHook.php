@@ -19,11 +19,10 @@ use Splash\Bundle\Models\AbstractStandaloneObject;
 use Splash\Connectors\SendInBlue\Services\SendInBlueConnector;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
+use stdClass;
 
 /**
  * SendInBlue Implementation of WebHooks
- *
- * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class WebHook extends AbstractStandaloneObject
 {
@@ -36,27 +35,32 @@ class WebHook extends AbstractStandaloneObject
     /**
      * {@inheritdoc}
      */
-    protected static $DISABLED = true;
+    protected static bool $disabled = true;
 
     /**
      * {@inheritdoc}
      */
-    protected static $NAME = "WebHook";
+    protected static string $name = "WebHook";
 
     /**
      * {@inheritdoc}
      */
-    protected static $DESCRIPTION = "SendInBlue WebHook";
+    protected static string $description = "SendInBlue WebHook";
 
     /**
      * {@inheritdoc}
      */
-    protected static $ICO = "fa fa-cogs";
+    protected static string $ico = "fa fa-cogs";
+
+    /**
+     * @phpstan-var stdClass
+     */
+    protected object $object;
 
     /**
      * @var SendInBlueConnector
      */
-    protected $connector;
+    protected SendInBlueConnector $connector;
 
     /**
      * Class Constructor

@@ -39,18 +39,18 @@ class SendInBlueConnector extends AbstractConnector
     /**
      * Objects Type Class Map
      *
-     * @var array
+     * @var array<string, class-string>
      */
-    protected static $objectsMap = array(
+    protected static array $objectsMap = array(
         "ThirdParty" => "Splash\\Connectors\\SendInBlue\\Objects\\ThirdParty",
     );
 
     /**
      * Widgets Type Class Map
      *
-     * @var array
+     * @var array<string, class-string>
      */
-    protected static $widgetsMap = array(
+    protected static array $widgetsMap = array(
         "SelfTest" => "Splash\\Connectors\\SendInBlue\\Widgets\\SelfTest",
     );
 
@@ -60,7 +60,7 @@ class SendInBlueConnector extends AbstractConnector
     public function ping() : bool
     {
         //====================================================================//
-        // Safety Check => Verify Selftest Pass
+        // Safety Check => Verify Self-test Pass
         if (!$this->selfTest()) {
             return false;
         }
@@ -75,7 +75,7 @@ class SendInBlueConnector extends AbstractConnector
     public function connect() : bool
     {
         //====================================================================//
-        // Safety Check => Verify Selftest Pass
+        // Safety Check => Verify Self-test Pass
         if (!$this->selfTest()) {
             return false;
         }
@@ -110,11 +110,11 @@ class SendInBlueConnector extends AbstractConnector
         //====================================================================//
         // Server Logo & Ico
         $informations->icoraw = Splash::file()->readFileContents(
-            dirname(dirname(__FILE__))."/Resources/public/img/SendInBlue-Logo.jpg"
+            dirname(__FILE__, 2) ."/Resources/public/img/SendInBlue-Logo.jpg"
         );
         $informations->logourl = null;
         $informations->logoraw = Splash::file()->readFileContents(
-            dirname(dirname(__FILE__))."/Resources/public/img/SendInBlue-Logo.jpg"
+            dirname(__FILE__, 2) ."/Resources/public/img/SendInBlue-Logo.jpg"
         );
         //====================================================================//
         // Server Information
@@ -127,7 +127,7 @@ class SendInBlueConnector extends AbstractConnector
 
         $config = $this->getConfiguration();
         //====================================================================//
-        // Safety Check => Verify Selftest Pass
+        // Safety Check => Verify Self-test Pass
         if (!$this->selfTest() || empty($config["ApiList"])) {
             return $informations;
         }
@@ -162,7 +162,7 @@ class SendInBlueConnector extends AbstractConnector
         //====================================================================//
         // Verify Api Key is Set
         //====================================================================//
-        if (!isset($config["ApiKey"]) || empty($config["ApiKey"]) || !is_string($config["ApiKey"])) {
+        if (empty($config["ApiKey"]) || !is_string($config["ApiKey"])) {
             Splash::log()->err("Api Key is Invalid");
 
             return false;
@@ -172,7 +172,7 @@ class SendInBlueConnector extends AbstractConnector
         // Configure Rest API
         return API::configure(
             $config["ApiKey"],
-            isset($config["ApiList"]) ? $config["ApiList"] : null
+            $config["ApiList"] ?? null
         );
     }
 
@@ -187,16 +187,16 @@ class SendInBlueConnector extends AbstractConnector
     /**
      * {@inheritdoc}
      */
-    public function getFile(string $filePath, string $fileMd5)
+    public function getFile(string $filePath, string $fileMd5): ?array
     {
         //====================================================================//
-        // Safety Check => Verify Selftest Pass
+        // Safety Check => Verify Self-test Pass
         if (!$this->selfTest()) {
-            return false;
+            return null;
         }
         Splash::log()->err("There are No Files Reading for Mailchime Up To Now!");
 
-        return false;
+        return null;
     }
 
     //====================================================================//
@@ -204,7 +204,7 @@ class SendInBlueConnector extends AbstractConnector
     //====================================================================//
 
     /**
-     * @abstract   Get Connector Profile Informations
+     * Get Connector Profile Information
      *
      * @return array
      */
@@ -302,6 +302,7 @@ class SendInBlueConnector extends AbstractConnector
         }
         //====================================================================//
         // Generate WebHook Url
+        /** @var string $webHookServer */
         $webHookServer = filter_input(INPUT_SERVER, 'SERVER_NAME');
         //====================================================================//
         // When Running on a Local Server
@@ -348,6 +349,7 @@ class SendInBlueConnector extends AbstractConnector
         }
         //====================================================================//
         // Generate WebHook Url
+        /** @var string $webHookServer */
         $webHookServer = filter_input(INPUT_SERVER, 'SERVER_NAME');
         $webHookUrl = $router->generate(
             'splash_connector_action',
