@@ -22,25 +22,27 @@ echo '===> Start Docker Stack'
 docker-compose up -d
 
 ################################################################################
-# PHP 7.3
-echo '===> Checks Php 7.3'
-docker-compose exec php-7.3 bash ci/install.sh
-docker-compose exec php-7.3 php vendor/bin/grumphp run --testsuite=travis
-docker-compose exec php-7.3 php vendor/bin/grumphp run --testsuite=csfixer
-docker-compose exec php-7.3 php vendor/bin/grumphp run --testsuite=phpstan
-
+# Docker Compose Container you want to check
+CONTAINERS="php-8.0,php-7.4"
 ################################################################################
-# PHP 7.4
-echo '===> Checks Php 7.4'
-docker-compose exec php-7.4 bash ci/install.sh
-docker-compose exec php-7.4 php vendor/bin/grumphp run --testsuite=travis
-docker-compose exec php-7.4 php vendor/bin/grumphp run --testsuite=csfixer
-docker-compose exec php-7.4 php vendor/bin/grumphp run --testsuite=phpstan
+# Start Docker Compose Stack
+echo '===> Start Docker Stack'
+docker-compose up -d
 
-################################################################################
-# PHP 8.0
-echo '===> Checks Php 8.0'
-docker-compose exec php-8.0 bash ci/install.sh
-docker-compose exec php-8.0 php vendor/bin/grumphp run --testsuite=travis
-docker-compose exec php-8.0 php vendor/bin/grumphp run --testsuite=csfixer
-docker-compose exec php-8.0 php vendor/bin/grumphp run --testsuite=phpstan
+######################################
+# Run Grumphp Test Suites Locally
+php vendor/bin/grumphp run --testsuite=travis
+php vendor/bin/grumphp run --testsuite=csfixer
+
+######################################
+# Walk on Docker Compose Container
+for ID in $(echo $CONTAINERS | tr "," "\n")
+do
+    echo "===> Checks $ID"
+    # Ensure Git is Installed
+    docker-compose exec $ID bash ci/install.sh
+    # Run Grumphp Test Suites
+    docker-compose exec $ID php vendor/bin/grumphp run --testsuite=travis
+    docker-compose exec $ID php vendor/bin/grumphp run --testsuite=csfixer
+    docker-compose exec $ID php vendor/bin/grumphp run --testsuite=phpstan
+done

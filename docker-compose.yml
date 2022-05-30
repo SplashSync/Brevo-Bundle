@@ -35,7 +35,7 @@ services:
     ################################################################################
     # Splash Toolkit Container   
     toolkit:
-        image: 'splashsync/toolkit'
+        image: 'splashsync/toolkit:1.0'
         container_name: sendinblue-toolkit
         volumes:
             # Specify Local Configuration File
@@ -65,15 +65,6 @@ services:
             - ./:/var/www/html
             - vendor-php74:/var/www/html/vendor
 
-    ################################################################################
-    # PHP 7.3
-    php-7.3:
-        image:          registry.gitlab.com/badpixxel-projects/php-sdk:php-7.3
-        container_name: sendinblue-7.3
-        volumes:
-            - ./:/var/www/html
-            - vendor-php73:/var/www/html/vendor
-
 networks:
     ################################################################################
     # Default Private Network    
@@ -90,4 +81,3 @@ networks:
 volumes:
     vendor-php80: ~
     vendor-php74: ~
-    vendor-php73: ~
