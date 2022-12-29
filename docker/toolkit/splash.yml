@@ -28,5 +28,5 @@ splash:
             connector:          sendinblue
             config:  
                 WsHost:         http://localhost:8000
-                ApiKey:         ThisIsSecretApiKey
-                ApiList:        ThisIsSecretApiList
+                ApiKey:         '%env(resolve:SIB_API_KEY)%'
+                ApiList:        '%env(resolve:SIB_API_LIST)%'

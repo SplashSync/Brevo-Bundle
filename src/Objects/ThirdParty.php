@@ -18,17 +18,19 @@ namespace Splash\Connectors\SendInBlue\Objects;
 use Splash\Bundle\Models\AbstractStandaloneObject;
 use Splash\Connectors\SendInBlue\Services\SendInBlueConnector;
 use Splash\Models\Objects\IntelParserTrait;
+use Splash\Models\Objects\PrimaryKeysAwareInterface;
 use Splash\Models\Objects\SimpleFieldsTrait;
 use stdClass;
 
 /**
  * SendInBlue Implementation of ThirdParty
  */
-class ThirdParty extends AbstractStandaloneObject
+class ThirdParty extends AbstractStandaloneObject implements PrimaryKeysAwareInterface
 {
     use IntelParserTrait;
     use SimpleFieldsTrait;
     use ThirdParty\CRUDTrait;
+    use ThirdParty\PrimaryTrait;
     use ThirdParty\ObjectsListTrait;
     use ThirdParty\CoreTrait;
     use ThirdParty\AttributesTrait;

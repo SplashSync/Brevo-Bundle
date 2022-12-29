@@ -16,8 +16,10 @@
 namespace Splash\Connectors\SendInBlue\Services;
 
 use ArrayObject;
+use Splash\Bundle\Interfaces\Connectors\PrimaryKeysInterface;
 use Splash\Bundle\Models\AbstractConnector;
 use Splash\Bundle\Models\Connectors\GenericObjectMapperTrait;
+use Splash\Bundle\Models\Connectors\GenericObjectPrimaryMapperTrait;
 use Splash\Bundle\Models\Connectors\GenericWidgetMapperTrait;
 use Splash\Connectors\SendInBlue\Form\EditFormType;
 use Splash\Connectors\SendInBlue\Form\NewFormType;
@@ -31,9 +33,10 @@ use Symfony\Component\Routing\RouterInterface;
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class SendInBlueConnector extends AbstractConnector
+class SendInBlueConnector extends AbstractConnector implements PrimaryKeysInterface
 {
     use GenericObjectMapperTrait;
+    use GenericObjectPrimaryMapperTrait;
     use GenericWidgetMapperTrait;
 
     /**
