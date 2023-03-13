@@ -15,6 +15,8 @@
 
 namespace Splash\Connectors\SendInBlue\Objects\ThirdParty;
 
+use Splash\Core\SplashCore as Splash;
+
 /**
  * Manage ThirdParty Primary Search Requests
  */
@@ -35,6 +37,9 @@ trait PrimaryTrait
         // Try to load Contact by Email
         $contactId = self::encodeContactId($email);
         $contact = $this->load($contactId);
+        //====================================================================//
+        // Clean Splash Log
+        Splash::log()->cleanLog();
 
         return $contact ? $contactId : null;
     }

@@ -153,8 +153,10 @@ class SendInBlueHelper
             return null;
         }
         //====================================================================//
-        // Catch Errors inResponse
-        return self::catchErrors($response) ? $response->body : null;
+        // Catch Errors in Response
+        return (self::catchErrors($response) && ($response->body instanceof stdClass))
+            ? $response->body : null
+        ;
     }
 
     /**
@@ -229,7 +231,7 @@ class SendInBlueHelper
         }
         //====================================================================//
         // Catch Errors in Response
-        return self::catchErrors($response) ? true : false;
+        return self::catchErrors($response);
     }
 
     /**
