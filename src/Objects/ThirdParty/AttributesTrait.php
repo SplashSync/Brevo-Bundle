@@ -45,6 +45,7 @@ trait AttributesTrait
         "float" => SPL_T_DOUBLE,
         "boolean" => SPL_T_BOOL,
         "date" => SPL_T_DATE,
+        "category" => SPL_T_VARCHAR,
     );
 
     /**
@@ -75,38 +76,15 @@ trait AttributesTrait
 
         //====================================================================//
         // Create Attributes Fields
-        $factory = $this->fieldsFactory();
         foreach ($attributes as $attr) {
             //====================================================================//
             // Safety Check => Attributes List was Updated to New Format
-            if (!($attr instanceof stdClass)) {
+            if (!($attr instanceof stdClass) || !$this->isAvailable($attr)) {
                 continue;
             }
             //====================================================================//
-            // Attributes Not Used
-            if (!$this->isAvailable($attr)) {
-                continue;
-            }
-            //====================================================================//
-            // Add Attribute to Fields
-            $factory
-                ->create(self::toSplashType($attr))
-                ->identifier(strtolower($attr->name))
-                ->name($attr->name)
-                ->group("Attributes")
-            ;
-            //====================================================================//
-            // Add Attribute MicroData
-            $attrCode = strtolower($attr->name);
-            if (isset(static::$knowAttributes[$attrCode])) {
-                $factory->microData(
-                    self::$knowAttributes[$attrCode][0],
-                    self::$knowAttributes[$attrCode][1]
-                );
-
-                continue;
-            }
-            $factory->microData(self::$baseProp, strtolower($attr->name));
+            // Create Attribute Field
+            $this->buildAttributeField($attr);
         }
     }
 
@@ -133,7 +111,7 @@ trait AttributesTrait
         if (isset($this->object->attributes->{$attrName})) {
             //====================================================================//
             // Extract Attribute Value
-            switch ($attr->type) {
+            switch (self::getSibType($attr)) {
                 case 'float':
                     $fieldData = (float) $this->object->attributes->{$attrName};
 
@@ -155,12 +133,12 @@ trait AttributesTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string                $fieldName Field Identifier / Name
+     * @param null|float|int|string $fieldData Field Data
      *
      * @return void
      */
-    protected function setAttributesFields(string $fieldName, $fieldData): void
+    protected function setAttributesFields(string $fieldName, null|string|float|int $fieldData): void
     {
         //====================================================================//
         // Field is not an Attribute
@@ -171,10 +149,10 @@ trait AttributesTrait
         //====================================================================//
         // Fetch Original Attribute Value
         $attrName = $attr->name;
-        $origin = null;
-        if (isset($this->object->attributes->{$attrName})) {
-            $origin = $this->object->attributes->{$attrName};
-        }
+        $origin = $this->object->attributes->{$attrName} ?? null;
+        //====================================================================//
+        // Convert Splash Value to SendInBlue Value
+        $fieldData = self::getSibValue($attr, $fieldData);
         //====================================================================//
         // Compare & Update Attribute Value
         if ($origin != $fieldData) {
@@ -183,6 +161,45 @@ trait AttributesTrait
         }
 
         unset($this->in[$fieldName]);
+    }
+
+    /**
+     * Build Field using FieldFactory
+     *
+     * @return void
+     */
+    protected function buildAttributeField(stdClass $attr): void
+    {
+        $factory = $this->fieldsFactory();
+        //====================================================================//
+        // Add Attribute to Fields
+        $factory
+            ->create(self::toSplashType($attr))
+            ->identifier(strtolower($attr->name))
+            ->name($attr->name)
+            ->group("Attributes")
+        ;
+        //====================================================================//
+        // Add Attribute Values Choices
+        if ("category" == self::getSibType($attr)) {
+            foreach ($attr->enumeration ?? array() as $choice) {
+                if (!empty($choice->value) && !empty($choice->label)) {
+                    $factory->addChoice($choice->value, sprintf("[%s] %s", $choice->value, $choice->label));
+                }
+            }
+        }
+        //====================================================================//
+        // Add Attribute MicroData
+        $attrCode = strtolower($attr->name);
+        if (isset(static::$knowAttributes[$attrCode])) {
+            $factory->microData(
+                self::$knowAttributes[$attrCode][0],
+                self::$knowAttributes[$attrCode][1]
+            );
+
+            return;
+        }
+        $factory->microData(self::$baseProp, strtolower($attr->name));
     }
 
     /**
@@ -223,7 +240,7 @@ trait AttributesTrait
      */
     private function isAvailable(stdClass $attribute): bool
     {
-        if ("normal" == $attribute->category) {
+        if (in_array($attribute->category, array("normal", "category"), true)) {
             return true;
         }
 
@@ -244,13 +261,59 @@ trait AttributesTrait
         if ("SMS" == $attribute->name) {
             return SPL_T_PHONE;
         }
+        $attrType = self::getSibType($attribute);
         //====================================================================//
         // From mapping
-        if (isset(self::$attrType[$attribute->type])) {
-            return self::$attrType[$attribute->type];
+        if (isset(self::$attrType[$attrType])) {
+            return self::$attrType[$attrType];
         }
         //====================================================================//
         // Default Type
         return SPL_T_VARCHAR;
+    }
+
+    /**
+     * Get SendInBlue Attribute Type
+     *
+     * @param stdClass $attribute
+     *
+     * @return string
+     */
+    private static function getSibType(stdClass $attribute): string
+    {
+        return ("category" == $attribute->category) ? "category" : $attribute->type;
+    }
+
+    /**
+     * Convert Splash Value to SendInBlue Value
+     *
+     * @param stdClass              $attribute
+     * @param null|float|int|string $value
+     *
+     * @return null|float|int|string
+     */
+    private static function getSibValue(stdClass $attribute, null|string|float|int $value): null|string|float|int
+    {
+        //====================================================================//
+        // Detect Category Value
+        if ("category" == self::getSibType($attribute)) {
+            //====================================================================//
+            // Find by Value
+            foreach ($attribute->enumeration ?? array() as $choice) {
+                if (!empty($choice->value) && ($choice->value == $value)) {
+                    return $choice->value;
+                }
+            }
+            //====================================================================//
+            // Find by Label
+            foreach ($attribute->enumeration ?? array() as $choice) {
+                if (!empty($choice->value) && !empty($choice->label) && ($choice->label == $value)) {
+                    return $choice->value;
+                }
+            }
+        }
+        //====================================================================//
+        // Use Raw Value
+        return $value;
     }
 }
