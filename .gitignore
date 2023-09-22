@@ -2,7 +2,7 @@
 /.env
 /.php_cs.cache
 /.web-server-pid
-/public/bundles/
+/tests/public/bundles/
 /var/
 /vendor/
 /public/
