@@ -13,31 +13,36 @@
  *  file that was distributed with this source code.
  */
 
-namespace Splash\Connectors\SendInBlue\Services;
+namespace Splash\Connectors\Brevo\Services;
 
 use ArrayObject;
+use Psr\Log\LoggerInterface;
 use Splash\Bundle\Interfaces\Connectors\PrimaryKeysInterface;
 use Splash\Bundle\Models\AbstractConnector;
 use Splash\Bundle\Models\Connectors\GenericObjectMapperTrait;
 use Splash\Bundle\Models\Connectors\GenericObjectPrimaryMapperTrait;
 use Splash\Bundle\Models\Connectors\GenericWidgetMapperTrait;
-use Splash\Connectors\SendInBlue\Form\EditFormType;
-use Splash\Connectors\SendInBlue\Form\NewFormType;
-use Splash\Connectors\SendInBlue\Models\SendInBlueHelper as API;
-use Splash\Connectors\SendInBlue\Objects\WebHook;
+use Splash\Bundle\Models\Connectors\RoutesBuilderAwareTrait;
+use Splash\Bundle\Services\ConnectorRoutesBuilder;
+use Splash\Connectors\Brevo\Actions;
+use Splash\Connectors\Brevo\Form\EditFormType;
+use Splash\Connectors\Brevo\Form\NewFormType;
+use Splash\Connectors\Brevo\Models\BrevoApiHelper as API;
+use Splash\Connectors\Brevo\Objects;
 use Splash\Core\SplashCore as Splash;
-use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * SendInBlue REST API Connector for Splash
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class SendInBlueConnector extends AbstractConnector implements PrimaryKeysInterface
+class BrevoConnector extends AbstractConnector implements PrimaryKeysInterface
 {
     use GenericObjectMapperTrait;
     use GenericObjectPrimaryMapperTrait;
     use GenericWidgetMapperTrait;
+    use RoutesBuilderAwareTrait;
 
     /**
      * Objects Type Class Map
@@ -45,7 +50,8 @@ class SendInBlueConnector extends AbstractConnector implements PrimaryKeysInterf
      * @var array<string, class-string>
      */
     protected static array $objectsMap = array(
-        "ThirdParty" => "Splash\\Connectors\\SendInBlue\\Objects\\ThirdParty",
+        "ThirdParty" => Objects\ThirdParty::class,
+        "WebHook" => Objects\WebHook::class,
     );
 
     /**
@@ -54,8 +60,20 @@ class SendInBlueConnector extends AbstractConnector implements PrimaryKeysInterf
      * @var array<string, class-string>
      */
     protected static array $widgetsMap = array(
-        "SelfTest" => "Splash\\Connectors\\SendInBlue\\Widgets\\SelfTest",
+        "SelfTest" => "Splash\\Connectors\\Brevo\\Widgets\\SelfTest",
     );
+
+    /**
+     * Class Constructor
+     */
+    public function __construct(
+        EventDispatcherInterface $eventDispatcher,
+        LoggerInterface $logger,
+        ConnectorRoutesBuilder $routesBuilder,
+    ) {
+        parent::__construct($eventDispatcher, $logger);
+        $this->setRouteBuilder($routesBuilder);
+    }
 
     /**
      * {@inheritdoc}
@@ -67,6 +85,7 @@ class SendInBlueConnector extends AbstractConnector implements PrimaryKeysInterf
         if (!$this->selfTest()) {
             return false;
         }
+
         //====================================================================//
         // Perform Ping Test
         return API::ping();
@@ -108,16 +127,16 @@ class SendInBlueConnector extends AbstractConnector implements PrimaryKeysInterf
     {
         //====================================================================//
         // Server General Description
-        $informations->shortdesc = "SendInBlue";
-        $informations->longdesc = "Splash Integration for SendInBlue's Api V3.0";
+        $informations->shortdesc = "Brevo";
+        $informations->longdesc = "Splash Integration for Brevo's Api V3.0";
         //====================================================================//
         // Server Logo & Ico
         $informations->icoraw = Splash::file()->readFileContents(
-            dirname(__FILE__, 2)."/Resources/public/img/SendInBlue-Logo.jpg"
+            dirname(__FILE__, 2)."/Resources/public/img/Brevo-Icon.png"
         );
         $informations->logourl = null;
         $informations->logoraw = Splash::file()->readFileContents(
-            dirname(__FILE__, 2)."/Resources/public/img/SendInBlue-Logo.jpg"
+            dirname(__FILE__, 2)."/Resources/public/img/Brevo-Logo.png"
         );
         //====================================================================//
         // Server Information
@@ -172,6 +191,13 @@ class SendInBlueConnector extends AbstractConnector implements PrimaryKeysInterf
         }
 
         //====================================================================//
+        // Extended Mode
+        //====================================================================//
+        if ($this->getParameter("Extended", false)) {
+            Objects\WebHook::setDisabled(false);
+        }
+
+        //====================================================================//
         // Configure Rest API
         return API::configure(
             $config["ApiKey"],
@@ -214,16 +240,16 @@ class SendInBlueConnector extends AbstractConnector implements PrimaryKeysInterf
     public function getProfile() : array
     {
         return array(
-            'enabled' => true,                                   // is Connector Enabled
-            'beta' => false,                                  // is this a Beta release
-            'type' => self::TYPE_ACCOUNT,                     // Connector Type or Mode
-            'name' => 'sendinblue',                           // Connector code (lowercase, no space allowed)
-            'connector' => 'splash.connectors.sendinblue',         // Connector Symfony Service
-            'title' => 'profile.card.title',                   // Public short name
-            'label' => 'profile.card.label',                   // Public long name
+            'enabled' => true,                                  // is Connector Enabled
+            'beta' => false,                                    // is this a Beta release
+            'type' => self::TYPE_ACCOUNT,                       // Connector Type or Mode
+            'name' => 'sendinblue',                             // Connector code (lowercase, no space allowed)
+            'connector' => 'splash.connectors.sendinblue',      // Connector Symfony Service
+            'title' => 'profile.card.title',                    // Public short name
+            'label' => 'profile.card.label',                    // Public long name
             'domain' => 'SendInBlueBundle',                     // Translation domain for names
-            'ico' => '/bundles/sendinblue/img/SendInBlue-Logo.jpg', // Public Icon path
-            'www' => 'www.SendInBlue.com',                   // Website Url
+            'ico' => '/bundles/brevo/img/Brevo-Icon.png',       // Public Icon path
+            'www' => 'www.SendInBlue.com',                      // Website Url
         );
     }
 
@@ -232,7 +258,7 @@ class SendInBlueConnector extends AbstractConnector implements PrimaryKeysInterf
      */
     public function getConnectedTemplate() : string
     {
-        return "@SendInBlue/Profile/connected.html.twig";
+        return "@Brevo/Profile/connected.html.twig";
     }
 
     /**
@@ -240,7 +266,7 @@ class SendInBlueConnector extends AbstractConnector implements PrimaryKeysInterf
      */
     public function getOfflineTemplate() : string
     {
-        return "@SendInBlue/Profile/offline.html.twig";
+        return "@Brevo/Profile/offline.html.twig";
     }
 
     /**
@@ -248,7 +274,7 @@ class SendInBlueConnector extends AbstractConnector implements PrimaryKeysInterf
      */
     public function getNewTemplate() : string
     {
-        return "@SendInBlue/Profile/new.html.twig";
+        return "@Brevo/Profile/new.html.twig";
     }
 
     /**
@@ -273,7 +299,7 @@ class SendInBlueConnector extends AbstractConnector implements PrimaryKeysInterf
     public function getPublicActions() : array
     {
         return array(
-            "index" => "SendInBlueBundle:WebHooks:index",
+            "index" => Actions\Master::class,
         );
     }
 
@@ -283,7 +309,7 @@ class SendInBlueConnector extends AbstractConnector implements PrimaryKeysInterf
     public function getSecuredActions() : array
     {
         return array(
-            "webhooks" => "SendInBlueBundle:Actions:webhooks",
+            "webhooks" => Actions\WebhooksUpdate::class,
         );
     }
 
@@ -303,18 +329,13 @@ class SendInBlueConnector extends AbstractConnector implements PrimaryKeysInterf
         if (!$this->selfTest()) {
             return false;
         }
+
         //====================================================================//
         // Generate WebHook Url
-        /** @var string $webHookServer */
-        $webHookServer = filter_input(INPUT_SERVER, 'SERVER_NAME');
-        //====================================================================//
-        // When Running on a Local Server
-        if (false !== strpos("localhost", $webHookServer)) {
-            $webHookServer = "www.splashsync.com";
-        }
+        $webHookUrl = $this->routeBuilder->getMasterActionUrl($this);
         //====================================================================//
         // Create Object Class
-        $webHookManager = new WebHook($this);
+        $webHookManager = new Objects\WebHook($this);
         $webHookManager->configure("webhook", $this->getWebserviceId(), $this->getConfiguration());
         //====================================================================//
         // Get List Of WebHooks for this List
@@ -327,10 +348,16 @@ class SendInBlueConnector extends AbstractConnector implements PrimaryKeysInterf
         foreach ($webHooks as $webHook) {
             //====================================================================//
             // This is a Splash WebHooks
-            if (false !== strpos(trim($webHook['url']), $webHookServer)) {
+            if (!$this->getRouteBuilder()->isSplashUrl($webHook['url'])) {
+                continue;
+            }
+            //====================================================================//
+            // This is Splash WebHook
+            if (trim($webHook['url']) == $webHookUrl) {
                 return true;
             }
         }
+
         //====================================================================//
         // Splash WebHooks was NOT Found
         return false;
@@ -339,11 +366,9 @@ class SendInBlueConnector extends AbstractConnector implements PrimaryKeysInterf
     /**
      * Check & Update SendInBlue Api Account WebHooks.
      *
-     * @param RouterInterface $router
-     *
      * @return bool
      */
-    public function updateWebHooks(RouterInterface $router) : bool
+    public function updateWebHooks() : bool
     {
         //====================================================================//
         // Connector SelfTest
@@ -352,25 +377,10 @@ class SendInBlueConnector extends AbstractConnector implements PrimaryKeysInterf
         }
         //====================================================================//
         // Generate WebHook Url
-        /** @var string $webHookServer */
-        $webHookServer = filter_input(INPUT_SERVER, 'SERVER_NAME');
-        $webHookUrl = $router->generate(
-            'splash_connector_action',
-            array(
-                'connectorName' => $this->getProfile()["name"],
-                'webserviceId' => $this->getWebserviceId(),
-            ),
-            RouterInterface::ABSOLUTE_URL
-        );
-        //====================================================================//
-        // When Running on a Local Server
-        if (false !== strpos("localhost", $webHookServer)) {
-            $webHookServer = "www.splashsync.com";
-            $webHookUrl = "https://www.splashsync.com/en/ws/SendInBlue/123456";
-        }
+        $webHookUrl = $this->getRouteBuilder()->getMasterActionUrl($this);
         //====================================================================//
         // Create Object Class
-        $webHookManager = new WebHook($this);
+        $webHookManager = new Objects\WebHook($this);
         $webHookManager->configure("webhook", $this->getWebserviceId(), $this->getConfiguration());
         //====================================================================//
         // Get List Of WebHooks for this List
@@ -391,7 +401,7 @@ class SendInBlueConnector extends AbstractConnector implements PrimaryKeysInterf
             }
             //====================================================================//
             // This is a Splash WebHooks
-            if (false !== strpos(trim($webHook['url']), $webHookServer)) {
+            if ($this->getRouteBuilder()->isSplashUrl($webHook['url'])) {
                 $webHookManager->delete($webHook['id']);
             }
         }
@@ -400,6 +410,7 @@ class SendInBlueConnector extends AbstractConnector implements PrimaryKeysInterf
         if ($foundWebHook) {
             return true;
         }
+
         //====================================================================//
         // Add Splash WebHooks
         return (false !== $webHookManager->create($webHookUrl));

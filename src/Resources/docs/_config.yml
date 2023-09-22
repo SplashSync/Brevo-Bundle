@@ -21,12 +21,12 @@
 
 # Title of the Bundle / Module
 title: SendInBlue Connector
-repository: SplashSync/SendInBlue-Bundle
+repository: SplashSync/Brevo-Bundle
 # Subtitle of the Site (Generally DOC)
 subtitle: DOC
 # the sub-path of your site, e.g. /blog
-baseurl: "/SendInBlue-Bundle" 
+baseurl: "/Brevo-Bundle"
 # Description of the Bundle/Module
-description:    "SendInBlue Connectors for Splash Sync."
+description:    "Brevo (Ex SendInBlue) Connectors for Splash Sync."
 # Package Code on Packagist
-package:    "splash/sendinblue"
+package:    "splash/brevo"

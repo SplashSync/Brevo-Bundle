@@ -13,7 +13,7 @@
  *  file that was distributed with this source code.
  */
 
-namespace Splash\Connectors\SendInBlue\Objects\ThirdParty;
+namespace Splash\Connectors\Brevo\Objects\ThirdParty;
 
 use DateTime;
 

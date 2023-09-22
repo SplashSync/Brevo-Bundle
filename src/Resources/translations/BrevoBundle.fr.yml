@@ -7,22 +7,22 @@ var:
         
     list:
         label:  Liste
-        desc:   "La liste SendInBlue que vous voulez synchroniser avec Splash."
+        desc:   "La liste contacts que vous voulez synchroniser avec Splash."
 
 ## Node Profile
 profile:
     connection:
         title:  Connexion API
     card:   
-        title:  SendInBlue API V3
-        label:  Connectez votre compte SendInBlue pour synchroniser vos clients avec vos listes d'abonnés
+        title:  Brevo API V3
+        label:  Connectez votre compte Brevo pour synchroniser vos clients avec vos listes d'abonnés
 
 ## Node Api Actions
 admin:
-    selftest:   Configuration du Connecteur SendInBlue
-    connect:    Connexion a l'API SendInBlue V3  
+    selftest:   Configuration du Connecteur Brevo
+    connect:    Connexion a l'API Brevo V3
     webhooks:
         label:  Configuration des WebHooks
         desc:   Détecte et Configure les WebHooks pour Splash Sync
-        msg:    Configuration des WebHooks Réussie
-        err:    La Configuration des WebHooks a échouée
+        msg:    Configuration des WebHooks est valide
+        err:    La Configuration des WebHooks est nécessaire

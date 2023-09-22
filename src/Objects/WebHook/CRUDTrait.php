@@ -13,9 +13,9 @@
  *  file that was distributed with this source code.
  */
 
-namespace Splash\Connectors\SendInBlue\Objects\WebHook;
+namespace Splash\Connectors\Brevo\Objects\WebHook;
 
-use Splash\Connectors\SendInBlue\Models\SendInBlueHelper as API;
+use Splash\Connectors\Brevo\Models\BrevoApiHelper as API;
 use Splash\Core\SplashCore      as Splash;
 use stdClass;
 

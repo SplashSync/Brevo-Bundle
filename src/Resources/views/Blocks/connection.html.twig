@@ -1,4 +1,4 @@
-{% trans_default_domain "SendInBlueBundle" %}
+{% trans_default_domain "BrevoBundle" %}
 
 <!-- Connection Block -->
 <ul class="list-unstyled">
@@ -21,7 +21,7 @@
             <i class="fa fa-check"></i>&nbsp;{{ 'admin.webhooks.msg'| trans }}
         </h4>
         {% else %}
-        <h4 class="font-md text-danger">
+        <h4 class="font-md text-warning">
             <i class="fa fa-times"></i>&nbsp;{{ 'admin.webhooks.err'| trans }}
         </h4>
         {% endif %}

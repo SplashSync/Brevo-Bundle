@@ -13,7 +13,7 @@
  *  file that was distributed with this source code.
  */
 
-namespace Splash\Connectors\SendInBlue\Form;
+namespace Splash\Connectors\Brevo\Form;
 
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -35,6 +35,6 @@ class NewFormType extends AbstractSendInBlueType
         $this
             ->addApiKeyField($builder, $options)
             ->addApiListField($builder, $options)
-            ;
+        ;
     }
 }

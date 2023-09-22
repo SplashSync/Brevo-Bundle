@@ -13,7 +13,7 @@
  *  file that was distributed with this source code.
  */
 
-namespace Splash\Connectors\SendInBlue\DependencyInjection;
+namespace Splash\Connectors\Brevo\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -23,7 +23,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 /**
  * Loads and manages bundle configuration
  */
-class SendInBlueExtension extends Extension
+class BrevoExtension extends Extension
 {
     /**
      * {@inheritdoc}
@@ -33,6 +33,6 @@ class SendInBlueExtension extends Extension
     public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.yml');
+        $loader->load('services.yaml');
     }
 }

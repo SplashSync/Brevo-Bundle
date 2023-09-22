@@ -13,24 +13,28 @@
  *  file that was distributed with this source code.
  */
 
-namespace Splash\Connectors\SendInBlue\Controller;
+namespace Splash\Connectors\Brevo\Actions;
 
 use Splash\Bundle\Models\AbstractConnector;
 use Splash\Bundle\Models\Local\ActionsTrait;
-use Splash\Connectors\SendInBlue\Services\SendInBlueConnector;
+use Splash\Connectors\Brevo\Services\BrevoConnector;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Translation\Translator;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Splash SendInBlue Connector Actions Controller
  */
-class ActionsController extends AbstractController
+class WebhooksUpdate extends AbstractController
 {
     use ActionsTrait;
+
+    public function __construct(
+        private TranslatorInterface $translator
+    ) {
+    }
 
     /**
      * Update User Connector WebHooks List
@@ -40,28 +44,24 @@ class ActionsController extends AbstractController
      *
      * @return Response
      */
-    public function webhooksAction(Request $request, AbstractConnector $connector): Response
+    public function __invoke(Request $request, AbstractConnector $connector): Response
     {
         $result = false;
         //====================================================================//
         // Connector SelfTest
-        if (($connector instanceof SendInBlueConnector) && $connector->selfTest()) {
-            /** @var RouterInterface $router */
-            $router = $this->get('router');
+        if (($connector instanceof BrevoConnector) && $connector->selfTest()) {
             //====================================================================//
             // Update WebHooks Config
-            $result = $connector->updateWebHooks($router);
+            $result = $connector->updateWebHooks();
         }
         //====================================================================//
         // Inform User
-        /** @var Translator $translator */
-        $translator = $this->get('translator');
         $this->addFlash(
             $result ? "success" : "danger",
-            $translator->trans(
+            $this->translator->trans(
                 $result ? "admin.webhooks.msg" : "admin.webhooks.err",
                 array(),
-                "SendInBlueBundle"
+                "BrevoBundle"
             )
         );
         //====================================================================//

@@ -13,10 +13,10 @@
  *  file that was distributed with this source code.
  */
 
-namespace Splash\Connectors\SendInBlue\Objects;
+namespace Splash\Connectors\Brevo\Objects;
 
 use Splash\Bundle\Models\AbstractStandaloneObject;
-use Splash\Connectors\SendInBlue\Services\SendInBlueConnector;
+use Splash\Connectors\Brevo\Services\BrevoConnector;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\PrimaryKeysAwareInterface;
 use Splash\Models\Objects\SimpleFieldsTrait;
@@ -62,16 +62,16 @@ class ThirdParty extends AbstractStandaloneObject implements PrimaryKeysAwareInt
     protected object $object;
 
     /**
-     * @var SendInBlueConnector
+     * @var BrevoConnector
      */
-    protected SendInBlueConnector $connector;
+    protected BrevoConnector $connector;
 
     /**
      * Class Constructor
      *
-     * @param SendInBlueConnector $parentConnector
+     * @param BrevoConnector $parentConnector
      */
-    public function __construct(SendInBlueConnector $parentConnector)
+    public function __construct(BrevoConnector $parentConnector)
     {
         $this->connector = $parentConnector;
     }

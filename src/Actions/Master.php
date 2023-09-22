@@ -13,30 +13,34 @@
  *  file that was distributed with this source code.
  */
 
-namespace Splash\Connectors\SendInBlue\Controller;
+namespace Splash\Connectors\Brevo\Actions;
 
 use Psr\Log\LoggerInterface;
 use Splash\Bundle\Models\AbstractConnector;
-use Splash\Connectors\SendInBlue\Objects\ThirdParty;
+use Splash\Connectors\Brevo\Objects\ThirdParty;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
- * Splash SendInBlue WebHooks Actions Controller
+ * Splash Brevo WebHooks Actions Controller
  */
-class WebHooksController extends AbstractController
+class Master extends AbstractController
 {
     /**
      * @var string
      */
-    const USER = "SendInBlue API";
+    const USER = "Brevo API";
 
     /**
      * @var string
      */
     const COMMENT = 'Contact has been Updated';
+
+    public function __construct(private LoggerInterface $logger)
+    {
+    }
 
     //====================================================================//
     //  SendInBlue WEBHOOKS MANAGEMENT
@@ -45,7 +49,6 @@ class WebHooksController extends AbstractController
     /**
      * Execute WebHook Actions for A SendInBlue Connector
      *
-     * @param LoggerInterface   $logger
      * @param Request           $request
      * @param AbstractConnector $connector
      *
@@ -53,12 +56,12 @@ class WebHooksController extends AbstractController
      *
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
-    public function indexAction(LoggerInterface $logger, Request $request, AbstractConnector $connector): JsonResponse
+    public function __invoke(Request $request, AbstractConnector $connector): JsonResponse
     {
         //====================================================================//
         // For SendInBlue Ping Test
         if ("example@example.com" == $request->get('email')) {
-            $logger->notice(__CLASS__.'::'.__FUNCTION__.' SendInBlue Ping.', $request->attributes->all());
+            $this->logger->notice(__CLASS__.'::'.__FUNCTION__.' SendInBlue Ping.', $request->attributes->all());
 
             return $this->prepareResponse(200);
         }
@@ -69,7 +72,7 @@ class WebHooksController extends AbstractController
 
         //====================================================================//
         // Log SendInBlue Request
-        $logger->info(__CLASS__.'::'.__FUNCTION__.' SendInBlue WebHook Received ', $eventData);
+        $this->logger->info(__CLASS__.'::'.__FUNCTION__.' SendInBlue WebHook Received ', $eventData);
 
         //==============================================================================
         // Commit Changes
@@ -138,6 +141,7 @@ class WebHooksController extends AbstractController
         if (!is_array($requestData) || !isset($requestData['event']) || !isset($requestData['email'])) {
             throw new BadRequestHttpException('Malformed or missing data');
         }
+
         //==============================================================================
         // Return Request Data
         return $requestData;

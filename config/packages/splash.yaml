@@ -1,0 +1,23 @@
+parameters:
+    # Adds a fallback configuration if the env var is not set.
+    env(BREVO_API_KEY): 'ThisIsSecretApiKey'
+    env(BREVO_API_LIST): 'ThisIsSecretApiList'
+
+splash:
+    ################################################################################
+    # List of Available Connector Connections
+    ################################################################################
+    connections:
+        
+        ########################################################################
+        # Brevo Default
+        brevo:
+            id:                 ThisIsBrevoWsId
+            key:                ThisIsNotASecretKeyForBrevo
+            name:               Serveur 1 (Brevo)
+            connector:          sendinblue
+            config:
+                Extended:       true
+                WsHost:         http://localhost:8000
+                ApiKey:         '%env(resolve:BREVO_API_KEY)%'
+                ApiList:        '%env(resolve:BREVO_API_LIST)%'

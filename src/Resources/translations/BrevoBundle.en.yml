@@ -7,22 +7,22 @@ var:
 
     list:
         label:  List
-        desc:   "The SendInBlue list you want to synchronize with Splash."
+        desc:   "Contact list you want to synchronize with Splash."
 
 ## Node Profile
 profile:
     connection:
         title: API Connection
     card:   
-        title:  SendInBlue API V3
-        label:  Connect your SendInBlue Account to Sync your Customer with your Subscriber Lists
+        title:  Brevo API V3
+        label:  Connect your Brevo Account to Sync your Customer with your Subscriber Lists
 
 ## Node Api Actions
 admin:
     selftest:   SendInBlue Connector Configuration
-    connect:    Connect to SendInBlue API V3    
+    connect:    Connect to Brevo API V3
     webhooks:
         label:  Update of WebHooks
         desc:   Detect & Update Splash Sync WebHooks Configuration
-        msg:    WebHook Configuration Updated
-        err:    Update of WebHooks Configuration Failled
+        msg:    WebHook Configuration is Valid
+        err:    Update of WebHooks Configuration Required

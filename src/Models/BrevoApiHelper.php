@@ -13,7 +13,7 @@
  *  file that was distributed with this source code.
  */
 
-namespace Splash\Connectors\SendInBlue\Models;
+namespace Splash\Connectors\Brevo\Models;
 
 use Httpful\Exception\ConnectionErrorException;
 use Httpful\Mime;
@@ -23,16 +23,16 @@ use Splash\Core\SplashCore as Splash;
 use stdClass;
 
 /**
- * SendInBlue Specific Helper
+ * Brevo Specific Helper
  *
  * Support for Managing ApiKey, ApiRequests, Hashs, Etc...
  */
-class SendInBlueHelper
+class BrevoApiHelper
 {
     /**
      * @var string
      */
-    const ENDPOINT = "https://api.sendinblue.com/v3/";
+    const ENDPOINT = "https://api.brevo.com/v3/";
 
     /**
      * @var string
@@ -69,7 +69,7 @@ class SendInBlueHelper
                 'api-key' => $apiKey,
             ))
             ->timeout(Splash::isDebugMode() ? 15 : 3)
-            ;
+        ;
         // Set it as a template
         Request::ini($template);
 
@@ -121,6 +121,7 @@ class SendInBlueHelper
         //====================================================================//
         // Catch Errors inResponse
         self::catchErrors($response);
+
         //====================================================================//
         // Return Connect Result
         return (200 == $response->code);
@@ -142,6 +143,7 @@ class SendInBlueHelper
         if (!empty($body)) {
             $uri .= "?".http_build_query($body);
         }
+
         //====================================================================//
         // Perform Request
         try {
@@ -152,6 +154,7 @@ class SendInBlueHelper
 
             return null;
         }
+
         //====================================================================//
         // Catch Errors in Response
         return (self::catchErrors($response) && ($response->body instanceof stdClass))
@@ -180,6 +183,7 @@ class SendInBlueHelper
 
             return null;
         }
+
         //====================================================================//
         // Catch Errors inResponse
         return self::catchErrors($response);
@@ -206,6 +210,7 @@ class SendInBlueHelper
 
             return null;
         }
+
         //====================================================================//
         // Catch Errors inResponse
         return self::catchErrors($response) ? $response->body : null;
@@ -229,6 +234,7 @@ class SendInBlueHelper
 
             return null;
         }
+
         //====================================================================//
         // Catch Errors in Response
         return self::catchErrors($response);

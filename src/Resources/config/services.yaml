@@ -1,15 +1,19 @@
 services:
+    _defaults:
+        autowire:           true
+        autoconfigure:      true
+
     ################################################################################
-    # SPLASH SendInBlue Connector Service
+    # SPLASH Brevo Connector Service
     splash.connectors.sendinblue:
-        class: Splash\Connectors\SendInBlue\Services\SendInBlueConnector
+        class: Splash\Connectors\Brevo\Services\BrevoConnector
         arguments:  [ "@event_dispatcher", "@logger" ]
         tags:       
             - { name: "splash.connector"}
 
     ################################################################################
-    # Enables Dependency Injection in Controller Actions
-    Splash\Connectors\SendInBlue\Controller\:
-        resource: '../../Controller'
+    # Enables Dependency Injection in Actions
+    Splash\Connectors\Brevo\Actions\:
+        resource: '../../Actions'
         public: true
         tags: ['controller.service_arguments']

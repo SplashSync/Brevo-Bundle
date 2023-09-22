@@ -13,9 +13,10 @@
  *  file that was distributed with this source code.
  */
 
-namespace   Splash\Connectors\SendInBlue\Objects\WebHook;
+namespace   Splash\Connectors\Brevo\Objects\WebHook;
 
-use Splash\Connectors\SendInBlue\Models\SendInBlueHelper as API;
+use Splash\Client\Splash;
+use Splash\Connectors\Brevo\Models\BrevoApiHelper as API;
 
 /**
  * SendInBlue WebHook Objects List Functions
@@ -35,6 +36,8 @@ trait ObjectsListTrait
         //====================================================================//
         // Request Failed
         if (null == $rawData) {
+            Splash::log()->cleanLog();
+
             return array( 'meta' => array('current' => 0, 'total' => 0));
         }
         //====================================================================//

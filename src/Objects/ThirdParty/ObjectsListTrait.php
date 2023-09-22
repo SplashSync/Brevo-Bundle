@@ -13,10 +13,10 @@
  *  file that was distributed with this source code.
  */
 
-namespace   Splash\Connectors\SendInBlue\Objects\ThirdParty;
+namespace   Splash\Connectors\Brevo\Objects\ThirdParty;
 
 use DateTime;
-use Splash\Connectors\SendInBlue\Models\SendInBlueHelper as API;
+use Splash\Connectors\Brevo\Models\BrevoApiHelper as API;
 
 /**
  * SendInBlue Users Objects List Functions

@@ -13,14 +13,14 @@
  *  file that was distributed with this source code.
  */
 
-namespace Splash\Connectors\SendInBlue\Widgets;
+namespace Splash\Connectors\Brevo\Widgets;
 
 use Splash\Bundle\Models\AbstractStandaloneWidget;
-use Splash\Connectors\SendInBlue\Services\SendInBlueConnector;
+use Splash\Connectors\Brevo\Services\BrevoConnector;
 use Splash\Core\SplashCore      as Splash;
 
 /**
- * SendInBlue Config SelfTest
+ * Brevo Config SelfTest
  */
 class SelfTest extends AbstractStandaloneWidget
 {
@@ -49,16 +49,16 @@ class SelfTest extends AbstractStandaloneWidget
     protected static string $ico = "fa fa-info-circle";
 
     /**
-     * @var SendInBlueConnector
+     * @var BrevoConnector
      */
-    protected SendInBlueConnector $connector;
+    protected BrevoConnector $connector;
 
     /**
      * Class Constructor
      *
-     * @param SendInBlueConnector $connector
+     * @param BrevoConnector $connector
      */
-    public function __construct(SendInBlueConnector $connector)
+    public function __construct(BrevoConnector $connector)
     {
         $this->connector = $connector;
     }
@@ -87,7 +87,7 @@ class SelfTest extends AbstractStandaloneWidget
         $this->buildIntroBlock();
 
         //====================================================================//
-        // Build SlefTest Results Block
+        // Build Self-Test Results Block
         //====================================================================//
         $this->connector->selfTest();
         $this->buildNotificationsBlock();
@@ -111,7 +111,7 @@ class SelfTest extends AbstractStandaloneWidget
     {
         //====================================================================//
         // Into Text Block
-        $this->blocksFactory()->addTextBlock("This widget summarize SelfTest of your SendInBlue Account Config");
+        $this->blocksFactory()->addTextBlock("This widget summarize SelfTest of your Brevo Account Config");
     }
 
     /**

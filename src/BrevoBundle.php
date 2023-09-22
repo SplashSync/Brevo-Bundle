@@ -13,13 +13,13 @@
  *  file that was distributed with this source code.
  */
 
-namespace Splash\Connectors\SendInBlue;
+namespace Splash\Connectors\Brevo;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
  * Splash SendInBlue Connector Bundle
  */
-class SendInBlueBundle extends Bundle
+class BrevoBundle extends Bundle
 {
 }

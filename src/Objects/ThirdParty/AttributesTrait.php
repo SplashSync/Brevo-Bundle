@@ -13,7 +13,7 @@
  *  file that was distributed with this source code.
  */
 
-namespace Splash\Connectors\SendInBlue\Objects\ThirdParty;
+namespace Splash\Connectors\Brevo\Objects\ThirdParty;
 
 use stdClass;
 
@@ -267,6 +267,7 @@ trait AttributesTrait
         if (isset(self::$attrType[$attrType])) {
             return self::$attrType[$attrType];
         }
+
         //====================================================================//
         // Default Type
         return SPL_T_VARCHAR;
@@ -312,6 +313,7 @@ trait AttributesTrait
                 }
             }
         }
+
         //====================================================================//
         // Use Raw Value
         return $value;
