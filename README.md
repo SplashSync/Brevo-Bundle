@@ -1,14 +1,14 @@
 ![Splash](http://www.splashsync.com/bundles/theme/img/splash-logo.png)
 
-# Splash SendInBlue Bundle
+# Splash Brevo Bundle
 
-This Bundle is source for Splashsync SendInBlue Connector.
+This Bundle is source for Splashsync Brevo (Ex SendInBlue) Connector.
 
 To try it, use [Splash Toolkit](https://github.com/SplashSync/Toolkit)
 
 ## Documentation
 
-For the configuration guide and reference, see: [SendInBlue Connector Documentation](https://splashsync.gitlab.io/SendInBlue-Bundle/)
+For the configuration guide and reference, see: [Brevo Connector Documentation](https://splashsync.gitlab.io/Brevo-Bundle/)
 
 ## Contributing
 

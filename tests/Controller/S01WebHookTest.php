@@ -13,15 +13,15 @@
  *  file that was distributed with this source code.
  */
 
-namespace Splash\Connectors\SendInBlue\Test\Controller;
+namespace Splash\Connectors\Brevo\Test\Controller;
 
 use Exception;
-use Splash\Connectors\SendInBlue\Objects\ThirdParty;
-use Splash\Connectors\SendInBlue\Services\SendInBlueConnector;
+use Splash\Connectors\Brevo\Objects\ThirdParty;
+use Splash\Connectors\Brevo\Services\BrevoConnector;
 use Splash\Tests\Tools\TestCase;
 
 /**
- * Test of SendInBlue Connector WebHook Controller
+ * Test of Brevo Connector WebHook Controller
  */
 class S01WebHookTest extends TestCase
 {
@@ -41,8 +41,8 @@ class S01WebHookTest extends TestCase
     {
         //====================================================================//
         // Load Connector
-        $connector = $this->getConnector("sendinblue");
-        $this->assertInstanceOf(SendInBlueConnector::class, $connector);
+        $connector = $this->getConnector("brevo");
+        $this->assertInstanceOf(BrevoConnector::class, $connector);
 
         //====================================================================//
         // Ping Action -> POST -> KO
@@ -71,8 +71,8 @@ class S01WebHookTest extends TestCase
     {
         //====================================================================//
         // Load Connector
-        $connector = $this->getConnector("sendinblue");
-        $this->assertInstanceOf(SendInBlueConnector::class, $connector);
+        $connector = $this->getConnector("brevo");
+        $this->assertInstanceOf(BrevoConnector::class, $connector);
 
         //====================================================================//
         // Empty Contents
@@ -111,8 +111,8 @@ class S01WebHookTest extends TestCase
     {
         //====================================================================//
         // Load Connector
-        $connector = $this->getConnector("sendinblue");
-        $this->assertInstanceOf(SendInBlueConnector::class, $connector);
+        $connector = $this->getConnector("brevo");
+        $this->assertInstanceOf(BrevoConnector::class, $connector);
 
         //====================================================================//
         // FORM POST MODE
