@@ -140,7 +140,7 @@ class BrevoConnector extends AbstractConnector implements PrimaryKeysInterface
         );
         //====================================================================//
         // Server Information
-        $informations->servertype = "SendInBlue REST Api V3";
+        $informations->servertype = "Brevo REST Api V3";
         $informations->serverurl = API::ENDPOINT;
         //====================================================================//
         // Module Information
@@ -247,7 +247,7 @@ class BrevoConnector extends AbstractConnector implements PrimaryKeysInterface
             'connector' => 'splash.connectors.sendinblue',      // Connector Symfony Service
             'title' => 'profile.card.title',                    // Public short name
             'label' => 'profile.card.label',                    // Public long name
-            'domain' => 'SendInBlueBundle',                     // Translation domain for names
+            'domain' => 'BrevoBundle',                          // Translation domain for names
             'ico' => '/bundles/brevo/img/Brevo-Icon.png',       // Public Icon path
             'www' => 'www.SendInBlue.com',                      // Website Url
         );
