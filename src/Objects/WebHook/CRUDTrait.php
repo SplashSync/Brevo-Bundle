@@ -16,7 +16,7 @@
 namespace Splash\Connectors\Brevo\Objects\WebHook;
 
 use Splash\Connectors\Brevo\Models\BrevoApiHelper as API;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use stdClass;
 
 /**
