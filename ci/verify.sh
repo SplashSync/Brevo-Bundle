@@ -19,15 +19,15 @@
 ################################################################################
 # Start Docker Compose Stack
 echo '===> Start Docker Stack'
-docker-compose up -d
+docker compose up -d
 
 ################################################################################
 # Docker Compose Container you want to check
-CONTAINERS="php-8.1,php-8.0"
+CONTAINERS="php-8.3,php-8.1"
 ################################################################################
 # Start Docker Compose Stack
 echo '===> Start Docker Stack'
-docker-compose up -d
+docker compose up -d
 
 ######################################
 # Run Grumphp Test Suites Locally
@@ -40,9 +40,9 @@ for ID in $(echo $CONTAINERS | tr "," "\n")
 do
     echo "===> Checks $ID"
     # Ensure Git is Installed
-    docker-compose exec $ID bash ci/install.sh
+    docker compose exec $ID composer update -q || composer update
     # Run Grumphp Test Suites
-    docker-compose exec $ID php vendor/bin/grumphp run --testsuite=travis
-    docker-compose exec $ID php vendor/bin/grumphp run --testsuite=csfixer
-    docker-compose exec $ID php vendor/bin/grumphp run --testsuite=phpstan
+    docker compose exec $ID php vendor/bin/grumphp run --testsuite=travis
+    docker compose exec $ID php vendor/bin/grumphp run --testsuite=csfixer
+    docker compose exec $ID php vendor/bin/grumphp run --testsuite=phpstan
 done
