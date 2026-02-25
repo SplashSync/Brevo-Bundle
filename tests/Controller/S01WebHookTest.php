@@ -18,6 +18,7 @@ namespace Splash\Connectors\Brevo\Test\Controller;
 use Exception;
 use Splash\Connectors\Brevo\Objects\ThirdParty;
 use Splash\Connectors\Brevo\Services\BrevoConnector;
+use Splash\Core\Dictionary\SplOperations;
 use Splash\Tests\Tools\TestCase;
 
 /**
@@ -160,7 +161,7 @@ class S01WebHookTest extends TestCase
                     "email" => $randEmail,
                 ),
                 self::MEMBER,
-                SPL_A_UPDATE,
+                SplOperations::UPDATE,
                 ThirdParty::encodeContactId($randEmail),
             );
         }
@@ -179,7 +180,7 @@ class S01WebHookTest extends TestCase
                     "email" => $randEmail,
                 ),
                 self::MEMBER,
-                SPL_A_UPDATE,
+                SplOperations::UPDATE,
                 ThirdParty::encodeContactId($randEmail),
             );
         }
