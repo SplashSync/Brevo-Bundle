@@ -1,5 +1,6 @@
 
 /.env
+/.env.local
 /.php_cs.cache
 /.web-server-pid
 /tests/public/bundles/
@@ -12,3 +13,4 @@
 /.idea/
 /.php-cs-fixer.cache
 /.phpunit.result.cache
+/config/reference.php
