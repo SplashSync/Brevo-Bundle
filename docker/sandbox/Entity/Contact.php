@@ -16,6 +16,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata as API;
+use App\Controller\ContactController;
 use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,11 +24,22 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Brevo Contact Entity - Stores contact/subscriber information.
  *
- * GET/PUT/DELETE handled natively by API Platform (using email as identifier).
- * POST handled by custom ContactController (for duplicate_parameter handling).
+ * POST: custom controller (duplicate_parameter error format).
+ * GET/PUT/DELETE: handled natively by API Platform.
  */
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
+#[API\ApiResource(
+    uriTemplate: '/v3/contacts',
+    operations: array(
+        new API\Post(
+            controller: ContactController::class,
+            read: false,
+            deserialize: false,
+            write: false,
+        ),
+    )
+)]
 #[API\ApiResource(
     uriTemplate: '/v3/contacts/{email}',
     operations: array(
@@ -55,10 +67,10 @@ class Contact
     public bool $smsBlacklisted = false;
 
     #[ORM\Column(type: Types::JSON)]
-    public array $attributes = [];
+    public array $attributes = array();
 
     #[ORM\Column(type: Types::JSON)]
-    public array $listIds = [];
+    public array $listIds = array();
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
     #[API\ApiProperty(writable: false)]

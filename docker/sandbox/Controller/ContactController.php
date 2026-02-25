@@ -20,21 +20,17 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 
 /**
- * Brevo API Sandbox - Contact custom endpoints.
+ * Brevo API Sandbox - Create a new contact.
  *
- * Only POST is handled here (for duplicate_parameter error format).
- * GET/PUT/DELETE are handled natively by API Platform.
+ * Custom controller for duplicate_parameter error format specific to Brevo.
  */
+#[AsController]
 class ContactController extends AbstractController
 {
-    /**
-     * Create a new contact (custom for duplicate handling).
-     */
-    #[Route('/v3/contacts', methods: ['POST'])]
-    public function create(Request $request, EntityManagerInterface $em): JsonResponse
+    public function __invoke(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true) ?: array();
 

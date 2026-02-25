@@ -19,18 +19,15 @@ use App\Entity\ContactAttribute;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 
 /**
- * Brevo API Sandbox - Contact Attributes endpoint.
+ * Brevo API Sandbox - List contact attributes (wrapped format).
  */
+#[AsController]
 class ContactAttributeController extends AbstractController
 {
-    /**
-     * Get all contact attribute definitions.
-     */
-    #[Route('/v3/contacts/attributes', methods: ['GET'])]
-    public function index(EntityManagerInterface $em): JsonResponse
+    public function __invoke(EntityManagerInterface $em): JsonResponse
     {
         $attributes = $em->getRepository(ContactAttribute::class)->findAll();
         $result = array();

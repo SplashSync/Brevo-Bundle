@@ -16,16 +16,26 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata as API;
+use App\Controller\ContactAttributeController;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Brevo Contact Attribute Entity - Stores contact attribute definitions.
  *
- * Single-item GET handled natively by API Platform.
- * List endpoint handled by custom ContactAttributeController (wrapped format).
+ * GET single: handled natively by API Platform.
+ * List: custom controller (wrapped format).
  */
 #[ORM\Entity]
+#[API\ApiResource(
+    uriTemplate: '/v3/contacts/attributes',
+    operations: array(
+        new API\GetCollection(
+            controller: ContactAttributeController::class,
+            read: false,
+        ),
+    )
+)]
 #[API\ApiResource(
     uriTemplate: '/v3/contacts/attributes/{id}',
     operations: array(new API\Get())
@@ -47,5 +57,5 @@ class ContactAttribute
     public string $type = 'text';
 
     #[ORM\Column(type: Types::JSON)]
-    public array $enumeration = [];
+    public array $enumeration = array();
 }

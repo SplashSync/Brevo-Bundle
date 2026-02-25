@@ -15,13 +15,26 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata as API;
+use App\Controller\AccountController;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Brevo Account Entity - Stores account information.
+ * Brevo Account Entity - Stores account information (singleton).
+ *
+ * GET: custom controller (nested address object + singleton).
  */
 #[ORM\Entity]
+#[API\ApiResource(
+    uriTemplate: '/v3/account',
+    operations: array(
+        new API\Get(
+            controller: AccountController::class,
+            read: false,
+        ),
+    )
+)]
 class Account
 {
     #[ORM\Id]

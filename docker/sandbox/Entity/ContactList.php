@@ -16,16 +16,26 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata as API;
+use App\Controller\ContactListController;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Brevo Contact List Entity - Stores mailing list information.
  *
- * Single-item GET handled natively by API Platform.
- * List endpoint handled by custom ContactListController (wrapped format).
+ * GET single: handled natively by API Platform.
+ * List: custom controller (wrapped format).
  */
 #[ORM\Entity]
+#[API\ApiResource(
+    uriTemplate: '/v3/contacts/lists',
+    operations: array(
+        new API\GetCollection(
+            controller: ContactListController::class,
+            read: false,
+        ),
+    )
+)]
 #[API\ApiResource(
     uriTemplate: '/v3/contacts/lists/{id}',
     operations: array(new API\Get())

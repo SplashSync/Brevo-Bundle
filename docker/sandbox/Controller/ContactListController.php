@@ -21,18 +21,19 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Brevo API Sandbox - Contact Lists endpoints.
  */
+#[AsController]
 class ContactListController extends AbstractController
 {
     /**
-     * Get all contact lists.
+     * Get all contact lists (wrapped format).
      */
-    #[Route('/v3/contacts/lists', methods: ['GET'])]
-    public function lists(EntityManagerInterface $em): JsonResponse
+    public function __invoke(EntityManagerInterface $em): JsonResponse
     {
         $lists = $em->getRepository(ContactList::class)->findAll();
         $result = array();
@@ -50,7 +51,7 @@ class ContactListController extends AbstractController
     /**
      * Get contacts belonging to a specific list.
      */
-    #[Route('/v3/contacts/lists/{listId}/contacts', methods: ['GET'])]
+    #[Route('/v3/contacts/lists/{listId}/contacts', methods: array('GET'))]
     public function listContacts(int $listId, Request $request, EntityManagerInterface $em): JsonResponse
     {
         $limit = (int) $request->query->get('limit', 50);

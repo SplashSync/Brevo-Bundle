@@ -16,6 +16,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata as API;
+use App\Controller\WebHookController;
 use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,14 +24,20 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Brevo WebHook Entity - Stores webhook configuration.
  *
- * Single-item CRUD handled natively by API Platform.
- * List endpoint handled by custom WebHookController (wrapped format).
+ * POST/GET/PUT/DELETE: handled natively by API Platform.
+ * List: custom controller (wrapped format).
  */
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
 #[API\ApiResource(
     uriTemplate: '/v3/webhooks',
-    operations: array(new API\Post())
+    operations: array(
+        new API\Post(),
+        new API\GetCollection(
+            controller: WebHookController::class,
+            read: false,
+        ),
+    )
 )]
 #[API\ApiResource(
     uriTemplate: '/v3/webhooks/{id}',
@@ -44,7 +51,7 @@ class WebHook
     public int $id;
 
     #[ORM\Column(nullable: false)]
-    public string $url;
+    public string $url = '';
 
     #[ORM\Column(nullable: true)]
     public ?string $description = null;
@@ -53,7 +60,7 @@ class WebHook
     public ?string $type = 'marketing';
 
     #[ORM\Column(type: Types::JSON)]
-    public array $events = [];
+    public array $events = array();
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
     #[API\ApiProperty(writable: false)]

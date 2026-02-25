@@ -19,15 +19,15 @@ use App\Entity\Account;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 
 /**
- * Brevo API Sandbox - Account endpoint.
+ * Brevo API Sandbox - Get account information (singleton).
  */
+#[AsController]
 class AccountController extends AbstractController
 {
-    #[Route('/v3/account', methods: ['GET'])]
-    public function index(EntityManagerInterface $em): JsonResponse
+    public function __invoke(EntityManagerInterface $em): JsonResponse
     {
         $account = $em->getRepository(Account::class)->findOneBy(array());
         if (!$account) {

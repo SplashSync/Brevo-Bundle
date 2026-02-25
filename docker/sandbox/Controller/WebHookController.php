@@ -20,21 +20,15 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 
 /**
- * Brevo API Sandbox - WebHook custom endpoints.
- *
- * Only list endpoint is handled here (wrapped format).
- * Single-item CRUD is handled natively by API Platform.
+ * Brevo API Sandbox - List webhooks (wrapped format).
  */
+#[AsController]
 class WebHookController extends AbstractController
 {
-    /**
-     * List webhooks with optional type filter (wrapped format).
-     */
-    #[Route('/v3/webhooks', methods: ['GET'])]
-    public function list(Request $request, EntityManagerInterface $em): JsonResponse
+    public function __invoke(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $type = $request->query->get('type');
         $criteria = $type ? array('type' => $type) : array();

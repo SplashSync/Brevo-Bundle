@@ -26,10 +26,6 @@
 FROM splashsync/openapi-sandbox:3.0
 
 ################################################################################
-# Copy Environment File
-COPY .env /app/.env
-
-################################################################################
 # Copy Custom Entity Definitions
 COPY Entity/ /app/src/Entity/
 
