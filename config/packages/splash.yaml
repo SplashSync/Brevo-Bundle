@@ -8,9 +8,9 @@ splash:
     # List of Available Connector Connections
     ################################################################################
     connections:
-        
+
         ########################################################################
-        # Brevo Default
+        # Brevo Default (Real API)
         brevo:
             id:                 ThisIsBrevoWsId
             key:                ThisIsNotASecretKeyForBrevo
@@ -18,6 +18,19 @@ splash:
             connector:          sendinblue
             config:
                 Extended:       true
-                WsHost:         http://localhost:8000
                 ApiKey:         '%env(resolve:BREVO_API_KEY)%'
                 ApiList:        '%env(resolve:BREVO_API_LIST)%'
+
+        ########################################################################
+        # Brevo Sandbox (Fake API for testing)
+        sandbox:
+            id:                 ThisIsBrevoSandboxWsId
+            key:                ThisIsNotASecretKeyForBrevoSandbox
+            name:               Serveur 2 (Sandbox)
+            connector:          sendinblue
+            config:
+                Extended:       true
+                isSandbox:      true
+                WsHost:         'http://172.112.0.101'
+                ApiKey:         'sandbox-api-key'
+                ApiList:        '1'

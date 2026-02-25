@@ -1,0 +1,51 @@
+<?php
+
+/*
+ *  This file is part of SplashSync Project.
+ *
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
+
+namespace App\Entity;
+
+use ApiPlatform\Metadata as API;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Brevo Contact Attribute Entity - Stores contact attribute definitions.
+ *
+ * Single-item GET handled natively by API Platform.
+ * List endpoint handled by custom ContactAttributeController (wrapped format).
+ */
+#[ORM\Entity]
+#[API\ApiResource(
+    uriTemplate: '/v3/contacts/attributes/{id}',
+    operations: array(new API\Get())
+)]
+class ContactAttribute
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: Types::INTEGER)]
+    public int $id;
+
+    #[ORM\Column(nullable: false)]
+    public string $name;
+
+    #[ORM\Column(nullable: false)]
+    public string $category = 'normal';
+
+    #[ORM\Column(nullable: false)]
+    public string $type = 'text';
+
+    #[ORM\Column(type: Types::JSON)]
+    public array $enumeration = [];
+}

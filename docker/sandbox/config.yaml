@@ -1,0 +1,17 @@
+api_platform:
+    title: Brevo API SandBox
+    defaults:
+        formats: ['json']
+        stateless: false
+    swagger:
+        api_keys:
+            - { name: "api-key", key: "api-key", type: "header" }
+    collection:
+        pagination:
+            enabled: true
+            items_per_page_parameter_name: limit
+
+framework:
+    router:
+        utf8: true
+
