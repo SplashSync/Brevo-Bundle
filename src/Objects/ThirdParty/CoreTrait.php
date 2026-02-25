@@ -15,6 +15,8 @@
 
 namespace Splash\Connectors\Brevo\Objects\ThirdParty;
 
+use Splash\Core\Dictionary\SplFields;
+
 /**
  * SendInBlue ThirdParty Core Fields (Required)
  */
@@ -34,7 +36,7 @@ trait CoreTrait
     {
         //====================================================================//
         // Email
-        $this->fieldsFactory()->create(SPL_T_EMAIL)
+        $this->fieldsFactory()->create(SplFields::EMAIL)
             ->identifier("email")
             ->name("Email")
             ->microData("http://schema.org/ContactPoint", "email")
@@ -45,7 +47,7 @@ trait CoreTrait
         ;
         //====================================================================//
         // Excluded from Email Campaigns
-        $this->fieldsFactory()->create(SPL_T_BOOL)
+        $this->fieldsFactory()->create(SplFields::BOOL)
             ->identifier("emailBlacklisted")
             ->name("Is Exluded from Emails Campaigns")
             ->microData("http://schema.org/Organization", "excluded")
@@ -53,7 +55,7 @@ trait CoreTrait
         ;
         //====================================================================//
         // Excluded from SMS Campaigns
-        $this->fieldsFactory()->create(SPL_T_BOOL)
+        $this->fieldsFactory()->create(SplFields::BOOL)
             ->identifier("smsBlacklisted")
             ->name("Is Exluded from Sms Campaigns")
             ->microData("http://schema.org/Organization", "excludedSms")

@@ -15,8 +15,8 @@
 
 namespace Splash\Connectors\Brevo\Objects\WebHook;
 
-use Splash\Client\Splash;
 use Splash\Connectors\Brevo\Models\BrevoApiHelper as API;
+use Splash\Core\Client\Splash;
 
 /**
  * SendInBlue WebHook Objects List Functions

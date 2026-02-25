@@ -17,6 +17,7 @@ namespace Splash\Connectors\Brevo\Objects\ThirdParty;
 
 use DateTime;
 use Splash\Connectors\Brevo\Models\BrevoApiHelper as API;
+use Splash\Core\Helpers\DatesHelper;
 
 /**
  * SendInBlue Users Objects List Functions
@@ -58,7 +59,7 @@ trait ObjectsListTrait
                 'email' => $member->email,
                 'emailBlacklisted' => $member->emailBlacklisted,
                 'smsBlacklisted' => $member->smsBlacklisted,
-                'modifiedAt' => (new DateTime($member->modifiedAt))->format(SPL_T_DATETIMECAST),
+                'modifiedAt' => DatesHelper::toDateTimeStr(new DateTime($member->modifiedAt)),
             );
         }
 

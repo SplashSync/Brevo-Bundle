@@ -15,6 +15,8 @@
 
 namespace Splash\Connectors\Brevo\Objects\WebHook;
 
+use Splash\Core\Dictionary\SplFields;
+
 /**
  * SendInBlue WebHook Core Fields (Required)
  */
@@ -29,7 +31,7 @@ trait CoreTrait
     {
         //====================================================================//
         // WebHook Url
-        $this->fieldsFactory()->create(SPL_T_URL)
+        $this->fieldsFactory()->create(SplFields::URL)
             ->Identifier("url")
             ->Name("Url")
             ->isRequired()
@@ -37,7 +39,7 @@ trait CoreTrait
 
         //====================================================================//
         // WebHook Description
-        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SplFields::VARCHAR)
             ->Identifier("description")
             ->Name("Description")
             ->isListed();

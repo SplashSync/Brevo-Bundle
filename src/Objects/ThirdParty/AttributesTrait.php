@@ -15,6 +15,7 @@
 
 namespace Splash\Connectors\Brevo\Objects\ThirdParty;
 
+use Splash\Core\Dictionary\SplFields;
 use stdClass;
 
 /**
@@ -41,11 +42,11 @@ trait AttributesTrait
      * @var array
      */
     private static array $attrType = array(
-        "text" => SPL_T_VARCHAR,
-        "float" => SPL_T_DOUBLE,
-        "boolean" => SPL_T_BOOL,
-        "date" => SPL_T_DATE,
-        "category" => SPL_T_VARCHAR,
+        "text" => SplFields::VARCHAR,
+        "float" => SplFields::DOUBLE,
+        "boolean" => SplFields::BOOL,
+        "date" => SplFields::DATE,
+        "category" => SplFields::VARCHAR,
     );
 
     /**
@@ -259,7 +260,7 @@ trait AttributesTrait
         //====================================================================//
         // Special => PHONE
         if ("SMS" == $attribute->name) {
-            return SPL_T_PHONE;
+            return SplFields::PHONE;
         }
         $attrType = self::getSibType($attribute);
         //====================================================================//
@@ -270,7 +271,7 @@ trait AttributesTrait
 
         //====================================================================//
         // Default Type
-        return SPL_T_VARCHAR;
+        return SplFields::VARCHAR;
     }
 
     /**

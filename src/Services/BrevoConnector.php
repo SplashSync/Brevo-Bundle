@@ -29,7 +29,8 @@ use Splash\Connectors\Brevo\Form\EditFormType;
 use Splash\Connectors\Brevo\Form\NewFormType;
 use Splash\Connectors\Brevo\Models\BrevoApiHelper as API;
 use Splash\Connectors\Brevo\Objects;
-use Splash\Core\SplashCore as Splash;
+use Splash\Core\Client\Splash;
+use Splash\Core\Dictionary\SplDefinition;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -144,7 +145,7 @@ class BrevoConnector extends AbstractConnector implements PrimaryKeysInterface
         $informations->serverurl = API::ENDPOINT;
         //====================================================================//
         // Module Information
-        $informations->moduleauthor = SPLASH_AUTHOR;
+        $informations->moduleauthor = SplDefinition::AUTHOR;
         $informations->moduleversion = "master";
 
         $config = $this->getConfiguration();
@@ -198,10 +199,18 @@ class BrevoConnector extends AbstractConnector implements PrimaryKeysInterface
         }
 
         //====================================================================//
+        // Build Sandbox Endpoint if needed
+        $endpoint = null;
+        if ($this->getParameter("isSandbox", false)) {
+            $endpoint = rtrim($config["WsHost"] ?? '', '/')."/v3/";
+        }
+
+        //====================================================================//
         // Configure Rest API
         return API::configure(
             $config["ApiKey"],
-            $config["ApiList"] ?? null
+            $config["ApiList"] ?? null,
+            $endpoint
         );
     }
 

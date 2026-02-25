@@ -15,7 +15,7 @@
 
 namespace Splash\Connectors\Brevo\Objects\ThirdParty;
 
-use Splash\Core\SplashCore as Splash;
+use Splash\Core\Client\Splash;
 
 /**
  * Manage ThirdParty Primary Search Requests

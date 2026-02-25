@@ -19,7 +19,7 @@ use Httpful\Exception\ConnectionErrorException;
 use Httpful\Mime;
 use Httpful\Request;
 use Httpful\Response;
-use Splash\Core\SplashCore as Splash;
+use Splash\Core\Client\Splash;
 use stdClass;
 
 /**
@@ -33,6 +33,11 @@ class BrevoApiHelper
      * @var string
      */
     const ENDPOINT = "https://api.brevo.com/v3/";
+
+    /**
+     * @var string
+     */
+    private static string $endpoint = self::ENDPOINT;
 
     /**
      * @var string
@@ -52,13 +57,17 @@ class BrevoApiHelper
     /**
      * Configure SendInBlue REST API
      *
-     * @param string $apiKey
-     * @param string $apiList
+     * @param string      $apiKey
+     * @param null|string $apiList
+     * @param null|string $endpoint Custom API endpoint (for sandbox mode)
      *
      * @return bool
      */
-    public static function configure(string $apiKey, string $apiList = null): bool
+    public static function configure(string $apiKey, string $apiList = null, string $endpoint = null): bool
     {
+        //====================================================================//
+        // Store API Endpoint
+        self::$endpoint = $endpoint ?? self::ENDPOINT;
         //====================================================================//
         // Store Current List to Use
         self::$apiList = is_string($apiList) ? $apiList : "";
@@ -86,7 +95,7 @@ class BrevoApiHelper
         //====================================================================//
         // Perform Ping Test
         try {
-            $response = Request::get(self::ENDPOINT."account")
+            $response = Request::get(self::$endpoint."account")
                 ->send();
         } catch (ConnectionErrorException $ex) {
             Splash::log()->err($ex->getMessage());
@@ -111,7 +120,7 @@ class BrevoApiHelper
         //====================================================================//
         // Perform Connect Test
         try {
-            $response = Request::get(self::ENDPOINT."account")
+            $response = Request::get(self::$endpoint."account")
                 ->send();
         } catch (ConnectionErrorException $ex) {
             Splash::log()->err($ex->getMessage());
@@ -139,7 +148,7 @@ class BrevoApiHelper
     {
         //====================================================================//
         // Prepare Uri
-        $uri = self::ENDPOINT.$path;
+        $uri = self::$endpoint.$path;
         if (!empty($body)) {
             $uri .= "?".http_build_query($body);
         }
@@ -175,7 +184,7 @@ class BrevoApiHelper
         //====================================================================//
         // Perform Request
         try {
-            $response = Request::put(self::ENDPOINT.$path)
+            $response = Request::put(self::$endpoint.$path)
                 ->body($body)
                 ->send();
         } catch (ConnectionErrorException $ex) {
@@ -202,7 +211,7 @@ class BrevoApiHelper
         //====================================================================//
         // Perform Request
         try {
-            $response = Request::post(self::ENDPOINT.$path)
+            $response = Request::post(self::$endpoint.$path)
                 ->body($body)
                 ->send();
         } catch (ConnectionErrorException $ex) {
@@ -228,7 +237,7 @@ class BrevoApiHelper
         //====================================================================//
         // Perform Request
         try {
-            $response = Request::delete(self::ENDPOINT.$path)->send();
+            $response = Request::delete(self::$endpoint.$path)->send();
         } catch (ConnectionErrorException $ex) {
             Splash::log()->err($ex->getMessage());
 

@@ -16,6 +16,8 @@
 namespace Splash\Connectors\Brevo\Objects\ThirdParty;
 
 use DateTime;
+use Splash\Core\Dictionary\SplFields;
+use Splash\Core\Helpers\DatesHelper;
 
 /**
  * SendInBlue ThirdParty Meta Fields
@@ -35,7 +37,7 @@ trait MetaTrait
 
         //====================================================================//
         // Last Change Date
-        $this->fieldsFactory()->create(SPL_T_DATETIME)
+        $this->fieldsFactory()->create(SplFields::DATETIME)
             ->Identifier("modifiedAt")
             ->Name("Last modification")
             ->Group("Meta")
@@ -62,7 +64,7 @@ trait MetaTrait
         //====================================================================//
         // Insert in Response
         $date = new DateTime($this->object->{$fieldName});
-        $this->out[$fieldName] = $date->format(SPL_T_DATETIMECAST);
+        $this->out[$fieldName] = DatesHelper::toDateTimeStr($date);
         //====================================================================//
         // Clear Key Flag
         unset($this->in[$key]);
