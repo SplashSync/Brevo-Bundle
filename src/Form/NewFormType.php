@@ -18,22 +18,17 @@ namespace Splash\Connectors\Brevo\Form;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * SendInBlue Account Create Form
+ * Brevo Account Connector Create Form
  */
-class NewFormType extends AbstractSendInBlueType
+class NewFormType extends AbstractBrevoType
 {
     /**
-     * Build SendInBlue New Server Form
-     *
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     *
-     * @return void
+     * @inerhitDoc
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $this
-            ->addApiKeyField($builder, $options)
+            ->addApiKeyField($builder)
             ->addApiListField($builder, $options)
         ;
     }

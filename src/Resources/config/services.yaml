@@ -4,12 +4,9 @@ services:
         autoconfigure:      true
 
     ################################################################################
-    # SPLASH Brevo Connector Service
-    splash.connectors.sendinblue:
-        class: Splash\Connectors\Brevo\Services\BrevoConnector
-        arguments:  [ "@event_dispatcher", "@logger" ]
-        tags:       
-            - { name: "splash.connector"}
+    # Autowire for Connectors
+    Splash\Connectors\Brevo\Connectors\:
+        resource: '../../Connectors'
 
     ################################################################################
     # Enables Dependency Injection in Actions

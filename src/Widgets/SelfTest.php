@@ -16,7 +16,7 @@
 namespace Splash\Connectors\Brevo\Widgets;
 
 use Splash\Bundle\Models\AbstractStandaloneWidget;
-use Splash\Connectors\Brevo\Services\BrevoConnector;
+use Splash\Connectors\Brevo\Connectors\BrevoConnector;
 use Splash\Core\Client\Splash;
 
 /**

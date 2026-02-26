@@ -17,7 +17,7 @@ namespace Splash\Connectors\Brevo\Test\Controller;
 
 use Exception;
 use Splash\Connectors\Brevo\Objects\ThirdParty;
-use Splash\Connectors\Brevo\Services\BrevoConnector;
+use Splash\Connectors\Brevo\Connectors\BrevoConnector;
 use Splash\Core\Dictionary\SplOperations;
 use Splash\Tests\Tools\TestCase;
 

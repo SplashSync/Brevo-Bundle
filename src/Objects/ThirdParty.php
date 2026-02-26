@@ -16,7 +16,7 @@
 namespace Splash\Connectors\Brevo\Objects;
 
 use Splash\Bundle\Models\AbstractStandaloneObject;
-use Splash\Connectors\Brevo\Services\BrevoConnector;
+use Splash\Connectors\Brevo\Connectors\BrevoConnector;
 use Splash\Core\Interfaces\Object\PrimaryKeysAwareInterface;
 use Splash\Core\Models\Objects\IntelParserTrait;
 use Splash\Core\Models\Objects\SimpleFieldsTrait;

@@ -23,19 +23,17 @@ use Symfony\Component\Form\FormBuilderInterface;
 /**
  * Base Form Type for SendInBlue Connectors Servers
  */
-abstract class AbstractSendInBlueType extends AbstractType
+abstract class AbstractBrevoType extends AbstractType
 {
     /**
-     * Add Api Key Field to FormBuilder
-     *
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     *
-     * @return $this
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * Translation Domain for this Connector
      */
-    public function addApiKeyField(FormBuilderInterface $builder, array $options)
+    const string DOMAIN = "BrevoBundle";
+
+    /**
+     * Add Api Key Field to FormBuilder
+     */
+    public function addApiKeyField(FormBuilderInterface $builder): static
     {
         $builder
             //==============================================================================
@@ -44,7 +42,7 @@ abstract class AbstractSendInBlueType extends AbstractType
                 'label' => "var.apikey.label",
                 'help' => "var.apikey.desc",
                 'required' => true,
-                'translation_domain' => "SendInBlueBundle",
+                'translation_domain' => self::DOMAIN,
             ))
         ;
 
@@ -53,13 +51,8 @@ abstract class AbstractSendInBlueType extends AbstractType
 
     /**
      * Add List Selector Field to FormBuilder
-     *
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     *
-     * @return $this
      */
-    public function addApiListField(FormBuilderInterface $builder, array $options)
+    public function addApiListField(FormBuilderInterface $builder, array $options): static
     {
         //==============================================================================
         // Check SendInBlue Lists are Available
@@ -74,7 +67,7 @@ abstract class AbstractSendInBlueType extends AbstractType
                 'label' => "var.list.label",
                 'help' => "var.list.desc",
                 'required' => true,
-                'translation_domain' => "SendInBlueBundle",
+                'translation_domain' => self::DOMAIN,
                 'choice_translation_domain' => false,
                 'choices' => array_flip($options["data"]["ApiListsIndex"]),
             ))

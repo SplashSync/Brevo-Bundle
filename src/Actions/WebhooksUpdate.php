@@ -17,7 +17,7 @@ namespace Splash\Connectors\Brevo\Actions;
 
 use Splash\Bundle\Models\AbstractConnector;
 use Splash\Bundle\Models\Local\ActionsTrait;
-use Splash\Connectors\Brevo\Services\BrevoConnector;
+use Splash\Connectors\Brevo\Connectors\BrevoConnector;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

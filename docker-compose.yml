@@ -39,11 +39,11 @@ services:
         container_name:     toolkit.brevo.local
         volumes:
             # Specify Local Configuration File
-#            - ./.env:/app/.env:ro
             - './config/packages/splash.yaml:/app/config/packages/splash.yaml:ro'
             # Uncomment to use Local Sources instead of Release
             - './src/:/app/connectors/Brevo/:ro'
             - './src/:/app/vendor/splash/sendinblue/src/:ro'
+        env_file:           .env.local
         hostname:           toolkit.brevo.local
         networks:
             brevo:     { ipv4_address: 172.112.0.100, aliases: [ toolkit.brevo.local ] }
