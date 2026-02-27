@@ -15,6 +15,7 @@
 
 namespace Splash\Connectors\Brevo\Form;
 
+use Splash\Connectors\Brevo\Services\Managers\ListsManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -56,20 +57,20 @@ abstract class AbstractBrevoType extends AbstractType
     {
         //==============================================================================
         // Check SendInBlue Lists are Available
-        if (empty($options["data"]["ApiListsIndex"])) {
+        if (empty($options["data"][ListsManager::LISTS_INDEX])) {
             return $this;
         }
 
         $builder
             //==============================================================================
             // SendInBlue List Option Selector
-            ->add('ApiList', ChoiceType::class, array(
+            ->add(ListsManager::DEFAULT_INDEX, ChoiceType::class, array(
                 'label' => "var.list.label",
                 'help' => "var.list.desc",
                 'required' => true,
                 'translation_domain' => self::DOMAIN,
                 'choice_translation_domain' => false,
-                'choices' => array_flip($options["data"]["ApiListsIndex"]),
+                'choices' => array_flip($options["data"][ListsManager::LISTS_INDEX]),
             ))
         ;
 
