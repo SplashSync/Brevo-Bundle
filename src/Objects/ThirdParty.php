@@ -15,17 +15,11 @@
 
 namespace Splash\Connectors\Brevo\Objects;
 
-use Splash\Bundle\Models\AbstractStandaloneObject;
 use Splash\Connectors\Brevo\Connectors\BrevoConnector;
-use Splash\Connectors\Brevo\Helpers\ContactIdHelper;
 use Splash\Connectors\Brevo\Models\Api\Contact;
-use Splash\Connectors\Brevo\Models\BrevoApiHelper as API;
 use Splash\Core\Client\Splash;
 use Splash\Core\Interfaces\Object\PrimaryKeysAwareInterface;
-use Splash\Core\Models\Objects\IntelParserTrait;
-use Splash\Core\Models\Objects\SimpleFieldsTrait;
 use Splash\OpenApi\Action\JsonLd\ListAction;
-use Splash\OpenApi\Action\Json\PutAction;
 use Splash\OpenApi\Dictionary\ActionOptions;
 use Splash\OpenApi\Models\Objects\AbstractRestAndMetadataObject;
 

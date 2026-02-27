@@ -58,6 +58,7 @@ trait CRUDTrait
         if (!$this->coreCreate()) {
             return Splash::log()->errNull("Unable to Create Contact (".$this->in["email"].").");
         }
+
         //====================================================================//
         // Load new Contact
         return $this->load(ContactIdHelper::encode($this->in["email"]));
@@ -89,35 +90,26 @@ trait CRUDTrait
             $this->delete(ContactIdHelper::encode($this->object->getOldEmail()));
             //====================================================================//
             // Create New Contact
-            $response = API::post(self::getUri(), $this->object);
-            if (is_null($response) || empty($response->id)) {
-                return Splash::log()->errNull("Unable to Create Member (".$this->object->email.").");
+            $createResponse = $this->visitor->create($this->object);
+            //====================================================================//
+            // Verify Response
+            if (!$createResponse->isSuccess()) {
+                return Splash::log()->errNull("Unable to Create Member (".$this->object->getEmail().").");
             }
-//            //====================================================================//
-//            // Dispatch Object Id Updated Event
-//            $this->connector->objectIdChanged(
-//                "ThirdParty",
-//                self::encodeContactId($this->emailChanged),
-//                self::encodeContactId($this->object->email)
-//            );
-//
-//            return $this->getObjectIdentifier();
+            //====================================================================//
+            // Dispatch Object ID Updated Event
+            $this->connector->objectIdChanged(
+                "ThirdParty",
+                ContactIdHelper::encode((string) $this->object->getOldEmail()),
+                ContactIdHelper::encode((string) $this->object->getEmail())
+            );
+
+            return $this->getObjectIdentifier();
         }
-
-        $this->coreUpdate(true);
-//        dd($this->object);
-
 
         //====================================================================//
         // Update Contact
         return $this->coreUpdate(true);
-
-        $response = API::put(self::getUri($this->object->email), $this->object);
-        if (true !== $response) {
-            return Splash::log()->errNull("Unable to Update Member (".$this->object->email.").");
-        }
-
-        return $this->getObjectIdentifier();
     }
 
     /**
@@ -131,6 +123,7 @@ trait CRUDTrait
         if (empty($objectId)) {
             return true;
         }
+
         //====================================================================//
         // Delete Contact from Api
         return $this->visitor

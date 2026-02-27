@@ -45,7 +45,7 @@ trait ListsTrait
     {
         //====================================================================//
         // Filter on List Field
-        if ($fieldName != 'lists') {
+        if ('lists' != $fieldName) {
             return;
         }
         $listManager = $this->connector->getLocator()->getListsManager();
@@ -68,7 +68,7 @@ trait ListsTrait
     {
         //====================================================================//
         // Filter on List Field
-        if ($fieldName != 'lists') {
+        if ('lists' != $fieldName) {
             return;
         }
         $listManager = $this->connector->getLocator()->getListsManager();
@@ -94,5 +94,4 @@ trait ListsTrait
 
         unset($this->in[$fieldName]);
     }
-
 }

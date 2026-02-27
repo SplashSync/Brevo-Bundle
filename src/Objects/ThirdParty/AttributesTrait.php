@@ -92,5 +92,4 @@ trait AttributesTrait
 
         unset($this->in[$fieldName]);
     }
-
 }
