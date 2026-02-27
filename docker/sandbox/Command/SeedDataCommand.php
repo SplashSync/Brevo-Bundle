@@ -112,8 +112,9 @@ class SeedDataCommand extends Command
                 'category' => 'category',
                 'type' => 'category',
                 'enumeration' => array(
-                    array('value' => 1, 'label' => 'M'),
-                    array('value' => 2, 'label' => 'Mme'),
+                    array('value' => "m", 'label' => 'Mr'),
+                    array('value' => "f", 'label' => 'Mme'),
+                    array('value' => "u", 'label' => 'Iel'),
                 ),
             ),
             array('name' => 'DATE_NAISSANCE', 'category' => 'normal', 'type' => 'date'),

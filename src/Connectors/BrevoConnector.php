@@ -175,20 +175,19 @@ class BrevoConnector extends AbstractConnector implements PrimaryKeysInterface
         }
         //====================================================================//
         // Get List Detailed Information
-        $details = API::get('account');
+        $details = $this->getConnexion()->get("/account");
         if (is_null($details)) {
             return $informations;
         }
-
         //====================================================================//
         // Company Information
-        $informations->company = $details->companyName;
-        $informations->address = $details->address->street;
-        $informations->zip = $details->address->zipCode;
-        $informations->town = $details->address->city;
-        $informations->country = $details->address->country;
+        $informations->company = $details["companyName"];
+        $informations->address = $details["address"]["street"];
+        $informations->zip = $details["address"]["zipCode"];
+        $informations->town = $details["address"]["city"];
+        $informations->country = $details["address"]["country"];
         $informations->www = "www.sendinblue.com";
-        $informations->email = $details->email;
+        $informations->email = $details['email'];
         $informations->phone = "~";
 
         return $informations;

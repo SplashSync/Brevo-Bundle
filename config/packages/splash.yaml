@@ -14,7 +14,7 @@ splash:
         brevo:
             id:                 ThisIsBrevoWsId
             key:                ThisIsNotASecretKeyForBrevo
-            name:               Serveur 1 (Brevo)
+            name:               Brevo - Stagging
             connector:          sendinblue
             config:
                 Extended:       true
@@ -27,7 +27,7 @@ splash:
         sandbox:
             id:                 ThisIsBrevoSandboxWsId
             key:                ThisIsNotASecretKeyForBrevoSandbox
-            name:               Serveur 2 (Sandbox)
+            name:               Brevo - Sandbox
             connector:          sendinblue
             config:
                 Extended:       true

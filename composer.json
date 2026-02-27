@@ -38,7 +38,7 @@
         "splash/openapi":                               "^3.0",
         "giggsey/libphonenumber-for-php-lite":          "^9.0"
     },
-    
+
     "require-dev": {
         "badpixxel/php-sdk":                            "^3.0",
         "splash/toolkit":                               "^3.0",

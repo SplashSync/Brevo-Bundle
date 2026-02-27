@@ -52,7 +52,8 @@ trait CRUDTrait
         }
         //====================================================================//
         // Ensure Default Contact List is present
-        if ($listName = $this->connector->getLocator()->getListsManager()->getDefaultListName()) {
+        $listName = $this->connector->getLocator()->getListsManager()->getDefaultListName();
+        if ($listName && !Splash::isCiCdMode()) {
             $current = is_string($this->in["lists"] ?? null) ? InlineHelper::toArray($this->in["lists"]) : array();
             if (!in_array($listName, $current, true)) {
                 $current[] = $listName;
@@ -130,7 +131,12 @@ trait CRUDTrait
         if (empty($objectId)) {
             return true;
         }
-
+        //====================================================================//
+        // Load Remote Object
+        $object = $this->coreLoad(ContactIdHelper::decode($objectId));
+        if (empty($object)) {
+            return Splash::log()->warTrace("Trying to Delete an Unknown Contact (".$objectId.").");
+        }
         //====================================================================//
         // Delete Contact from Api
         return $this->visitor

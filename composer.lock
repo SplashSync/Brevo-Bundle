@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5e011856595c107bdda3da45b50337e3",
+    "content-hash": "237a803e078048dfd94fc4daf374fe1b",
     "packages": [
         {
             "name": "doctrine/deprecations",
@@ -10663,16 +10663,10 @@
         {
             "name": "splash/validator",
             "version": "1.0.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.com/SplashTools/Validator.git",
-                "reference": "dbdee428dad86469f86836d104f121bb1dcc8e68"
-            },
             "dist": {
-                "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/SplashTools%2FValidator/repository/archive.zip?sha=dbdee428dad86469f86836d104f121bb1dcc8e68",
-                "reference": "dbdee428dad86469f86836d104f121bb1dcc8e68",
-                "shasum": ""
+                "type": "path",
+                "url": "/mnt/data/WebDesign/GitLab/Splash/Php-Validator",
+                "reference": "dbdee428dad86469f86836d104f121bb1dcc8e68"
             },
             "require": {
                 "php": "^7.4|^8.0",
@@ -10684,18 +10678,21 @@
                 "badpixxel/php-sdk": "^2.0|^3.0",
                 "ext-apcu": "*"
             },
-            "default-branch": true,
             "type": "package",
             "autoload": {
-                "files": [
-                    "phpunit/bootstrap.php"
-                ],
                 "psr-4": {
                     "Splash\\Tests\\": "phpunit/",
                     "Splash\\Validator\\": "src/"
+                },
+                "files": [
+                    "phpunit/bootstrap.php"
+                ]
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Splash\\Validator\\Tests\\": "tests/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -10710,11 +10707,9 @@
                 }
             ],
             "description": "Splash Modules & Connectors Validation Component",
-            "support": {
-                "issues": "https://gitlab.com/SplashTools/Validator/-/issues",
-                "source": "https://gitlab.com/SplashTools/Validator/-/tree/1.0"
-            },
-            "time": "2026-02-23T21:45:10+00:00"
+            "transport-options": {
+                "relative": false
+            }
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -17117,7 +17112,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "splash/validator": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
