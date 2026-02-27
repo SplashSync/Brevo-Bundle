@@ -16,7 +16,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata as API;
-use App\Controller\ContactAttributeController;
+use App\Controller\ContactAttribute\ListingController;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,7 +31,7 @@ use Doctrine\ORM\Mapping as ORM;
     uriTemplate: '/v3/contacts/attributes',
     operations: array(
         new API\GetCollection(
-            controller: ContactAttributeController::class,
+            controller: ListingController::class,
             read: false,
         ),
     )

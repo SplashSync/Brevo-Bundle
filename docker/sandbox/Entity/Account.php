@@ -16,7 +16,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata as API;
-use App\Controller\AccountController;
+use App\Controller\Account\GetController;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -30,7 +30,7 @@ use Doctrine\ORM\Mapping as ORM;
     uriTemplate: '/v3/account',
     operations: array(
         new API\Get(
-            controller: AccountController::class,
+            controller: GetController::class,
             read: false,
         ),
     )

@@ -13,46 +13,22 @@
  *  file that was distributed with this source code.
  */
 
-namespace App\Controller;
+namespace App\Controller\ContactList;
 
 use App\Entity\Contact;
-use App\Entity\ContactList;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * Brevo API Sandbox - Contact Lists endpoints.
+ * Brevo API Sandbox - Get contacts belonging to a specific list.
  */
 #[AsController]
-class ContactListController extends AbstractController
+class ContactsController extends AbstractController
 {
-    /**
-     * Get all contact lists (wrapped format).
-     */
-    public function __invoke(EntityManagerInterface $em): JsonResponse
-    {
-        $lists = $em->getRepository(ContactList::class)->findAll();
-        $result = array();
-        foreach ($lists as $list) {
-            $result[] = array(
-                'id' => $list->id,
-                'name' => $list->name,
-                'totalSubscribers' => $list->totalSubscribers,
-            );
-        }
-
-        return new JsonResponse(array('lists' => $result, 'count' => count($result)));
-    }
-
-    /**
-     * Get contacts belonging to a specific list.
-     */
-    #[Route('/v3/contacts/lists/{listId}/contacts', methods: array('GET'))]
-    public function listContacts(int $listId, Request $request, EntityManagerInterface $em): JsonResponse
+    public function __invoke(int $listId, Request $request, EntityManagerInterface $em): JsonResponse
     {
         $limit = (int) $request->query->get('limit', 50);
         $offset = (int) $request->query->get('offset', 0);

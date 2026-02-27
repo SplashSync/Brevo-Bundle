@@ -16,8 +16,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata as API;
-use App\Controller\WebHookController;
-use DateTime;
+use App\Controller\WebHook\ListingController;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -34,7 +33,7 @@ use Doctrine\ORM\Mapping as ORM;
     operations: array(
         new API\Post(),
         new API\GetCollection(
-            controller: WebHookController::class,
+            controller: ListingController::class,
             read: false,
         ),
     )
@@ -45,6 +44,8 @@ use Doctrine\ORM\Mapping as ORM;
 )]
 class WebHook
 {
+    use Traits\AuditTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
@@ -62,30 +63,8 @@ class WebHook
     #[ORM\Column(type: Types::JSON)]
     public array $events = array();
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
-    #[API\ApiProperty(writable: false)]
-    public DateTime $createdAt;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
-    #[API\ApiProperty(writable: false)]
-    public DateTime $modifiedAt;
-
     public function __construct()
     {
-        $this->createdAt = new DateTime();
-        $this->modifiedAt = new DateTime();
-    }
-
-    #[ORM\PrePersist]
-    public function onPrePersist(): void
-    {
-        $this->createdAt = new DateTime();
-        $this->modifiedAt = new DateTime();
-    }
-
-    #[ORM\PreUpdate]
-    public function onPreUpdate(): void
-    {
-        $this->modifiedAt = new DateTime();
+        $this->initAudit();
     }
 }

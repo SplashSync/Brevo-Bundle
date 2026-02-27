@@ -76,12 +76,23 @@ class SeedDataCommand extends Command
             return;
         }
 
-        $list = new ContactList();
-        $list->name = 'Test List';
-        $list->totalSubscribers = 0;
+        $lists = array(
+            array('name' => 'Newsletter', 'totalSubscribers' => 0),
+            array('name' => 'Clients', 'totalSubscribers' => 0),
+            array('name' => 'Prospects', 'totalSubscribers' => 0),
+            array('name' => 'VIP', 'totalSubscribers' => 0),
+            array('name' => 'Partners', 'totalSubscribers' => 0),
+        );
 
-        $this->em->persist($list);
-        $output->writeln('ContactList seeded.');
+        foreach ($lists as $data) {
+            $list = new ContactList();
+            $list->name = $data['name'];
+            $list->totalSubscribers = $data['totalSubscribers'];
+
+            $this->em->persist($list);
+        }
+
+        $output->writeln(sprintf('%d ContactLists seeded.', count($lists)));
     }
 
     private function seedContactAttributes(OutputInterface $output): void

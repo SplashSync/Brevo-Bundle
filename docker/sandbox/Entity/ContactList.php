@@ -16,7 +16,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata as API;
-use App\Controller\ContactListController;
+use App\Controller\ContactList\ContactsController;
+use App\Controller\ContactList\ListingController;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,7 +32,7 @@ use Doctrine\ORM\Mapping as ORM;
     uriTemplate: '/v3/contacts/lists',
     operations: array(
         new API\GetCollection(
-            controller: ContactListController::class,
+            controller: ListingController::class,
             read: false,
         ),
     )
@@ -39,6 +40,15 @@ use Doctrine\ORM\Mapping as ORM;
 #[API\ApiResource(
     uriTemplate: '/v3/contacts/lists/{id}',
     operations: array(new API\Get())
+)]
+#[API\ApiResource(
+    uriTemplate: '/v3/contacts/lists/{listId}/contacts',
+    operations: array(
+        new API\GetCollection(
+            controller: ContactsController::class,
+            read: false,
+        ),
+    )
 )]
 class ContactList
 {

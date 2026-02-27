@@ -13,7 +13,7 @@
  *  file that was distributed with this source code.
  */
 
-namespace App\Controller;
+namespace App\Controller\Contact;
 
 use App\Entity\Contact;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,7 +28,7 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
  * Custom controller for duplicate_parameter error format specific to Brevo.
  */
 #[AsController]
-class ContactController extends AbstractController
+class CreateController extends AbstractController
 {
     public function __invoke(Request $request, EntityManagerInterface $em): JsonResponse
     {

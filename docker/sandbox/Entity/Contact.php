@@ -16,8 +16,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata as API;
-use App\Controller\ContactController;
-use DateTime;
+use App\Controller\Contact\CreateController;
+use App\Controller\Contact\ListingController;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -32,8 +32,12 @@ use Doctrine\ORM\Mapping as ORM;
 #[API\ApiResource(
     uriTemplate: '/v3/contacts',
     operations: array(
+        new API\GetCollection(
+            controller: ListingController::class,
+            read: false,
+        ),
         new API\Post(
-            controller: ContactController::class,
+            controller: CreateController::class,
             read: false,
             deserialize: false,
             write: false,
@@ -50,6 +54,8 @@ use Doctrine\ORM\Mapping as ORM;
 )]
 class Contact
 {
+    use Traits\AuditTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
@@ -72,30 +78,8 @@ class Contact
     #[ORM\Column(type: Types::JSON)]
     public array $listIds = array();
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
-    #[API\ApiProperty(writable: false)]
-    public DateTime $modifiedAt;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
-    #[API\ApiProperty(writable: false)]
-    public DateTime $createdAt;
-
     public function __construct()
     {
-        $this->createdAt = new DateTime();
-        $this->modifiedAt = new DateTime();
-    }
-
-    #[ORM\PrePersist]
-    public function onPrePersist(): void
-    {
-        $this->createdAt = new DateTime();
-        $this->modifiedAt = new DateTime();
-    }
-
-    #[ORM\PreUpdate]
-    public function onPreUpdate(): void
-    {
-        $this->modifiedAt = new DateTime();
+        $this->initAudit();
     }
 }

@@ -15,6 +15,12 @@ COLOR_RESET := $(shell tput sgr0)
 serve: 	## Start Local Symfony Server
 	symfony serve --no-tls
 
+.PHONY: reload
+reload:		## Clear cache and update database
+	docker compose exec sandbox rm -Rf var/cache/*
+	docker compose exec sandbox bin/console doctrine:schema:update --force
+	docker compose exec sandbox bin/console cache:clear --no-debug
+
 .PHONY: upgrade
 upgrade:
 	$(MAKE) up
