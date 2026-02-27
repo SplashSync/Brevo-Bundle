@@ -26,7 +26,6 @@ use Splash\Bundle\Models\Connectors\GenericWidgetMapperTrait;
 use Splash\Bundle\Models\Connectors\RoutesBuilderAwareTrait;
 use Splash\Bundle\Services\ConnectorRoutesBuilder;
 use Splash\Connectors\Brevo\Dictionary\BrevoEndpoints;
-use Splash\Connectors\Brevo\Models\BrevoApiHelper as API;
 use Splash\Connectors\Brevo\Models\Connector\BrevoApiTrait;
 use Splash\Connectors\Brevo\Models\Connector\BrevoProfileTrait;
 use Splash\Connectors\Brevo\Objects;
@@ -217,20 +216,7 @@ class BrevoConnector extends AbstractConnector implements PrimaryKeysInterface
             Objects\WebHookParser::setDisabled();
         }
 
-        //====================================================================//
-        // Build Sandbox Endpoint if needed
-        $endpoint = null;
-        if ($this->getParameter("isSandbox", false)) {
-            $endpoint = rtrim($config["WsHost"] ?? '', '/')."/v3/";
-        }
-
-        //====================================================================//
-        // Configure Rest API
-        return API::configure(
-            $config["ApiKey"],
-            $config["ApiList"] ?? null,
-            $endpoint
-        );
+        return true;
     }
 
     //====================================================================//

@@ -174,16 +174,4 @@ trait CRUDTrait
 
         return $baseUri;
     }
-
-    /**
-     * Get Object CRUD List Uri
-     *
-     * @param string $action
-     *
-     * @return string
-     */
-    private static function getListUri(string $action) : string
-    {
-        return 'contacts/lists/'.API::getList().'/contacts/'.$action;
-    }
 }
