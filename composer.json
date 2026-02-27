@@ -40,7 +40,9 @@
     
     "require-dev": {
         "badpixxel/php-sdk":                            "^3.0",
-        "splash/toolkit":                               "^3.0"
+        "splash/toolkit":                               "^3.0",
+
+        "api-platform/core":                            "*"
     },
 
     "scripts": {
