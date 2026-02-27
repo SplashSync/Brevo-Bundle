@@ -720,12 +720,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SplashSync/Php-Core.git",
-                "reference": "5f8e84bc8e59dac0c4beec01c1c27fd2cedcc88b"
+                "reference": "bb37af0a9db303d0879f50565c37428789bf5dbe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SplashSync/Php-Core/zipball/5f8e84bc8e59dac0c4beec01c1c27fd2cedcc88b",
-                "reference": "5f8e84bc8e59dac0c4beec01c1c27fd2cedcc88b",
+                "url": "https://api.github.com/repos/SplashSync/Php-Core/zipball/bb37af0a9db303d0879f50565c37428789bf5dbe",
+                "reference": "bb37af0a9db303d0879f50565c37428789bf5dbe",
                 "shasum": ""
             },
             "require": {
@@ -771,7 +771,7 @@
                 "issues": "https://github.com/SplashSync/Php-Core/issues",
                 "source": "https://github.com/SplashSync/Php-Core/tree/3.0"
             },
-            "time": "2026-02-25T11:11:29+00:00"
+            "time": "2026-02-27T18:16:06+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -10667,12 +10667,12 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/SplashTools/Validator.git",
-                "reference": "e4176265be280b3c55c4d481542b8aa415573cd5"
+                "reference": "70c2b898f2153fc5258bc8cb1e36bce0cba5a30e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/SplashTools%2FValidator/repository/archive.zip?sha=e4176265be280b3c55c4d481542b8aa415573cd5",
-                "reference": "e4176265be280b3c55c4d481542b8aa415573cd5",
+                "url": "https://gitlab.com/api/v4/projects/SplashTools%2FValidator/repository/archive.zip?sha=70c2b898f2153fc5258bc8cb1e36bce0cba5a30e",
+                "reference": "70c2b898f2153fc5258bc8cb1e36bce0cba5a30e",
                 "shasum": ""
             },
             "require": {
@@ -10715,7 +10715,7 @@
                 "issues": "https://gitlab.com/SplashTools/Validator/-/issues",
                 "source": "https://gitlab.com/SplashTools/Validator/-/tree/1.0"
             },
-            "time": "2026-02-27T19:00:34+00:00"
+            "time": "2026-02-27T19:16:05+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
