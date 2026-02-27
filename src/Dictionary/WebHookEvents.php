@@ -24,38 +24,38 @@ class WebHookEvents
     // Transactional Email Events
     //====================================================================//
 
-    const string SENT            = "sent";
-    const string REQUEST         = "request";
-    const string DELIVERED       = "delivered";
-    const string HARD_BOUNCE     = "hardBounce";
-    const string SOFT_BOUNCE     = "softBounce";
-    const string BLOCKED         = "blocked";
-    const string SPAM            = "spam";
-    const string INVALID         = "invalid";
-    const string DEFERRED        = "deferred";
-    const string CLICK           = "click";
-    const string OPENED          = "opened";
-    const string UNIQUE_OPENED   = "uniqueOpened";
-    const string UNSUBSCRIBED    = "unsubscribed";
+    const string SENT = "sent";
+    const string REQUEST = "request";
+    const string DELIVERED = "delivered";
+    const string HARD_BOUNCE = "hardBounce";
+    const string SOFT_BOUNCE = "softBounce";
+    const string BLOCKED = "blocked";
+    const string SPAM = "spam";
+    const string INVALID = "invalid";
+    const string DEFERRED = "deferred";
+    const string CLICK = "click";
+    const string OPENED = "opened";
+    const string UNIQUE_OPENED = "uniqueOpened";
+    const string UNSUBSCRIBED = "unsubscribed";
 
     //====================================================================//
     // Marketing Events
     //====================================================================//
 
-    const string LIST_ADDITION   = "listAddition";
+    const string LIST_ADDITION = "listAddition";
 
     //====================================================================//
     // Inbound Email Events
     //====================================================================//
 
-    const string INBOUND_EMAIL_PROCESSED  = "inboundEmailProcessed";
+    const string INBOUND_EMAIL_PROCESSED = "inboundEmailProcessed";
 
     //====================================================================//
     // Contact Management Events
     //====================================================================//
 
-    const string CONTACT_UPDATED  = "contactUpdated";
-    const string CONTACT_DELETED  = "contactDeleted";
+    const string CONTACT_UPDATED = "contactUpdated";
+    const string CONTACT_DELETED = "contactDeleted";
 
     //====================================================================//
     // Splash Marketing Events (used by Splash Connector)
@@ -71,22 +71,22 @@ class WebHookEvents
     //====================================================================//
 
     const array ALL = array(
-        self::SENT                    => "Sent",
-        self::REQUEST                 => "Request",
-        self::DELIVERED               => "Delivered",
-        self::HARD_BOUNCE             => "Hard Bounce",
-        self::SOFT_BOUNCE             => "Soft Bounce",
-        self::BLOCKED                 => "Blocked",
-        self::SPAM                    => "Spam",
-        self::INVALID                 => "Invalid",
-        self::DEFERRED                => "Deferred",
-        self::CLICK                   => "Click",
-        self::OPENED                  => "Opened",
-        self::UNIQUE_OPENED           => "Unique Opened",
-        self::UNSUBSCRIBED            => "Unsubscribed",
-        self::LIST_ADDITION           => "List Addition",
+        self::SENT => "Sent",
+        self::REQUEST => "Request",
+        self::DELIVERED => "Delivered",
+        self::HARD_BOUNCE => "Hard Bounce",
+        self::SOFT_BOUNCE => "Soft Bounce",
+        self::BLOCKED => "Blocked",
+        self::SPAM => "Spam",
+        self::INVALID => "Invalid",
+        self::DEFERRED => "Deferred",
+        self::CLICK => "Click",
+        self::OPENED => "Opened",
+        self::UNIQUE_OPENED => "Unique Opened",
+        self::UNSUBSCRIBED => "Unsubscribed",
+        self::LIST_ADDITION => "List Addition",
         self::INBOUND_EMAIL_PROCESSED => "Inbound Email Processed",
-        self::CONTACT_UPDATED         => "Contact Updated",
-        self::CONTACT_DELETED         => "Contact Deleted",
+        self::CONTACT_UPDATED => "Contact Updated",
+        self::CONTACT_DELETED => "Contact Deleted",
     );
 }

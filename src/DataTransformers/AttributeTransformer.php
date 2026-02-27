@@ -51,7 +51,7 @@ class AttributeTransformer
         //====================================================================//
         // Category Attributes => Resolve by Value or Label
         if ("category" == $type) {
-            return self::resolveCategoryValue($attribute, $value);
+            return self::resolveCategoryValue($attribute, (string) $value);
         }
 
         //====================================================================//
