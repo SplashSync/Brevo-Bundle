@@ -10,19 +10,6 @@ splash:
     connections:
 
         ########################################################################
-        # Brevo Default (Real API)
-        brevo:
-            id:                 ThisIsBrevoWsId
-            key:                ThisIsNotASecretKeyForBrevo
-            name:               Brevo - Stagging
-            connector:          sendinblue
-            config:
-                Extended:       true
-                ApiKey:         '%env(resolve:BREVO_API_KEY)%'
-                ApiList:        '%env(resolve:BREVO_API_LIST)%'
-                ApiDfCountry:   'FR'
-
-        ########################################################################
         # Brevo Sandbox (Fake API for testing)
         sandbox:
             id:                 ThisIsBrevoSandboxWsId
@@ -35,3 +22,18 @@ splash:
                 WsHost:         'http://172.112.0.101'
                 ApiKey:         'sandbox-api-key'
                 ApiList:        '1'
+
+        ########################################################################
+        # Brevo Default (Real API)
+        brevo:
+            id:                 ThisIsBrevoWsId
+            key:                ThisIsNotASecretKeyForBrevo
+            name:               Brevo - Stagging
+            connector:          sendinblue
+            config:
+                Extended:       true
+                ApiKey:         '%env(resolve:BREVO_API_KEY)%'
+                ApiList:        '%env(resolve:BREVO_API_LIST)%'
+                ApiDfCountry:   'FR'
+
+

@@ -25,6 +25,7 @@ use Splash\Bundle\Models\Connectors\GenericObjectPrimaryMapperTrait;
 use Splash\Bundle\Models\Connectors\GenericWidgetMapperTrait;
 use Splash\Bundle\Models\Connectors\RoutesBuilderAwareTrait;
 use Splash\Bundle\Services\ConnectorRoutesBuilder;
+use Splash\Connectors\Brevo\Dictionary\BrevoEndpoints;
 use Splash\Connectors\Brevo\Models\BrevoApiHelper as API;
 use Splash\Connectors\Brevo\Models\Connector\BrevoApiTrait;
 use Splash\Connectors\Brevo\Models\Connector\BrevoProfileTrait;
@@ -161,7 +162,7 @@ class BrevoConnector extends AbstractConnector implements PrimaryKeysInterface
         //====================================================================//
         // Server Information
         $informations->servertype = "Brevo REST Api V3";
-        $informations->serverurl = API::ENDPOINT;
+        $informations->serverurl = BrevoEndpoints::getEndpoint($this->isSandbox());
         //====================================================================//
         // Module Information
         $informations->moduleauthor = SplDefinition::AUTHOR;

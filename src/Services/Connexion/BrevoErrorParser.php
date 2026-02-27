@@ -88,6 +88,9 @@ class BrevoErrorParser implements ErrorParserInterface
         if (!$response->request instanceof Request) {
             return;
         }
+        if (empty($response->request->payload)) {
+            return;
+        }
         //====================================================================//
         // Try to decode request body as Json
         $decoded = json_decode($response->request->payload, true);
