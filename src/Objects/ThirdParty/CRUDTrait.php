@@ -19,7 +19,7 @@ use Splash\Connectors\Brevo\Helpers\ContactIdHelper;
 use Splash\Connectors\Brevo\Models\Api\Contact;
 use Splash\Connectors\Brevo\Models\BrevoApiHelper as API;
 use Splash\Core\Client\Splash;
-use stdClass;
+use Splash\Core\Helpers\InlineHelper;
 
 /**
  * SendInBlue Users CRUD Functions
@@ -31,13 +31,15 @@ trait CRUDTrait
      */
     public function load(string $objectId): ?Contact
     {
-        return $this->coreLoad(ContactIdHelper::decode($objectId));
+        $contact = $this->coreLoad(ContactIdHelper::decode($objectId));
+
+        return ($contact instanceof Contact) ? $contact : null;
     }
 
     /**
      * Create Request Object
      *
-     * @return null|stdClass New Object
+     * @return null|Contact New Contact
      */
     public function create(): ?Contact
     {
@@ -49,9 +51,13 @@ trait CRUDTrait
             return null;
         }
         //====================================================================//
-        // Configure Default Contact List ID
-        if ($listId = $this->connector->getLocator()->getListsManager()->getDefaultListIndex()) {
-            $this->in["listIds"] = array($listId);
+        // Ensure Default Contact List is present
+        if ($listName = $this->connector->getLocator()->getListsManager()->getDefaultListName()) {
+            $current = is_string($this->in["lists"] ?? null) ? InlineHelper::toArray($this->in["lists"]) : array();
+            if (!in_array($listName, $current, true)) {
+                $current[] = $listName;
+            }
+            $this->in["lists"] = InlineHelper::fromArray($current);
         }
         //====================================================================//
         // Create new Contact
@@ -87,29 +93,30 @@ trait CRUDTrait
         if ($this->object->hasEmailChanged()) {
             //====================================================================//
             // Delete Contact
-            $this->delete(ContactIdHelper::encode($this->object->getOldEmail()));
+            $this->delete(ContactIdHelper::encode((string) $this->object->getOldEmail()));
             //====================================================================//
             // Create New Contact
             $createResponse = $this->visitor->create($this->object);
             //====================================================================//
             // Verify Response
             if (!$createResponse->isSuccess()) {
-                return Splash::log()->errNull("Unable to Create Member (".$this->object->getEmail().").");
+                return Splash::log()->errNull("Unable to Create Member (".$this->object->email.").");
             }
             //====================================================================//
             // Dispatch Object ID Updated Event
             $this->connector->objectIdChanged(
                 "ThirdParty",
                 ContactIdHelper::encode((string) $this->object->getOldEmail()),
-                ContactIdHelper::encode((string) $this->object->getEmail())
+                ContactIdHelper::encode($this->object->email)
             );
 
-            return $this->getObjectIdentifier();
+            return ContactIdHelper::encode($this->object->email);
         }
-
         //====================================================================//
         // Update Contact
-        return $this->coreUpdate(true);
+        $objectId = $this->coreUpdate(true);
+
+        return $objectId ? ContactIdHelper::encode($objectId) : null;
     }
 
     /**

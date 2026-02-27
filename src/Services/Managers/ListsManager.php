@@ -74,13 +74,16 @@ class ListsManager
     }
 
     /**
-     * Get Default Contact List Index
+     * Get Default Contact List Name
      */
-    public function getDefaultListIndex(): ?string
+    public function getDefaultListName(): ?string
     {
         $index = $this->getConnector()->getParameter(self::DEFAULT_INDEX);
+        if (!is_numeric($index)) {
+            return null;
+        }
 
-        return is_string($index) ? $index : null;
+        return $this->getName((int) $index);
     }
 
     /**

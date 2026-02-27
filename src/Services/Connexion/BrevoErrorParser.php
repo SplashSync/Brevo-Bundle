@@ -19,8 +19,8 @@ use Httpful\Request;
 use Httpful\Response;
 use Splash\Core\Client\Splash;
 use Splash\OpenApi\Interfaces\ErrorParserInterface;
+use Symfony\Component\DependencyInjection\Attribute\When;
 use Symfony\Component\HttpFoundation\Response as SfResponse;
-use Symfony\Component\Validator\Constraints\When;
 
 /**
  * Brevo API Error Parser
@@ -71,7 +71,11 @@ class BrevoErrorParser implements ErrorParserInterface
         }
         //====================================================================//
         // Store Decoded Error Response
-        Splash::log()->err($decoded['message']);
+        if (is_string($decoded['message'])) {
+            Splash::log()->err($decoded['message']);
+        } else {
+            Splash::log()->err(print_r($decoded['message'], true));
+        }
     }
 
     /**

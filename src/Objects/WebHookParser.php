@@ -15,17 +15,14 @@
 
 namespace Splash\Connectors\Brevo\Objects;
 
-use Splash\Bundle\Models\AbstractStandaloneObject;
 use Splash\Connectors\Brevo\Connectors\BrevoConnector;
-use Splash\Connectors\Brevo\Models\Api\Contact;
+use Splash\Connectors\Brevo\Dictionary\WebHookEvents;
 use Splash\Connectors\Brevo\Models\Api\Webhook;
 use Splash\Core\Client\Splash;
-use Splash\Core\Models\Objects\IntelParserTrait;
-use Splash\Core\Models\Objects\SimpleFieldsTrait;
+use Splash\Core\Helpers\InlineHelper;
 use Splash\OpenApi\Action\JsonLd\ListAction;
 use Splash\OpenApi\Dictionary\ActionOptions;
 use Splash\OpenApi\Models\Objects\AbstractRestAndMetadataObject;
-use stdClass;
 
 /**
  * Brevo Implementation of WebHooks
@@ -82,5 +79,21 @@ class WebHookParser extends AbstractRestAndMetadataObject
     public static function setDisabled(bool $disabled = true): void
     {
         static::$disabled = $disabled;
+    }
+
+    /**
+     * Create Splash WebHook from Url
+     */
+    public function createFromUrl(string $url): bool
+    {
+        return !empty($this->set(null, array(
+            "type" => "marketing",
+            "description" => "Splash Sync WebHook",
+            "url" => $url,
+            "events" => InlineHelper::fromArray(array(
+                WebHookEvents::UNSUBSCRIBED,
+                WebHookEvents::LIST_ADDITION,
+            ))
+        )));
     }
 }

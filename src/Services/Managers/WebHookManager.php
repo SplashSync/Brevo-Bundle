@@ -47,12 +47,12 @@ class WebHookManager
         foreach ($webHooks as $webHook) {
             //====================================================================//
             // Skip Non-Splash WebHooks
-            if (!$this->routesBuilder->isSplashUrl($webHook['url'])) {
+            if (!$this->routesBuilder->isSplashUrl((string) $webHook['url'])) {
                 continue;
             }
             //====================================================================//
             // This is our Splash WebHook
-            if (trim($webHook['url']) == $webHookUrl) {
+            if (trim((string) $webHook['url']) == $webHookUrl) {
                 return true;
             }
         }
@@ -77,15 +77,15 @@ class WebHookManager
         foreach ($webHooks as $webHook) {
             //====================================================================//
             // This is Current Node WebHook
-            if (trim($webHook['url']) == $webHookUrl) {
+            if (trim((string) $webHook['url']) == $webHookUrl) {
                 $foundWebHook = true;
 
                 continue;
             }
             //====================================================================//
             // This is an Old Splash WebHook => Delete
-            if ($this->routesBuilder->isSplashUrl($webHook['url'])) {
-                $this->getWebHookParser()->delete($webHook['id']);
+            if ($this->routesBuilder->isSplashUrl((string) $webHook['url'])) {
+                $this->getWebHookParser()->delete((string) $webHook['id']);
             }
         }
         //====================================================================//
@@ -96,7 +96,7 @@ class WebHookManager
 
         //====================================================================//
         // Register New Splash WebHook
-        return (false !== $this->getWebHookParser()->create($webHookUrl));
+        return (false !== $this->getWebHookParser()->createFromUrl($webHookUrl));
     }
 
     //====================================================================//
@@ -118,7 +118,7 @@ class WebHookManager
     /**
      * Fetch All Marketing WebHooks
      *
-     * @return array<int, array<string, mixed>>
+     * @return array<int, array<string, null|scalar>>
      */
     private function fetchWebHooksList(): array
     {

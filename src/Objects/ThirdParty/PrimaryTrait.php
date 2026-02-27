@@ -31,7 +31,7 @@ trait PrimaryTrait
         //====================================================================//
         // Safety Check
         $email = $keys['email'] ?? null;
-        if (!$email || !is_string($email)) {
+        if (!$email) {
             return null;
         }
         //====================================================================//
