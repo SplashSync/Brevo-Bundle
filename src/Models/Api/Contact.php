@@ -1,11 +1,23 @@
 <?php
 
+/*
+ *  This file is part of SplashSync Project.
+ *
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
+
 namespace Splash\Connectors\Brevo\Models\Api;
 
-use DateTime;
 use Splash\Connectors\Brevo\Helpers\ContactIdHelper;
+use Splash\Connectors\Brevo\Models\Api\Common\AuditTrait;
 use Splash\Connectors\Brevo\Models\Api\Contact\EmailTrait;
-use Splash\Core\Dictionary\SplFields;
 use Splash\Metadata\Attributes as SPL;
 use Splash\OpenApi\Dictionary\SerializerGroups as SplGroups;
 use Splash\Templates\ThirdPartyFields;
@@ -24,6 +36,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Contact
 {
     use EmailTrait;
+    use AuditTrait;
 
     /**
      * Brevo Contact ID
@@ -68,20 +81,6 @@ class Contact
     )]
     #[Serializer\Groups(SplGroups::WRITE)]
     public array $unlinkListIds = array();
-
-    /**
-     * Contact Last Modification Date
-     */
-    #[SPL\Template(ThirdPartyFields::DATE_CREATED)]
-    #[Serializer\Groups(SplGroups::READ)]
-    public DateTime $modifiedAt;
-
-    /**
-     * Contact Creation Date
-     */
-    #[SPL\Template(ThirdPartyFields::DATE_MODIFIED)]
-    #[Serializer\Groups(SplGroups::READ)]
-    public DateTime $createdAt;
 
     //====================================================================//
     // Getters & Setters
