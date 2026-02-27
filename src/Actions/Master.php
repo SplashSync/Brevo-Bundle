@@ -54,15 +54,13 @@ class Master extends AbstractController
      * @param AbstractConnector $connector
      *
      * @return JsonResponse
-     *
-     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     public function __invoke(Request $request, AbstractConnector $connector): JsonResponse
     {
         //====================================================================//
         // For SendInBlue Ping Test
         if ("example@example.com" == $request->get('email')) {
-            $this->logger->notice(__CLASS__.'::'.__FUNCTION__.' SendInBlue Ping.', $request->attributes->all());
+            $this->logger->notice(__CLASS__.'::'.__FUNCTION__.' Brevo Ping.', $request->attributes->all());
 
             return $this->prepareResponse(200);
         }
@@ -73,7 +71,7 @@ class Master extends AbstractController
 
         //====================================================================//
         // Log SendInBlue Request
-        $this->logger->info(__CLASS__.'::'.__FUNCTION__.' SendInBlue WebHook Received ', $eventData);
+        $this->logger->info(__CLASS__.'::'.__FUNCTION__.' Brevo WebHook Received ', $eventData);
 
         //==============================================================================
         // Commit Changes
@@ -103,8 +101,10 @@ class Master extends AbstractController
         // Commit Multiple Changes to Splash
         if (is_array($eventData['email'])) {
             foreach ($eventData['email'] as $eventEmail) {
-                $email = ContactIdHelper::encode($eventEmail);
-                $connector->commit('ThirdParty', $email, SplOperations::UPDATE, self::USER, self::COMMENT);
+                if (is_string($eventEmail)) {
+                    $email = ContactIdHelper::encode($eventEmail);
+                    $connector->commit('ThirdParty', $email, SplOperations::UPDATE, self::USER, self::COMMENT);
+                }
             }
 
             return;
