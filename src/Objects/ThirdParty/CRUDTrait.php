@@ -15,6 +15,8 @@
 
 namespace Splash\Connectors\Brevo\Objects\ThirdParty;
 
+use Splash\Connectors\Brevo\Helpers\ContactIdHelper;
+use Splash\Connectors\Brevo\Models\Api\Contact;
 use Splash\Connectors\Brevo\Models\BrevoApiHelper as API;
 use Splash\Core\Client\Splash;
 use stdClass;
@@ -25,26 +27,11 @@ use stdClass;
 trait CRUDTrait
 {
     /**
-     * Load Request Object
-     *
-     * @param string $objectId Object id
-     *
-     * @return null|stdClass
+     * @inerhitDoc
      */
-    public function load(string $objectId): ?stdClass
+    public function load(string $objectId): ?Contact
     {
-        //====================================================================//
-        // Stack Trace
-        Splash::log()->trace();
-
-        //====================================================================//
-        // Get Contact Infos from Api
-        $sibObject = API::get(self::getUri(self::decodeContactId($objectId)));
-        if ((null == $sibObject) || !isset($sibObject->email)) {
-            return Splash::log()->errNull("Unable to load Contact (".self::decodeContactId($objectId).").");
-        }
-
-        return $sibObject;
+        return $this->coreLoad(ContactIdHelper::decode($objectId));
     }
 
     /**
@@ -52,11 +39,8 @@ trait CRUDTrait
      *
      * @return null|stdClass New Object
      */
-    public function create(): ?stdClass
+    public function create(): ?Contact
     {
-        //====================================================================//
-        // Stack Trace
-        Splash::log()->trace();
         //====================================================================//
         // Check Customer Name is given
         if (empty($this->in["email"]) || !is_string($this->in["email"])) {
@@ -65,19 +49,18 @@ trait CRUDTrait
             return null;
         }
         //====================================================================//
-        // Init Object
-        $postData = array(
-            'email' => $this->in["email"],
-            'listIds' => array((int) API::getList()),
-        );
-        //====================================================================//
-        // Create New Contact
-        $response = API::post(self::getUri(), (object) $postData);
-        if (is_null($response) || empty($response->id)) {
-            return Splash::log()->errNull("Unable to Create Member (".$this->in["email"].").");
+        // Configure Default Contact List ID
+        if ($listId = $this->connector->getLocator()->getListsManager()->getDefaultListIndex()) {
+            $this->in["listIds"] = array($listId);
         }
-
-        return $this->load(self::encodeContactId($this->in["email"]));
+        //====================================================================//
+        // Create new Contact
+        if (!$this->coreCreate()) {
+            return Splash::log()->errNull("Unable to Create Contact (".$this->in["email"].").");
+        }
+        //====================================================================//
+        // Load new Contact
+        return $this->load(ContactIdHelper::encode($this->in["email"]));
     }
 
     /**
@@ -95,34 +78,40 @@ trait CRUDTrait
         //====================================================================//
         // No Update Required
         if (!$needed) {
-            return $this->getObjectIdentifier();
+            return $this->object->getId();
         }
 
         //====================================================================//
         // Replace Contact
-        if ($this->emailChanged) {
+        if ($this->object->hasEmailChanged()) {
             //====================================================================//
             // Delete Contact
-            $this->delete(self::encodeContactId($this->emailChanged));
+            $this->delete(ContactIdHelper::encode($this->object->getOldEmail()));
             //====================================================================//
             // Create New Contact
             $response = API::post(self::getUri(), $this->object);
             if (is_null($response) || empty($response->id)) {
                 return Splash::log()->errNull("Unable to Create Member (".$this->object->email.").");
             }
-            //====================================================================//
-            // Dispatch Object Id Updated Event
-            $this->connector->objectIdChanged(
-                "ThirdParty",
-                self::encodeContactId($this->emailChanged),
-                self::encodeContactId($this->object->email)
-            );
-
-            return $this->getObjectIdentifier();
+//            //====================================================================//
+//            // Dispatch Object Id Updated Event
+//            $this->connector->objectIdChanged(
+//                "ThirdParty",
+//                self::encodeContactId($this->emailChanged),
+//                self::encodeContactId($this->object->email)
+//            );
+//
+//            return $this->getObjectIdentifier();
         }
+
+        $this->coreUpdate(true);
+//        dd($this->object);
+
 
         //====================================================================//
         // Update Contact
+        return $this->coreUpdate(true);
+
         $response = API::put(self::getUri($this->object->email), $this->object);
         if (true !== $response) {
             return Splash::log()->errNull("Unable to Update Member (".$this->object->email.").");
@@ -134,7 +123,7 @@ trait CRUDTrait
     /**
      * {@inheritdoc}
      */
-    public function delete(string $objectId): bool
+    public function delete(?string $objectId = null): bool
     {
         //====================================================================//
         // Stack Trace
@@ -144,12 +133,10 @@ trait CRUDTrait
         }
         //====================================================================//
         // Delete Contact from Api
-        $result = API::delete(self::getUri(self::decodeContactId($objectId)));
-        if (is_null($result)) {
-            return Splash::log()->errTrace("Unable to Delete Contact (".self::decodeContactId($objectId).").");
-        }
-
-        return true;
+        return $this->visitor
+            ->delete(ContactIdHelper::decode($objectId))
+            ->isSuccess()
+        ;
     }
 
     /**
@@ -161,7 +148,7 @@ trait CRUDTrait
             return null;
         }
 
-        return self::encodeContactId($this->object->email);
+        return $this->object->email;
     }
 
     /**

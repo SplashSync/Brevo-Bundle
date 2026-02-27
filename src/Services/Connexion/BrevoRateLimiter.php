@@ -1,0 +1,60 @@
+<?php
+
+namespace Splash\Connectors\Brevo\Services\Connexion;
+
+use Httpful\Response;
+use Splash\OpenApi\Interfaces\RateLimiterInterface;
+use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
+
+/**
+ * Default Brevo API Rate Limiter
+ */
+class BrevoRateLimiter implements RateLimiterInterface
+{
+    /**
+     * Symfony Rate Limiter Configuration Key
+     */
+    const string CONFIG_KEY = 'brevo_api';
+
+    /**
+     * Limiter key (typically the connector WebService ID)
+     */
+    private string $key = 'default';
+
+    public function __construct(
+        #[Target(self::CONFIG_KEY)]
+        private readonly RateLimiterFactoryInterface $rateLimiterFactory,
+    ) {
+    }
+
+    /**
+     * Set the limiter key (connector WebService ID)
+     */
+    public function setKey(string $key): static
+    {
+        $this->key = $key;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function waitIfNeeded(): void
+    {
+        //====================================================================//
+        // Consume one token, wait if limit is reached
+        $this->rateLimiterFactory->create($this->key)->reserve()->wait();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function updateFromResponse(Response $response): bool
+    {
+        //====================================================================//
+        // Retry on 429 Too Many Requests
+        return 429 === $response->code;
+    }
+}

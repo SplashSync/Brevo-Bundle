@@ -15,6 +15,7 @@
 
 namespace Splash\Connectors\Brevo\Objects\ThirdParty;
 
+use Splash\Connectors\Brevo\Helpers\ContactIdHelper;
 use Splash\Core\Client\Splash;
 
 /**
@@ -30,12 +31,12 @@ trait PrimaryTrait
         //====================================================================//
         // Safety Check
         $email = $keys['email'] ?? null;
-        if (!$email) {
+        if (!$email || !is_string($email)) {
             return null;
         }
         //====================================================================//
         // Try to load Contact by Email
-        $contactId = self::encodeContactId($email);
+        $contactId = ContactIdHelper::encode($email);
         $contact = $this->load($contactId);
         //====================================================================//
         // Clean Splash Log

@@ -4,13 +4,18 @@ services:
         autoconfigure:      true
 
     ################################################################################
-    # Autowire for Connectors
-    Splash\Connectors\Brevo\Connectors\:
-        resource: '../../Connectors'
-
-    ################################################################################
     # Enables Dependency Injection in Actions
     Splash\Connectors\Brevo\Actions\:
         resource: '../../Actions'
         public: true
         tags: ['controller.service_arguments']
+
+    ################################################################################
+    # Autowire for Connectors
+    Splash\Connectors\Brevo\Connectors\:
+        resource: '../../Connectors'
+
+    ################################################################################
+    # Autowire for Services
+    Splash\Connectors\Brevo\Services\:
+        resource: '../../Services'

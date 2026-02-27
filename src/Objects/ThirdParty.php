@@ -17,86 +17,54 @@ namespace Splash\Connectors\Brevo\Objects;
 
 use Splash\Bundle\Models\AbstractStandaloneObject;
 use Splash\Connectors\Brevo\Connectors\BrevoConnector;
+use Splash\Connectors\Brevo\Helpers\ContactIdHelper;
+use Splash\Connectors\Brevo\Models\Api\Contact;
+use Splash\Connectors\Brevo\Models\BrevoApiHelper as API;
+use Splash\Core\Client\Splash;
 use Splash\Core\Interfaces\Object\PrimaryKeysAwareInterface;
 use Splash\Core\Models\Objects\IntelParserTrait;
 use Splash\Core\Models\Objects\SimpleFieldsTrait;
-use stdClass;
+use Splash\OpenApi\Action\JsonLd\ListAction;
+use Splash\OpenApi\Action\Json\PutAction;
+use Splash\OpenApi\Dictionary\ActionOptions;
+use Splash\OpenApi\Models\Objects\AbstractRestAndMetadataObject;
 
 /**
  * SendInBlue Implementation of ThirdParty
  */
-class ThirdParty extends AbstractStandaloneObject implements PrimaryKeysAwareInterface
+class ThirdParty extends AbstractRestAndMetadataObject implements PrimaryKeysAwareInterface
 {
-    use IntelParserTrait;
-    use SimpleFieldsTrait;
     use ThirdParty\CRUDTrait;
     use ThirdParty\PrimaryTrait;
-    use ThirdParty\ObjectsListTrait;
-    use ThirdParty\CoreTrait;
+    use ThirdParty\ListsTrait;
     use ThirdParty\AttributesTrait;
-    use ThirdParty\MetaTrait;
 
     /**
-     * {@inheritdoc}
-     */
-    protected static bool $disabled = false;
-
-    /**
-     * {@inheritdoc}
-     */
-    protected static string $name = "Customer";
-
-    /**
-     * {@inheritdoc}
-     */
-    protected static string $description = "SendInBlue Contact";
-
-    /**
-     * {@inheritdoc}
-     */
-    protected static string $ico = "fa fa-user";
-
-    /**
-     * @phpstan-var stdClass
+     * @var Contact
      */
     protected object $object;
 
     /**
-     * @var BrevoConnector
-     */
-    protected BrevoConnector $connector;
-
-    /**
      * Class Constructor
-     *
-     * @param BrevoConnector $parentConnector
      */
-    public function __construct(BrevoConnector $parentConnector)
-    {
-        $this->connector = $parentConnector;
-    }
-
-    /**
-     * Encode Contact Email to Splash Id String
-     *
-     * @param string $email
-     *
-     * @return string
-     */
-    public static function encodeContactId(string $email)
-    {
-        return base64_encode(strtolower($email));
-    }
-
-    /**
-     * Decode Contact Email from Splash Id String
-     *
-     * @param string $contactId
-     *
-     * @return string
-     */
-    protected static function decodeContactId(string $contactId)
-    {
-        return (string) base64_decode($contactId, true);
+    public function __construct(
+        protected readonly BrevoConnector $connector
+    ) {
+        parent::__construct(
+            $visitor = $connector->getVisitor(Contact::class),
+            $visitor->getMetadataAdapter(),
+            Contact::class
+        );
+        //====================================================================//
+        // Configure Search by Email
+        $this->visitor->setListAction(ListAction::class, array(
+            ActionOptions::PAGE_KEY => null,
+            ActionOptions::OFFSET_KEY => "offset",
+            ActionOptions::MEMBER_KEY => "contacts",
+            ActionOptions::TOTAL_KEY => "count",
+        ));
+        //====================================================================//
+        //  Load Translation File
+        Splash::translator()->load('local');
     }
 }
