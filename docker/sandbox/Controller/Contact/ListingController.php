@@ -62,7 +62,7 @@ class ListingController extends AbstractController
                 'smsBlacklisted' => $contact->smsBlacklisted,
                 'createdAt' => $contact->createdAt->format('Y-m-d\TH:i:s.000P'),
                 'modifiedAt' => $contact->modifiedAt->format('Y-m-d\TH:i:s.000P'),
-                'listIds' => $contact->listIds,
+                'listIds' => $contact->getListIds(),
                 'attributes' => $contact->attributes,
             );
         }

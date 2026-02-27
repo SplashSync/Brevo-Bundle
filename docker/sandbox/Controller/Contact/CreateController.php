@@ -56,7 +56,7 @@ class CreateController extends AbstractController
         $contact->emailBlacklisted = $data['emailBlacklisted'] ?? false;
         $contact->smsBlacklisted = $data['smsBlacklisted'] ?? false;
         $contact->attributes = $data['attributes'] ?? array();
-        $contact->listIds = $data['listIds'] ?? array();
+        $contact->setListIds($data['listIds'] ?? array());
 
         $em->persist($contact);
         $em->flush();
