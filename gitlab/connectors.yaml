@@ -43,7 +43,7 @@ functional-brevo:
           optional: true
     services:
         - name: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-          alias: sandbox.open-api.local
+          alias: sandbox.brevo.local
     variables:
         SPLASH_SEQUENCE: "Brevo - Sandbox"
     ################################################################################
