@@ -52,7 +52,7 @@ class WebhooksUpdate extends AbstractController
         if (($connector instanceof BrevoConnector) && $connector->selfTest()) {
             //====================================================================//
             // Update WebHooks Config
-            $result = $connector->updateWebHooks();
+            $result = $connector->getLocator()->getWebHookManager()->update();
         }
         //====================================================================//
         // Inform User

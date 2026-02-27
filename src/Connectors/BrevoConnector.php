@@ -25,23 +25,17 @@ use Splash\Bundle\Models\Connectors\GenericObjectPrimaryMapperTrait;
 use Splash\Bundle\Models\Connectors\GenericWidgetMapperTrait;
 use Splash\Bundle\Models\Connectors\RoutesBuilderAwareTrait;
 use Splash\Bundle\Services\ConnectorRoutesBuilder;
-use Splash\Connectors\Brevo\Dictionary\BrevoEndpoints;
 use Splash\Connectors\Brevo\Models\BrevoApiHelper as API;
+use Splash\Connectors\Brevo\Models\Connector\BrevoApiTrait;
 use Splash\Connectors\Brevo\Models\Connector\BrevoProfileTrait;
 use Splash\Connectors\Brevo\Objects;
 use Splash\Connectors\Brevo\Services\BrevoLocator;
-use Splash\Connectors\Brevo\Services\Connexion\BrevoErrorParser;
 use Splash\Core\Client\Splash;
 use Splash\Core\Dictionary\SplDefinition;
-use Splash\OpenApi\Action\Json\PutAction;
-use Splash\OpenApi\Connexion\JsonConnexion;
 use Splash\OpenApi\Hydrators\SymfonyHydrator;
-use Splash\OpenApi\Interfaces\ConnexionInterface;
 use Splash\OpenApi\Models\Connector\RestAdapterAwareTrait;
-use Splash\OpenApi\Visitor\JsonVisitor;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Webmozart\Assert\Assert;
 
 /**
  * Brevo REST API Connector for Splash
@@ -55,6 +49,7 @@ class BrevoConnector extends AbstractConnector implements PrimaryKeysInterface
     use GenericWidgetMapperTrait;
     use RoutesBuilderAwareTrait;
     use BrevoProfileTrait;
+    use BrevoApiTrait;
 
     /**
      * Objects Type Class Map
@@ -63,7 +58,7 @@ class BrevoConnector extends AbstractConnector implements PrimaryKeysInterface
      */
     protected static array $objectsMap = array(
         "ThirdParty" => Objects\ThirdParty::class,
-        "WebHook" => Objects\WebHook::class,
+        "WebHook" => Objects\WebHookParser::class,
     );
 
     /**
@@ -74,11 +69,6 @@ class BrevoConnector extends AbstractConnector implements PrimaryKeysInterface
     protected static array $widgetsMap = array(
         "SelfTest" => "Splash\\Connectors\\Brevo\\Widgets\\SelfTest",
     );
-
-    /**
-     * @var array<string, ConnexionInterface>
-     */
-    private array $connexions = array();
 
     /**
      * Class Constructor
@@ -221,10 +211,10 @@ class BrevoConnector extends AbstractConnector implements PrimaryKeysInterface
         }
 
         //====================================================================//
-        // Extended Mode
+        // SandBox Mode
         //====================================================================//
-        if ($this->getParameter("Extended", false)) {
-            Objects\WebHook::setDisabled(false);
+        if (!$this->isSandbox()) {
+            Objects\WebHookParser::setDisabled();
         }
 
         //====================================================================//
@@ -244,91 +234,6 @@ class BrevoConnector extends AbstractConnector implements PrimaryKeysInterface
     }
 
     //====================================================================//
-    // Open API Connector Interfaces
-    //====================================================================//
-
-    /**
-     * Get Connector Api Connexion
-     */
-    public function getConnexion(): ConnexionInterface
-    {
-        $wsId = $this->getWebserviceId();
-        //====================================================================//
-        // Connexion already created
-        if (isset($this->connexions[$wsId])) {
-            return $this->connexions[$wsId];
-        }
-        //====================================================================//
-        // Safety check
-        Assert::true($this->selfTest(), "Self-test fails... Unable to create API Connexion!");
-        //====================================================================//
-        // Fetch Connector Configuration
-        $config = $this->getConfiguration();
-        //====================================================================//
-        // Setup Api Connexion
-        $connexion = new JsonConnexion(
-            BrevoEndpoints::getEndpoint($this->isSandbox()),
-            array(
-                'api-key' => $config["ApiKey"]
-            )
-        );
-        //====================================================================//
-        // Setup Rate Limiter
-        $connexion->setRateLimiter($this->getLocator()->getRateLimiter());
-        $connexion->setErrorParser(new BrevoErrorParser());
-
-
-        return $this->connexions[$wsId] = $connexion;
-    }
-
-    /**
-     * @return SymfonyHydrator
-     */
-    public function getHydrator(): SymfonyHydrator
-    {
-        return $this->hydrator;
-    }
-
-    /**
-     * Get Brevo Connector Services Locator
-     */
-    public function getLocator(): BrevoLocator
-    {
-        return $this->locator->configure($this);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getVisitor(string $model): JsonVisitor
-    {
-        $visitor = new JsonVisitor(
-            $this->getRestAdapter(),
-            $this->getConnexion(),
-            $this->getHydrator(),
-            $model,
-        );
-        //====================================================================//
-        // Configure Visitor
-        $visitor->setTimezone("UTC");
-        $visitor->setUpdateAction(PutAction::class);
-
-        return $visitor;
-    }
-
-    /**
-     * Check if we are in Sandbox Mode
-     */
-    public function isSandbox(): bool
-    {
-        return !empty($this->getParameter("isSandbox", false));
-    }
-
-    //====================================================================//
-    // Objects Interfaces
-    //====================================================================//
-
-    //====================================================================//
     // Files Interfaces
     //====================================================================//
 
@@ -345,108 +250,5 @@ class BrevoConnector extends AbstractConnector implements PrimaryKeysInterface
         Splash::log()->err("There are No Files Reading for Brevo Up To Now!");
 
         return null;
-    }
-
-    //====================================================================//
-    //  HIGH LEVEL WEBSERVICE CALLS
-    //====================================================================//
-
-    /**
-     * Check & Update SendInBlue Api Account WebHooks.
-     *
-     * @return bool
-     */
-    public function verifyWebHooks() : bool
-    {
-        //====================================================================//
-        // Connector SelfTest
-        if (!$this->selfTest()) {
-            return false;
-        }
-
-        //====================================================================//
-        // Generate WebHook Url
-        $webHookUrl = $this->routeBuilder->getMasterActionUrl($this);
-        //====================================================================//
-        // Create Object Class
-        $webHookManager = new Objects\WebHook($this);
-        $webHookManager->configure("webhook", $this->getWebserviceId(), $this->getConfiguration());
-        //====================================================================//
-        // Get List Of WebHooks for this List
-        $webHooks = $webHookManager->objectsList();
-        if (isset($webHooks["meta"])) {
-            unset($webHooks["meta"]);
-        }
-        //====================================================================//
-        // Filter & Clean List Of WebHooks
-        foreach ($webHooks as $webHook) {
-            //====================================================================//
-            // This is a Splash WebHooks
-            if (!$this->getRouteBuilder()->isSplashUrl($webHook['url'])) {
-                continue;
-            }
-            //====================================================================//
-            // This is Splash WebHook
-            if (trim($webHook['url']) == $webHookUrl) {
-                return true;
-            }
-        }
-
-        //====================================================================//
-        // Splash WebHooks was NOT Found
-        return false;
-    }
-
-    /**
-     * Check & Update SendInBlue Api Account WebHooks.
-     *
-     * @return bool
-     */
-    public function updateWebHooks() : bool
-    {
-        //====================================================================//
-        // Connector SelfTest
-        if (!$this->selfTest()) {
-            return false;
-        }
-        //====================================================================//
-        // Generate WebHook Url
-        $webHookUrl = $this->getRouteBuilder()->getMasterActionUrl($this);
-        //====================================================================//
-        // Create Object Class
-        $webHookManager = new Objects\WebHook($this);
-        $webHookManager->configure("webhook", $this->getWebserviceId(), $this->getConfiguration());
-        //====================================================================//
-        // Get List Of WebHooks for this List
-        $webHooks = $webHookManager->objectsList();
-        if (isset($webHooks["meta"])) {
-            unset($webHooks["meta"]);
-        }
-        //====================================================================//
-        // Filter & Clean List Of WebHooks
-        $foundWebHook = false;
-        foreach ($webHooks as $webHook) {
-            //====================================================================//
-            // This is Current Node WebHooks
-            if (trim($webHook['url']) == $webHookUrl) {
-                $foundWebHook = true;
-
-                continue;
-            }
-            //====================================================================//
-            // This is a Splash WebHooks
-            if ($this->getRouteBuilder()->isSplashUrl($webHook['url'])) {
-                $webHookManager->delete($webHook['id']);
-            }
-        }
-        //====================================================================//
-        // Splash WebHooks was Found
-        if ($foundWebHook) {
-            return true;
-        }
-
-        //====================================================================//
-        // Add Splash WebHooks
-        return (false !== $webHookManager->create($webHookUrl));
     }
 }
