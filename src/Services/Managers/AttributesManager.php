@@ -19,6 +19,7 @@ use Splash\Connectors\Brevo\Helpers\AttributesHelper;
 use Splash\Connectors\Brevo\Models\BrevoConnectorAwareTrait;
 use Splash\Core\Components\FieldsFactory;
 use stdClass;
+use Webmozart\Assert\Assert;
 
 /**
  * Manage Brevo Contacts Attributes
@@ -59,6 +60,7 @@ class AttributesManager
         // Parse Attributes to Connector Settings
         $attributesIndex = array();
         foreach ($response["attributes"] as $attrDetails) {
+            Assert::isArray($attrDetails);
             //====================================================================//
             // Add Attribute Index
             $attributesIndex[$attrDetails["name"]] = $attrDetails["type"] ?? "text";
@@ -161,5 +163,4 @@ class AttributesManager
             $factory->addChoice($value, $label);
         }
     }
-
 }

@@ -79,29 +79,18 @@ class BrevoErrorParser implements ErrorParserInterface
      */
     protected function extractRequestBody(Response $response): void
     {
-
-        dd($response);
-
         //====================================================================//
         // Safety Check
         if (!$response->request instanceof Request) {
             return;
         }
-
-dd($response->request);
-
         //====================================================================//
         // Try to decode request body as Json
         $decoded = json_decode($response->request->payload, true);
         //====================================================================//
-        // Unable to decode => Store Raw Response
-        if (!is_array($decoded) || !isset($decoded['message'])) {
-            Splash::log()->err(html_entity_decode($response->raw_body));
-
-            return;
+        // Payload was Decoded => Store Raw Request
+        if (is_array($decoded) && !empty($decoded)) {
+            Splash::log()->dump($decoded);
         }
-        //====================================================================//
-        // Store Decoded Error Response
-        Splash::log()->err($decoded['message']);
     }
 }

@@ -34,6 +34,7 @@ class BrevoLocator implements ServiceSubscriberInterface
         return array(
             Managers\ListsManager::class,
             Managers\AttributesManager::class,
+            Managers\WebHookManager::class,
             Connexion\BrevoRateLimiter::class,
         );
     }
@@ -63,6 +64,19 @@ class BrevoLocator implements ServiceSubscriberInterface
         Assert::isInstanceOf(
             $service = $this->locator->get(Managers\AttributesManager::class),
             Managers\AttributesManager::class
+        );
+
+        return $service->configure($this->connector);
+    }
+
+    /**
+     * Get Brevo WebHook Manager
+     */
+    public function getWebHookManager(): Managers\WebHookManager
+    {
+        Assert::isInstanceOf(
+            $service = $this->locator->get(Managers\WebHookManager::class),
+            Managers\WebHookManager::class
         );
 
         return $service->configure($this->connector);

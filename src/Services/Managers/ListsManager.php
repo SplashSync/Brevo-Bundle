@@ -16,6 +16,7 @@
 namespace Splash\Connectors\Brevo\Services\Managers;
 
 use Splash\Connectors\Brevo\Models\BrevoConnectorAwareTrait;
+use Webmozart\Assert\Assert;
 
 /**
  * Manage Brevo Contacts Lists
@@ -56,6 +57,7 @@ class ListsManager
         // Parse Lists to Connector Settings
         $listIndex = array();
         foreach ($response["lists"] as $listDetails) {
+            Assert::isArray($listDetails);
             //====================================================================//
             // Add List Index
             $listIndex[$listDetails["id"]] = $listDetails["name"];
@@ -91,7 +93,7 @@ class ListsManager
             return null;
         }
 
-        return (string) $index[$listId];
+        return is_scalar($index[$listId]) ? (string) $index[$listId] : null;
     }
 
     /**
@@ -122,6 +124,7 @@ class ListsManager
             return array();
         }
 
+        /** @var  string[] $index */
         return array_combine(array_values($index), array_values($index));
     }
 }
