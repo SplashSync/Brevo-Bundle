@@ -41,7 +41,7 @@ class Contact
     /**
      * Brevo Contact ID
      */
-    #[Serializer\Groups(SplGroups::ALL)]
+    #[Serializer\Groups(array(SplGroups::READ, SplGroups::LIST))]
     public int $id;
 
     /**
@@ -62,7 +62,7 @@ class Contact
      * Contact Custom Attributes (Dynamic Fields)
      */
     #[Serializer\Groups(SplGroups::DEFAULT)]
-    public array $attributes = array();
+    public array $attributes = array("default" => "");
 
     /**
      * Contact Mailing Lists IDs (Current / To Add))
@@ -92,5 +92,10 @@ class Contact
     public function getId(): string
     {
         return ContactIdHelper::encode($this->email);
+    }
+
+    public function getAttributes(): array
+    {
+        return !empty($this->attributes) ? $this->attributes : array("default" => "none");
     }
 }
