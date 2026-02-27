@@ -17,6 +17,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata as API;
 use App\Controller\WebHook\ListingController;
+use App\Controller\WebHook\UpdateController;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -40,7 +41,18 @@ use Doctrine\ORM\Mapping as ORM;
 )]
 #[API\ApiResource(
     uriTemplate: '/v3/webhooks/{id}',
-    operations: array(new API\Get(), new API\Put(), new API\Delete())
+    operations: array(
+        new API\Get(),
+        new API\Put(
+            status: 204,
+            controller: UpdateController::class,
+            output: false,
+            read: false,
+            deserialize: false,
+            write: false,
+        ),
+        new API\Delete(),
+    )
 )]
 class WebHook
 {
