@@ -29,5 +29,6 @@ class EditFormType extends AbstractBrevoType
     {
         $this->addApiKeyField($builder);
         $this->addApiListField($builder, $options);
+        $this->addDefaultCountryField($builder);
     }
 }

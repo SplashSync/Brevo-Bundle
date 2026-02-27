@@ -15,6 +15,7 @@
 
 namespace Splash\Connectors\Brevo\Form;
 
+use Splash\Connectors\Brevo\Dictionary\CountryCodes;
 use Splash\Connectors\Brevo\Services\Managers\ListsManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -71,6 +72,28 @@ abstract class AbstractBrevoType extends AbstractType
                 'translation_domain' => self::DOMAIN,
                 'choice_translation_domain' => false,
                 'choices' => array_flip($options["data"][ListsManager::LISTS_INDEX]),
+            ))
+        ;
+
+        return $this;
+    }
+
+    /**
+     * Add Default Country Selector Field to FormBuilder
+     */
+    public function addDefaultCountryField(FormBuilderInterface $builder): static
+    {
+        $builder
+            //==============================================================================
+            // Default Country Code for Phone Number Formatting
+            ->add(CountryCodes::CONFIG_KEY, ChoiceType::class, array(
+                'label' => "var.country.label",
+                'help' => "var.country.desc",
+                'required' => false,
+                'translation_domain' => self::DOMAIN,
+                'choice_translation_domain' => false,
+                'placeholder' => "",
+                'choices' => CountryCodes::getChoices(),
             ))
         ;
 

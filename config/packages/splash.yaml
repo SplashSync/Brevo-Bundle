@@ -20,6 +20,7 @@ splash:
                 Extended:       true
                 ApiKey:         '%env(resolve:BREVO_API_KEY)%'
                 ApiList:        '%env(resolve:BREVO_API_LIST)%'
+                ApiDfCountry:   'FR'
 
         ########################################################################
         # Brevo Sandbox (Fake API for testing)

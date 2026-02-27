@@ -16,6 +16,8 @@
 namespace Splash\Connectors\Brevo\Models\Connector;
 
 use Splash\Connectors\Brevo\Dictionary\BrevoEndpoints;
+use Splash\Connectors\Brevo\Dictionary\CountryCodes;
+use Splash\Connectors\Brevo\Helpers\PhoneNumberHelper;
 use Splash\Connectors\Brevo\Services\BrevoLocator;
 use Splash\Connectors\Brevo\Services\Connexion\BrevoErrorParser;
 use Splash\OpenApi\Action\Json\PutAction;
@@ -64,6 +66,12 @@ trait BrevoApiTrait
         // Setup Rate Limiter
         $connexion->setRateLimiter($this->getLocator()->getRateLimiter());
         $connexion->setErrorParser(new BrevoErrorParser());
+        //====================================================================//
+        // Configure Default Country for Phone Number Formatting
+        $defaultCountry = $config[CountryCodes::CONFIG_KEY] ?? null;
+        if (is_string($defaultCountry) && !empty($defaultCountry)) {
+            PhoneNumberHelper::setDefaultRegion($defaultCountry);
+        }
 
         return $this->connexions[$wsId] = $connexion;
     }

@@ -16,6 +16,7 @@
 namespace Splash\Connectors\Brevo\DataTransformers;
 
 use Splash\Connectors\Brevo\Helpers\AttributesHelper;
+use Splash\Connectors\Brevo\Helpers\PhoneNumberHelper;
 use stdClass;
 
 /**
@@ -52,6 +53,11 @@ class AttributeTransformer
         // Category Attributes => Resolve by Value or Label
         if ("category" == $type) {
             return self::resolveCategoryValue($attribute, (string) $value);
+        }
+        //====================================================================//
+        // Phone Attributes => Normalize to E.164 International Format
+        if (AttributesHelper::isPhone($attribute) && is_string($value)) {
+            return PhoneNumberHelper::toInternational($value);
         }
 
         //====================================================================//

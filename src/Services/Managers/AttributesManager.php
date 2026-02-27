@@ -156,7 +156,10 @@ class AttributesManager
         }
         //====================================================================//
         // Configure Field
-        $factory->group("Attributes");
+        $factory
+            ->group("Attributes")
+            ->setPreferWrite()
+        ;
         //====================================================================//
         // Add Attribute Values Choices
         foreach (AttributesHelper::getChoices($attr) as $value => $label) {

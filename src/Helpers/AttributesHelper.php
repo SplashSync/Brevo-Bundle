@@ -33,6 +33,14 @@ class AttributesHelper
     }
 
     /**
+     * Check if this Attribute is a Phone Number Field
+     */
+    public static function isPhone(stdClass $attribute): bool
+    {
+        return in_array(strtolower($attribute->name), array("sms", "phone", "mobile"), true);
+    }
+
+    /**
      * Check if this Attribute is Available for Sync
      */
     public static function isAvailable(stdClass $attribute): bool
@@ -47,7 +55,7 @@ class AttributesHelper
     {
         //====================================================================//
         // Special => PHONE
-        if (in_array(strtolower($attribute->name), array("sms", "phone", "mobile"), true)) {
+        if (self::isPhone($attribute)) {
             return SplFields::PHONE;
         }
         //====================================================================//

@@ -1,28 +1,32 @@
 
-## Node Variables 
+## Node Variables
 var:
     apikey:
-        label:  API Key V3
-        desc:   "API keys provide full access to your account, so keep them safe."
+        label:      "API Key V3"
+        desc:       "API keys provide full access to your account, so keep them safe."
 
     list:
-        label:  List
-        desc:   "Contact list you want to synchronize with Splash."
+        label:      "List"
+        desc:       "Contact list you want to synchronize with Splash."
+
+    country:
+        label:      "Default Country"
+        desc:       "Default country code for phone number formatting (ISO 3166-1)."
 
 ## Node Profile
 profile:
     connection:
-        title: API Connection
-    card:   
-        title:  Brevo API V3
-        label:  Connect your Brevo Account to Sync your Customer with your Subscriber Lists
+        title:      "API Connection"
+    card:
+        title:      "Brevo API V3"
+        label:      "Connect your Brevo Account to Sync your Customer with your Subscriber Lists"
 
 ## Node Api Actions
 admin:
-    selftest:   SendInBlue Connector Configuration
-    connect:    Connect to Brevo API V3
+    selftest:       "SendInBlue Connector Configuration"
+    connect:        "Connect to Brevo API V3"
     webhooks:
-        label:  Update of WebHooks
-        desc:   Detect & Update Splash Sync WebHooks Configuration
-        msg:    WebHook Configuration is Valid
-        err:    Update of WebHooks Configuration Required
+        label:      "Update of WebHooks"
+        desc:       "Detect & Update Splash Sync WebHooks Configuration"
+        msg:        "WebHook Configuration is Valid"
+        err:        "Update of WebHooks Configuration Required"
