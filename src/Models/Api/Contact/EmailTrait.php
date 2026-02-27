@@ -31,7 +31,6 @@ trait EmailTrait
     #[SPL\Template(ThirdPartyFields::EMAIL)]
     #[SPL\IsPrimary]
     #[SPL\IsRequired]
-    #[SPL\IsNotTested]
     #[Serializer\Groups(SplGroups::ALL)]
     public string $email;
 

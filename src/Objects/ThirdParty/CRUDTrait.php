@@ -137,6 +137,7 @@ trait CRUDTrait
         if (empty($object)) {
             return Splash::log()->warTrace("Trying to Delete an Unknown Contact (".$objectId.").");
         }
+
         //====================================================================//
         // Delete Contact from Api
         return $this->visitor

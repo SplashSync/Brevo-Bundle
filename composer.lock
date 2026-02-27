@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "237a803e078048dfd94fc4daf374fe1b",
+    "content-hash": "5e011856595c107bdda3da45b50337e3",
     "packages": [
         {
             "name": "doctrine/deprecations",
@@ -642,12 +642,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SplashSync/Php-Bundle.git",
-                "reference": "0edfe46790203b7ca44bf07ad141f9d09d4c4e4e"
+                "reference": "2022a31d11e2006430a54dcb9447e3ecbd6d80fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SplashSync/Php-Bundle/zipball/0edfe46790203b7ca44bf07ad141f9d09d4c4e4e",
-                "reference": "0edfe46790203b7ca44bf07ad141f9d09d4c4e4e",
+                "url": "https://api.github.com/repos/SplashSync/Php-Bundle/zipball/2022a31d11e2006430a54dcb9447e3ecbd6d80fb",
+                "reference": "2022a31d11e2006430a54dcb9447e3ecbd6d80fb",
                 "shasum": ""
             },
             "require": {
@@ -712,7 +712,7 @@
                 "issues": "https://github.com/SplashSync/Php-Bundle/issues",
                 "source": "https://github.com/SplashSync/Php-Bundle/tree/3.0"
             },
-            "time": "2026-02-26T12:21:30+00:00"
+            "time": "2026-02-27T17:05:41+00:00"
         },
         {
             "name": "splash/phpcore",
@@ -10599,12 +10599,12 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/SplashTools/Toolkit.git",
-                "reference": "55dc4e4f315895f0c16eca9b43fba2ed250c57ba"
+                "reference": "55672cb192d499d7804053facb606c1cf6a882fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/SplashTools%2FToolkit/repository/archive.zip?sha=55dc4e4f315895f0c16eca9b43fba2ed250c57ba",
-                "reference": "55dc4e4f315895f0c16eca9b43fba2ed250c57ba",
+                "url": "https://gitlab.com/api/v4/projects/SplashTools%2FToolkit/repository/archive.zip?sha=55672cb192d499d7804053facb606c1cf6a882fe",
+                "reference": "55672cb192d499d7804053facb606c1cf6a882fe",
                 "shasum": ""
             },
             "require": {
@@ -10613,6 +10613,7 @@
                 "ext-iconv": "*",
                 "ext-soap": "*",
                 "ext-xml": "*",
+                "giggsey/libphonenumber-for-php-lite": "^9.0",
                 "nyholm/psr7": "^1.8",
                 "php": "^8.1",
                 "sonata-project/user-bundle": ">=4.0",
@@ -10658,15 +10659,21 @@
             "support": {
                 "source": "https://gitlab.com/SplashTools/Toolkit/-/tree/3.0"
             },
-            "time": "2026-02-13T19:41:23+00:00"
+            "time": "2026-02-27T17:55:13+00:00"
         },
         {
             "name": "splash/validator",
             "version": "1.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.com/SplashTools/Validator.git",
+                "reference": "e4176265be280b3c55c4d481542b8aa415573cd5"
+            },
             "dist": {
-                "type": "path",
-                "url": "/mnt/data/WebDesign/GitLab/Splash/Php-Validator",
-                "reference": "dbdee428dad86469f86836d104f121bb1dcc8e68"
+                "type": "zip",
+                "url": "https://gitlab.com/api/v4/projects/SplashTools%2FValidator/repository/archive.zip?sha=e4176265be280b3c55c4d481542b8aa415573cd5",
+                "reference": "e4176265be280b3c55c4d481542b8aa415573cd5",
+                "shasum": ""
             },
             "require": {
                 "php": "^7.4|^8.0",
@@ -10678,21 +10685,18 @@
                 "badpixxel/php-sdk": "^2.0|^3.0",
                 "ext-apcu": "*"
             },
+            "default-branch": true,
             "type": "package",
             "autoload": {
+                "files": [
+                    "phpunit/bootstrap.php"
+                ],
                 "psr-4": {
                     "Splash\\Tests\\": "phpunit/",
                     "Splash\\Validator\\": "src/"
-                },
-                "files": [
-                    "phpunit/bootstrap.php"
-                ]
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Splash\\Validator\\Tests\\": "tests/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -10707,9 +10711,11 @@
                 }
             ],
             "description": "Splash Modules & Connectors Validation Component",
-            "transport-options": {
-                "relative": false
-            }
+            "support": {
+                "issues": "https://gitlab.com/SplashTools/Validator/-/issues",
+                "source": "https://gitlab.com/SplashTools/Validator/-/tree/1.0"
+            },
+            "time": "2026-02-27T19:00:34+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -17112,9 +17118,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "splash/validator": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
