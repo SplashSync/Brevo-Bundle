@@ -21,6 +21,7 @@ use Splash\Bundle\Phpunit\ConnectorTestCase;
 use Splash\Connectors\Brevo\Connectors\BrevoConnector;
 use Splash\Connectors\Brevo\Helpers\ContactIdHelper;
 use Splash\Core\Dictionary\SplOperations;
+use Splash\Validator\Assertions\Objects\CommitValidator;
 
 /**
  * Test of Brevo Connector WebHook Controller
@@ -129,7 +130,7 @@ class S01WebHookTest extends ConnectorTestCase
         );
         //====================================================================//
         // Verify Response
-        ConnectorValidator::assertIsLastCommitted($action, $objectType, $objectId);
+        CommitValidator::assertIsLastCommitted($action, $objectType, $objectId);
 
         //====================================================================//
         // JSON MODE
@@ -140,7 +141,7 @@ class S01WebHookTest extends ConnectorTestCase
         );
         //====================================================================//
         // Verify Response
-        ConnectorValidator::assertIsLastCommitted($action, $objectType, $objectId);
+        CommitValidator::assertIsLastCommitted($action, $objectType, $objectId);
     }
 
     /**
