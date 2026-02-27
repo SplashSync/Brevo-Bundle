@@ -66,7 +66,7 @@ class SelfTest extends AbstractStandaloneWidget
     /**
      * {@inheritdoc}
      *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(UnusedFormalParameter)
      */
     public function get(array $parameters = array()): array
     {
