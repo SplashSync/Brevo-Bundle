@@ -85,7 +85,7 @@ trait BrevoApiTrait
     }
 
     /**
-     * {@inheritDoc}
+     * @param class-string $model
      */
     public function getVisitor(string $model): JsonVisitor
     {
