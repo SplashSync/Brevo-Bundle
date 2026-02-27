@@ -1,6 +1,6 @@
 parameters:
     # Adds a fallback configuration if the env var is not set.
-     env(BREVO_API_KEY):     'ThisIsSecretApiKey'
+    env(BREVO_API_KEY):     'ThisIsSecretApiKey'
     env(BREVO_API_LIST):    'ThisIsSecretApiList'
 
 splash:

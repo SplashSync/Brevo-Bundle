@@ -17,7 +17,7 @@ namespace Splash\Connectors\Brevo\Actions;
 
 use Psr\Log\LoggerInterface;
 use Splash\Bundle\Models\AbstractConnector;
-use Splash\Connectors\Brevo\Objects\ThirdParty;
+use Splash\Connectors\Brevo\Helpers\ContactIdHelper;
 use Splash\Core\Dictionary\SplOperations;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -103,7 +103,7 @@ class Master extends AbstractController
         // Commit Multiple Changes to Splash
         if (is_array($eventData['email'])) {
             foreach ($eventData['email'] as $eventEmail) {
-                $email = ThirdParty::encodeContactId($eventEmail);
+                $email = ContactIdHelper::encode($eventEmail);
                 $connector->commit('ThirdParty', $email, SplOperations::UPDATE, self::USER, self::COMMENT);
             }
 
@@ -111,7 +111,7 @@ class Master extends AbstractController
         }
         //==============================================================================
         // Commit Single Changes to Splash
-        $email = ThirdParty::encodeContactId($eventData['email']);
+        $email = ContactIdHelper::encode($eventData['email']);
         $connector->commit('ThirdParty', $email, SplOperations::UPDATE, self::USER, self::COMMENT);
     }
 

@@ -25,13 +25,23 @@ use Splash\Bundle\Models\Connectors\GenericObjectPrimaryMapperTrait;
 use Splash\Bundle\Models\Connectors\GenericWidgetMapperTrait;
 use Splash\Bundle\Models\Connectors\RoutesBuilderAwareTrait;
 use Splash\Bundle\Services\ConnectorRoutesBuilder;
+use Splash\Connectors\Brevo\Dictionary\BrevoEndpoints;
 use Splash\Connectors\Brevo\Models\BrevoApiHelper as API;
 use Splash\Connectors\Brevo\Models\Connector\BrevoProfileTrait;
 use Splash\Connectors\Brevo\Objects;
+use Splash\Connectors\Brevo\Services\BrevoLocator;
+use Splash\Connectors\Brevo\Services\Connexion\BrevoErrorParser;
 use Splash\Core\Client\Splash;
 use Splash\Core\Dictionary\SplDefinition;
+use Splash\OpenApi\Action\Json\PutAction;
+use Splash\OpenApi\Connexion\JsonConnexion;
+use Splash\OpenApi\Hydrators\SymfonyHydrator;
+use Splash\OpenApi\Interfaces\ConnexionInterface;
+use Splash\OpenApi\Models\Connector\RestAdapterAwareTrait;
+use Splash\OpenApi\Visitor\JsonVisitor;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Webmozart\Assert\Assert;
 
 /**
  * Brevo REST API Connector for Splash
@@ -39,6 +49,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 #[AutoconfigureTag(ConnectorInterface::TAG)]
 class BrevoConnector extends AbstractConnector implements PrimaryKeysInterface
 {
+    use RestAdapterAwareTrait;
     use GenericObjectMapperTrait;
     use GenericObjectPrimaryMapperTrait;
     use GenericWidgetMapperTrait;
@@ -65,9 +76,16 @@ class BrevoConnector extends AbstractConnector implements PrimaryKeysInterface
     );
 
     /**
+     * @var array<string, ConnexionInterface>
+     */
+    private array $connexions = array();
+
+    /**
      * Class Constructor
      */
     public function __construct(
+        private readonly SymfonyHydrator   $hydrator,
+        private readonly BrevoLocator       $locator,
         EventDispatcherInterface $eventDispatcher,
         LoggerInterface $logger,
         ConnectorRoutesBuilder $routesBuilder,
@@ -86,10 +104,17 @@ class BrevoConnector extends AbstractConnector implements PrimaryKeysInterface
         if (!$this->selfTest()) {
             return false;
         }
-
         //====================================================================//
         // Perform Ping Test
-        return API::ping();
+        $this->getConnexion()->get("/account");
+        //====================================================================//
+        // Check Response
+        $response = $this->getConnexion()->getLastResponse();
+        if ($response && ($response->code >= 200) && ($response->code < 500)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -103,18 +128,22 @@ class BrevoConnector extends AbstractConnector implements PrimaryKeysInterface
             return false;
         }
         //====================================================================//
-        // Perform Connect Test
-        if (!API::connect()) {
+        // Perform Ping Test
+        $this->getConnexion()->get("/account");
+        //====================================================================//
+        // Check Response
+        $response = $this->getConnexion()->getLastResponse();
+        if (!$response || (200 != $response->code)) {
             return false;
         }
         //====================================================================//
         // Get List of Available Lists
-        if (!$this->fetchMailingLists()) {
+        if (!$this->getLocator()->getListsManager()->fetchMailingLists()) {
             return false;
         }
         //====================================================================//
         // Get List of Available Members Properties
-        if (!$this->fetchAttributesLists()) {
+        if (!$this->getLocator()->getAttributesManager()->fetchContactAttributes()) {
             return false;
         }
 
@@ -215,6 +244,87 @@ class BrevoConnector extends AbstractConnector implements PrimaryKeysInterface
     }
 
     //====================================================================//
+    // Open API Connector Interfaces
+    //====================================================================//
+
+    /**
+     * Get Connector Api Connexion
+     */
+    public function getConnexion(): ConnexionInterface
+    {
+        $wsId = $this->getWebserviceId();
+        //====================================================================//
+        // Connexion already created
+        if (isset($this->connexions[$wsId])) {
+            return $this->connexions[$wsId];
+        }
+        //====================================================================//
+        // Safety check
+        Assert::true($this->selfTest(), "Self-test fails... Unable to create API Connexion!");
+        //====================================================================//
+        // Fetch Connector Configuration
+        $config = $this->getConfiguration();
+        //====================================================================//
+        // Setup Api Connexion
+        $connexion = new JsonConnexion(
+            BrevoEndpoints::getEndpoint($this->isSandbox()),
+            array(
+                'api-key' => $config["ApiKey"]
+            )
+        );
+        //====================================================================//
+        // Setup Rate Limiter
+        $connexion->setRateLimiter($this->getLocator()->getRateLimiter());
+        $connexion->setErrorParser(new BrevoErrorParser());
+
+
+        return $this->connexions[$wsId] = $connexion;
+    }
+
+    /**
+     * @return SymfonyHydrator
+     */
+    public function getHydrator(): SymfonyHydrator
+    {
+        return $this->hydrator;
+    }
+
+    /**
+     * Get Brevo Connector Services Locator
+     */
+    public function getLocator(): BrevoLocator
+    {
+        return $this->locator->configure($this);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getVisitor(string $model): JsonVisitor
+    {
+        $visitor = new JsonVisitor(
+            $this->getRestAdapter(),
+            $this->getConnexion(),
+            $this->getHydrator(),
+            $model,
+        );
+        //====================================================================//
+        // Configure Visitor
+        $visitor->setTimezone("UTC");
+        $visitor->setUpdateAction(PutAction::class);
+
+        return $visitor;
+    }
+
+    /**
+     * Check if we are in Sandbox Mode
+     */
+    public function isSandbox(): bool
+    {
+        return !empty($this->getParameter("isSandbox", false));
+    }
+
+    //====================================================================//
     // Objects Interfaces
     //====================================================================//
 
@@ -232,11 +342,11 @@ class BrevoConnector extends AbstractConnector implements PrimaryKeysInterface
         if (!$this->selfTest()) {
             return null;
         }
-        Splash::log()->err("There are No Files Reading for Mailchime Up To Now!");
+        Splash::log()->err("There are No Files Reading for Brevo Up To Now!");
 
         return null;
     }
-    
+
     //====================================================================//
     //  HIGH LEVEL WEBSERVICE CALLS
     //====================================================================//
@@ -338,72 +448,5 @@ class BrevoConnector extends AbstractConnector implements PrimaryKeysInterface
         //====================================================================//
         // Add Splash WebHooks
         return (false !== $webHookManager->create($webHookUrl));
-    }
-
-    //====================================================================//
-    //  LOW LEVEL PRIVATE FUNCTIONS
-    //====================================================================//
-
-    /**
-     * Get SendInBlue User Lists
-     *
-     * @return bool
-     */
-    private function fetchMailingLists(): bool
-    {
-        //====================================================================//
-        // Get User Lists from Api
-        $response = API::get('contacts/lists');
-        if (is_null($response)) {
-            return false;
-        }
-        if (!isset($response->lists)) {
-            return false;
-        }
-        //====================================================================//
-        // Parse Lists to Connector Settings
-        $listIndex = array();
-        foreach ($response->lists as $listDetails) {
-            //====================================================================//
-            // Add List Index
-            $listIndex[$listDetails->id] = $listDetails->name;
-        }
-        //====================================================================//
-        // Store in Connector Settings
-        $this->setParameter("ApiListsIndex", $listIndex);
-        $this->setParameter("ApiListsDetails", $response->lists);
-        //====================================================================//
-        // Update Connector Settings
-        $this->updateConfiguration();
-
-        return true;
-    }
-
-    /**
-     * Get SendInBlue User Attributes Lists
-     *
-     * @return bool
-     */
-    private function fetchAttributesLists(): bool
-    {
-        //====================================================================//
-        // Get User Lists from Api
-        $response = API::get('contacts/attributes');
-        if (is_null($response)) {
-            return false;
-        }
-        // @codingStandardsIgnoreStart
-        if (!isset($response->attributes)) {
-            return false;
-        }
-        //====================================================================//
-        // Store in Connector Settings
-        $this->setParameter("ContactAttributes", $response->attributes);
-        // @codingStandardsIgnoreEnd
-        //====================================================================//
-        // Update Connector Settings
-        $this->updateConfiguration();
-
-        return true;
     }
 }
