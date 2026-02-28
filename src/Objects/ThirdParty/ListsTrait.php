@@ -29,7 +29,11 @@ trait ListsTrait
     protected function buildListFields(): void
     {
         $listManager = $this->connector->getLocator()->getListsManager();
-
+        //====================================================================//
+        // Refresh List of Available Contact Lists
+        $listManager->fetchMailingLists();
+        //====================================================================//
+        // Register Contact Lists Field
         $this->fieldsFactory()->create(SplFields::INLINE, "lists")
             ->name("Lists")
             ->description("List to which the contact belongs")

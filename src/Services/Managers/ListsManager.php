@@ -123,9 +123,6 @@ class ListsManager
     public function getChoices(): array
     {
         $index = $this->getConnector()->getParameter(self::LISTS_INDEX);
-
-        var_dump($index);
-
         if (!is_array($index)) {
             return array();
         }

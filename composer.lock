@@ -720,12 +720,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SplashSync/Php-Core.git",
-                "reference": "bb37af0a9db303d0879f50565c37428789bf5dbe"
+                "reference": "42c38c751d910bcab462ff06851af45b85267f4b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SplashSync/Php-Core/zipball/bb37af0a9db303d0879f50565c37428789bf5dbe",
-                "reference": "bb37af0a9db303d0879f50565c37428789bf5dbe",
+                "url": "https://api.github.com/repos/SplashSync/Php-Core/zipball/42c38c751d910bcab462ff06851af45b85267f4b",
+                "reference": "42c38c751d910bcab462ff06851af45b85267f4b",
                 "shasum": ""
             },
             "require": {
@@ -771,7 +771,7 @@
                 "issues": "https://github.com/SplashSync/Php-Core/issues",
                 "source": "https://github.com/SplashSync/Php-Core/tree/3.0"
             },
-            "time": "2026-02-27T18:16:06+00:00"
+            "time": "2026-02-27T19:13:50+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
