@@ -39,7 +39,7 @@
         <const  name="SPLASH_DEBUG" value="true" />
         <server name="SPLASH_CI" value="true" />
 
-        <env  name="SPLASH_TYPES" value="ThirdParty" />
+        <!-- <env  name="SPLASH_TYPES" value="ThirdParty" />-->
         <env  name="SPLASH_SEQUENCE" value="Brevo - Sandbox" />
     </php>
     
