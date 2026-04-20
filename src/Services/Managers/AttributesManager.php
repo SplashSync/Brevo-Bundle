@@ -18,7 +18,6 @@ namespace Splash\Connectors\Brevo\Services\Managers;
 use Splash\Connectors\Brevo\Helpers\AttributesHelper;
 use Splash\Connectors\Brevo\Models\BrevoConnectorAwareTrait;
 use Splash\Core\Components\FieldsFactory;
-use stdClass;
 use Webmozart\Assert\Assert;
 
 /**
@@ -45,8 +44,6 @@ class AttributesManager
 
     /**
      * Get Brevo User Contacts Attributes Lists
-     *
-     * @return bool
      */
     public function fetchContactAttributes(): bool
     {
@@ -70,7 +67,7 @@ class AttributesManager
         $this->getConnector()->setParameter(self::ATTRIBUTES_INDEX, $attributesIndex);
         $this->getConnector()->setParameter(
             self::ATTRIBUTES_DETAILS,
-            json_decode((string) json_encode($response["attributes"]))
+            json_decode((string) json_encode($response["attributes"]), true)
         );
         //====================================================================//
         // Update Connector Settings
@@ -81,8 +78,6 @@ class AttributesManager
 
     /**
      * Build Fields using FieldFactory
-     *
-     * @return void
      */
     public function buildAttributesFields(FieldsFactory $factory): void
     {
@@ -98,7 +93,7 @@ class AttributesManager
         foreach ($attributes as $attr) {
             //====================================================================//
             // Safety Check => Attributes List was Updated to New Format
-            if (!($attr instanceof stdClass) || !AttributesHelper::isAvailable($attr)) {
+            if (!is_array($attr) || !AttributesHelper::isAvailable($attr)) {
                 continue;
             }
             //====================================================================//
@@ -109,8 +104,10 @@ class AttributesManager
 
     /**
      * Find an Attribute by its Field Name
+     *
+     * @return null|array<array-key, mixed>
      */
-    public function findByFieldName(string $fieldName): ?stdClass
+    public function findByFieldName(string $fieldName): ?array
     {
         //====================================================================//
         // Load Attributes List
@@ -121,7 +118,11 @@ class AttributesManager
         //====================================================================//
         // Walk on Contacts Attributes
         foreach ($attributes as $attr) {
-            if (($attr instanceof stdClass) && strtolower($attr->name) == $fieldName) {
+            if (!is_array($attr)) {
+                continue;
+            }
+            $name = $attr["name"] ?? null;
+            if (is_string($name) && strtolower($name) == $fieldName) {
                 return $attr;
             }
         }
@@ -138,20 +139,21 @@ class AttributesManager
      *
      * @return void
      */
-    protected function buildAttributeField(FieldsFactory $factory, stdClass $attr): void
+    protected function buildAttributeField(FieldsFactory $factory, array $attr): void
     {
+        $name = (string) ($attr["name"] ?? "");
         if ($template = AttributesHelper::getTemplate($attr)) {
             //====================================================================//
             // Add Attribute to Field from Template
-            $factory->createFromTemplate(strtolower($attr->name), $template);
+            $factory->createFromTemplate(strtolower($name), $template);
         } else {
             //====================================================================//
             // Add Attribute to Fields
             $factory
                 ->create(AttributesHelper::toSplashType($attr))
-                ->identifier(strtolower($attr->name))
-                ->name($attr->name)
-                ->microData(self::ITEM_TYPE, strtolower($attr->name));
+                ->identifier(strtolower($name))
+                ->name($name)
+                ->microData(self::ITEM_TYPE, strtolower($name))
             ;
         }
         //====================================================================//
@@ -163,7 +165,7 @@ class AttributesManager
         //====================================================================//
         // Add Attribute Values Choices
         foreach (AttributesHelper::getChoices($attr) as $value => $label) {
-            $factory->addChoice($value, $label);
+            $factory->addChoice((string) $value, $label);
         }
     }
 }

@@ -53,9 +53,13 @@ trait AttributesTrait
         if (!$attr) {
             return;
         }
+        $attrName = $attr["name"] ?? null;
+        if (!is_string($attrName)) {
+            return;
+        }
         //====================================================================//
         // Read & Transform Attribute Value
-        $rawValue = $this->object->attributes[$attr->name] ?? null;
+        $rawValue = $this->object->attributes[$attrName] ?? null;
         $this->out[$fieldName] = AttributeTransformer::toSplash($attr, $rawValue);
         //====================================================================//
         // Clear Key Flag
@@ -78,9 +82,12 @@ trait AttributesTrait
         if (!$attr) {
             return;
         }
+        $attrName = $attr["name"] ?? null;
+        if (!is_string($attrName)) {
+            return;
+        }
         //====================================================================//
         // Transform Splash Value to Brevo Value
-        $attrName = $attr->name;
         $brevoValue = AttributeTransformer::toBrevo($attr, $fieldData);
         //====================================================================//
         // Compare & Update Attribute Value

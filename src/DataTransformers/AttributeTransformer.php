@@ -17,7 +17,6 @@ namespace Splash\Connectors\Brevo\DataTransformers;
 
 use Splash\Connectors\Brevo\Helpers\AttributesHelper;
 use Splash\Connectors\Brevo\Helpers\PhoneNumberHelper;
-use stdClass;
 
 /**
  * Transform Brevo Contact Attribute Values between Splash and Brevo Formats
@@ -29,7 +28,7 @@ class AttributeTransformer
      *
      * @param null|float|int|string $rawValue Raw value from Brevo API
      */
-    public static function toSplash(stdClass $attribute, null|string|float|int $rawValue): null|string|float|int
+    public static function toSplash(array $attribute, null|string|float|int $rawValue): null|string|float|int
     {
         if (null === $rawValue) {
             return null;
@@ -46,7 +45,7 @@ class AttributeTransformer
      *
      * @param null|float|int|string $value Splash field value
      */
-    public static function toBrevo(stdClass $attribute, null|bool|string|float|int $value): null|bool|string|float|int
+    public static function toBrevo(array $attribute, null|bool|string|float|int $value): null|bool|string|float|int
     {
         $type = AttributesHelper::getType($attribute);
         //====================================================================//
@@ -74,28 +73,34 @@ class AttributeTransformer
 
     /**
      * Resolve Category Attribute Value from Value or Label
+     *
+     * Value match takes priority over Label match.
      */
     private static function resolveCategoryValue(
-        stdClass $attribute,
+        array $attribute,
         null|string|float|int $value
     ): null|string|float|int {
-        //====================================================================//
-        // Find by Value
-        foreach ($attribute->enumeration ?? array() as $choice) {
-            if (!empty($choice->value) && ($choice->value == $value)) {
-                return $choice->value;
+        $labelMatch = null;
+        foreach ($attribute["enumeration"] ?? array() as $choice) {
+            if (!is_array($choice)) {
+                continue;
             }
-        }
-        //====================================================================//
-        // Find by Label
-        foreach ($attribute->enumeration ?? array() as $choice) {
-            if (!empty($choice->value) && !empty($choice->label) && ($choice->label == $value)) {
-                return $choice->value;
+            $choiceValue = $choice["value"] ?? null;
+            if (!is_string($choiceValue) && !is_int($choiceValue) && !is_float($choiceValue)) {
+                continue;
+            }
+            //====================================================================//
+            // Direct Match on Value => Return Immediately
+            if ($choiceValue == $value) {
+                return $choiceValue;
+            }
+            //====================================================================//
+            // Match on Label => Remember but Keep Scanning for a Value Match
+            if (!empty($choice["label"]) && ($choice["label"] == $value)) {
+                $labelMatch ??= $choiceValue;
             }
         }
 
-        //====================================================================//
-        // Fallback to Raw Value
-        return $value;
+        return $labelMatch ?? $value;
     }
 }

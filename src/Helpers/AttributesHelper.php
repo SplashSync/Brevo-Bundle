@@ -17,7 +17,6 @@ namespace Splash\Connectors\Brevo\Helpers;
 
 use Splash\Core\Dictionary\SplFields;
 use Splash\Templates\ThirdPartyFields;
-use stdClass;
 
 /**
  * Brevo Contact Attributes Helper
@@ -27,31 +26,31 @@ class AttributesHelper
     /**
      * Get Brevo Attribute Type
      */
-    public static function getType(stdClass $attribute): string
+    public static function getType(array $attribute): string
     {
-        return ("category" == $attribute->category) ? "category" : $attribute->type;
+        return ("category" == ($attribute["category"] ?? null)) ? "category" : (string) ($attribute["type"] ?? "text");
     }
 
     /**
      * Check if this Attribute is a Phone Number Field
      */
-    public static function isPhone(stdClass $attribute): bool
+    public static function isPhone(array $attribute): bool
     {
-        return in_array(strtolower($attribute->name), array("sms", "phone", "mobile"), true);
+        return in_array(strtolower((string) ($attribute["name"] ?? "")), array("sms", "phone", "mobile"), true);
     }
 
     /**
      * Check if this Attribute is Available for Sync
      */
-    public static function isAvailable(stdClass $attribute): bool
+    public static function isAvailable(array $attribute): bool
     {
-        return in_array($attribute->category, array("normal", "category"), true);
+        return in_array($attribute["category"] ?? null, array("normal", "category"), true);
     }
 
     /**
      * Get Splash Attribute Type Name
      */
-    public static function toSplashType(stdClass $attribute): string
+    public static function toSplashType(array $attribute): string
     {
         //====================================================================//
         // Special => PHONE
@@ -74,9 +73,9 @@ class AttributesHelper
     /**
      * Get Attribute Choices for Category Attributes
      *
-     * @return array<string, string>
+     * @return array<int|string, string>
      */
-    public static function getChoices(stdClass $attribute): array
+    public static function getChoices(array $attribute): array
     {
         //====================================================================//
         // Only Category Attributes have Choices
@@ -86,10 +85,16 @@ class AttributesHelper
         //====================================================================//
         // Build Choices Array
         $choices = array();
-        foreach ($attribute->enumeration ?? array() as $choice) {
-            if (!empty($choice->value) && !empty($choice->label)) {
-                $choices[$choice->value] = sprintf("[%s] %s", $choice->value, $choice->label);
+        foreach ($attribute["enumeration"] ?? array() as $choice) {
+            if (!is_array($choice)) {
+                continue;
             }
+            $value = $choice["value"] ?? null;
+            $label = $choice["label"] ?? null;
+            if (empty($value) || empty($label) || !is_scalar($value) || !is_scalar($label)) {
+                continue;
+            }
+            $choices[(string) $value] = sprintf("[%s] %s", $value, $label);
         }
 
         return $choices;
@@ -100,9 +105,9 @@ class AttributesHelper
      *
      * @return null|class-string
      */
-    public static function getTemplate(stdClass $attribute): ?string
+    public static function getTemplate(array $attribute): ?string
     {
-        return match (strtolower($attribute->name)) {
+        return match (strtolower((string) ($attribute["name"] ?? ""))) {
             "nom" => ThirdPartyFields::FIRSTNAME,
             "prenom" => ThirdPartyFields::LASTNAME,
             "sms", "phone", "mobile" => ThirdPartyFields::MOBILE,
