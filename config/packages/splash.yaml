@@ -14,7 +14,7 @@ splash:
         sandbox:
             id:                 ThisIsBrevoSandboxWsId
             key:                ThisIsNotASecretKeyForBrevoSandbox
-            name:               Brevo - Sandbox
+            name:               "Brevo - Sandbox"
             connector:          sendinblue
             config:
                 Extended:       true
@@ -28,12 +28,27 @@ splash:
         brevo:
             id:                 ThisIsBrevoWsId
             key:                ThisIsNotASecretKeyForBrevo
-            name:               Brevo - Stagging
+            name:               "Brevo - Staging"
             connector:          sendinblue
             config:
                 Extended:       true
                 ApiKey:         '%env(resolve:BREVO_API_KEY)%'
                 ApiList:        '%env(resolve:BREVO_API_LIST)%'
                 ApiDfCountry:   'FR'
+
+        ########################################################################
+        # Brevo Bridge Sandbox (Fake API for testing)
+        bridge:
+            id:                 ThisIsBrevoBridgeWsId
+            key:                ThisIsNotASecretKeyForBrevoBridge
+            name:               "Brevo - Bridge"
+            connector:          "3.0@sendinblue"
+            config:
+                Extended:       true
+                isSandbox:      true
+                WsHost:         'http://172.112.0.101'
+                ApiKey:         'sandbox-api-key'
+                ApiList:        '1'
+
 
 

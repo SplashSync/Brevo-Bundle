@@ -7,6 +7,7 @@
 /var/
 /vendor/
 /public/
+/dist/
 /.gh-pages/
 /docs/yarn.lock
 /docs/assets/vendor/tiny-emitter/yarn.lock
@@ -15,3 +16,5 @@
 /.phpunit.result.cache
 /config/reference.php
 /assets/vendor/
+/bridges/*.phar
+/bridges/*.splx

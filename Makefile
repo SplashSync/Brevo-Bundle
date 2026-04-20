@@ -44,6 +44,11 @@ test: 	## Execute Functional Test in All Containers
 	$(MAKE) up
 	$(MAKE) all COMMAND="php vendor/bin/phpunit"
 
+
+.PHONY: bridge
+bridge: 	## Execute Functional Test
+	php vendor/bin/bridge-builder
+
 .PHONY: all
 all: # Execute a Command in All Containers
 	@$(foreach service,$(shell docker compose config --services), \

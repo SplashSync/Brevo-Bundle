@@ -40,9 +40,10 @@ services:
         volumes:
             # Specify Local Configuration File
             - './config/packages/splash.yaml:/app/config/packages/splash.yaml:ro'
+            # Push Bridge Connector
+            - './dist/:/app/bridges/:ro'
             # Uncomment to use Local Sources instead of Release
             - './src/:/app/connectors/Brevo/:ro'
-            - './src/:/app/vendor/splash/sendinblue/src/:ro'
         env_file:           .env.local
         hostname:           toolkit.brevo.local
         networks:
