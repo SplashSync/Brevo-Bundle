@@ -1,14 +1,21 @@
 
 /.env
+/.env.local
 /.php_cs.cache
 /.web-server-pid
 /tests/public/bundles/
 /var/
 /vendor/
 /public/
+/dist/
 /.gh-pages/
 /docs/yarn.lock
 /docs/assets/vendor/tiny-emitter/yarn.lock
 /.idea/
 /.php-cs-fixer.cache
 /.phpunit.result.cache
+/config/reference.php
+/assets/vendor/
+
+/bridges/*.phar
+/bridges/*.splx
