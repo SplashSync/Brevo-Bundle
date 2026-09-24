@@ -1,0 +1,744 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Brevo",
+        "description": "Splash Integration for Brevo's Api V3.0",
+        "version": "master",
+        "x-splash-server": {
+            "shortdesc": "Brevo",
+            "longdesc": "Splash Integration for Brevo's Api V3.0",
+            "logourl": null,
+            "scopes": [],
+            "servertype": "Brevo REST Api V3",
+            "serverurl": "http://sandbox.brevo.local/v3",
+            "moduleauthor": "Splash Official <www.splashsync.com>",
+            "moduleversion": "master"
+        }
+    },
+    "tags": [
+        {
+            "name": "Customer",
+            "description": "- **Type:** `ThirdParty`\n- **Icon:** `fa fa-user`\n\nBrevo Contact\n\n### Configuration\n\n| Action | Allowed | Push | Pull |\n|--------|:-------:|:----:|:----:|\n| Create | \u2705 | \u2705 | \u2705 |\n| Update | \u2705 | \u2705 | \u2705 |\n| Delete | \u2705 | \u2705 | \u2705 |\n\n<SchemaDefinition schemaRef=\"#/components/schemas/ThirdParty\" />"
+        },
+        {
+            "name": "WebHook",
+            "description": "- **Type:** `Webhook`\n- **Icon:** `fa fa-plug`\n\nBrevo WebHook\n\n### Configuration\n\n| Action | Allowed | Push | Pull |\n|--------|:-------:|:----:|:----:|\n| Create | \u2705 | \u2705 | \u2705 |\n| Update | \u2705 | \u2705 | \u2705 |\n| Delete | \u2705 | \u2705 | \u2705 |\n\n<SchemaDefinition schemaRef=\"#/components/schemas/WebHook\" />"
+        }
+    ],
+    "paths": {
+        "/thirdparty/list": {
+            "post": {
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "List Customer",
+                "operationId": "listThirdParty",
+                "description": "Read objects list \u2014 rows only carry fields flagged `In List`.\n\nThe server appends a `meta` entry to the result: `{ total, current }` counters.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "filters": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Text filter applied on searchable fields"
+                                    },
+                                    "params": {
+                                        "type": "object",
+                                        "properties": {
+                                            "max": {
+                                                "type": "integer",
+                                                "description": "Maximum number of results"
+                                            },
+                                            "offset": {
+                                                "type": "integer",
+                                                "description": "List start offset"
+                                            },
+                                            "sortfield": {
+                                                "type": "string",
+                                                "description": "Field id used to sort the list"
+                                            },
+                                            "sortorder": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "ASC",
+                                                    "DESC"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ThirdPartyListItem"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/thirdparty/get": {
+            "post": {
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "Read Customer",
+                "operationId": "getThirdParty",
+                "description": "Read object data \u2014 only requested fields are returned.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "description": "Object identifier"
+                                    },
+                                    "fields": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "description": "Ids of the fields to read"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ThirdParty"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/thirdparty/set": {
+            "post": {
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "Write Customer",
+                "operationId": "setThirdParty",
+                "description": "Create or update object data \u2014 read-only fields are not writable and hidden from this request.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "fields"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Object identifier \u2014 `null` to create a new object"
+                                    },
+                                    "fields": {
+                                        "$ref": "#/components/schemas/ThirdParty"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "description": "Identifier of the created or updated object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Write failure \u2014 the server answers `null`. Check `Splash::log()` messages for error details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "nullable": true,
+                                    "description": "Always `null` on write failure"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/thirdparty/delete": {
+            "post": {
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "Delete Customer",
+                "operationId": "deleteThirdParty",
+                "description": "Delete an object.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "description": "Object identifier"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "boolean",
+                                    "description": "True when the object was deleted"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/webhook/list": {
+            "post": {
+                "tags": [
+                    "WebHook"
+                ],
+                "summary": "List WebHook",
+                "operationId": "listWebHook",
+                "description": "Read objects list \u2014 rows only carry fields flagged `In List`.\n\nThe server appends a `meta` entry to the result: `{ total, current }` counters.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "filters": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Text filter applied on searchable fields"
+                                    },
+                                    "params": {
+                                        "type": "object",
+                                        "properties": {
+                                            "max": {
+                                                "type": "integer",
+                                                "description": "Maximum number of results"
+                                            },
+                                            "offset": {
+                                                "type": "integer",
+                                                "description": "List start offset"
+                                            },
+                                            "sortfield": {
+                                                "type": "string",
+                                                "description": "Field id used to sort the list"
+                                            },
+                                            "sortorder": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "ASC",
+                                                    "DESC"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/WebHookListItem"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/webhook/get": {
+            "post": {
+                "tags": [
+                    "WebHook"
+                ],
+                "summary": "Read WebHook",
+                "operationId": "getWebHook",
+                "description": "Read object data \u2014 only requested fields are returned.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "description": "Object identifier"
+                                    },
+                                    "fields": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "description": "Ids of the fields to read"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/WebHook"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/webhook/set": {
+            "post": {
+                "tags": [
+                    "WebHook"
+                ],
+                "summary": "Write WebHook",
+                "operationId": "setWebHook",
+                "description": "Create or update object data \u2014 read-only fields are not writable and hidden from this request.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "fields"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "nullable": true,
+                                        "description": "Object identifier \u2014 `null` to create a new object"
+                                    },
+                                    "fields": {
+                                        "$ref": "#/components/schemas/WebHook"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "description": "Identifier of the created or updated object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Write failure \u2014 the server answers `null`. Check `Splash::log()` messages for error details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "nullable": true,
+                                    "description": "Always `null` on write failure"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/webhook/delete": {
+            "post": {
+                "tags": [
+                    "WebHook"
+                ],
+                "summary": "Delete WebHook",
+                "operationId": "deleteWebHook",
+                "description": "Delete an object.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "description": "Object identifier"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task data payload",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "boolean",
+                                    "description": "True when the object was deleted"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "SplashPrice": {
+                "type": "object",
+                "title": "Splash Price",
+                "description": "Price structure with tax details and currency",
+                "properties": {
+                    "ht": {
+                        "type": "number",
+                        "description": "Tax excluded amount"
+                    },
+                    "ttc": {
+                        "type": "number",
+                        "description": "Tax included amount"
+                    },
+                    "tax": {
+                        "type": "number",
+                        "description": "Tax amount"
+                    },
+                    "vat": {
+                        "type": "number",
+                        "description": "VAT rate (percent)"
+                    },
+                    "base": {
+                        "type": "integer",
+                        "enum": [
+                            0,
+                            1
+                        ],
+                        "description": "Price base: 0 = tax excluded, 1 = tax included"
+                    },
+                    "code": {
+                        "type": "string",
+                        "description": "Currency ISO code"
+                    },
+                    "symbol": {
+                        "type": "string",
+                        "description": "Currency symbol"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Currency name"
+                    }
+                }
+            },
+            "SplashFile": {
+                "type": "object",
+                "title": "Splash File",
+                "description": "File structure with checksum for synchronization",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Human readable file name"
+                    },
+                    "filename": {
+                        "type": "string",
+                        "description": "File name with extension"
+                    },
+                    "path": {
+                        "type": "string",
+                        "description": "File path or identifier on server"
+                    },
+                    "url": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "Public url, if available"
+                    },
+                    "md5": {
+                        "type": "string",
+                        "description": "File contents checksum"
+                    },
+                    "size": {
+                        "type": "integer",
+                        "description": "File size in bytes"
+                    }
+                }
+            },
+            "SplashImage": {
+                "title": "Splash Image",
+                "description": "Image structure: a Splash File with dimensions",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/SplashFile"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "width": {
+                                "type": "integer",
+                                "description": "Image width in pixels"
+                            },
+                            "height": {
+                                "type": "integer",
+                                "description": "Image height in pixels"
+                            }
+                        }
+                    }
+                ]
+            },
+            "ThirdParty": {
+                "type": "object",
+                "title": "Customer",
+                "description": "Brevo Contact",
+                "x-splash-type": "ThirdParty",
+                "properties": {
+                    "emailBlacklisted": {
+                        "type": "boolean",
+                        "title": "Email Opt-Out",
+                        "description": "Email sending blocked for this contact\n\n- **Template:** `Splash\\Templates\\ThirdParty\\Marketing\\NoEmail::class`\n- **Microdata:** `http://schema.org/ContactPoint` \u2192 `emailOptOut`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "x-schema-org-itemtype": "http://schema.org/ContactPoint",
+                        "x-schema-org-itemprop": "emailOptOut",
+                        "x-technical-description": "Boolean flag indicating if the ThirdParty has opted out of email communications. Used by mailers (Brevo, Mailchimp, etc.) to block all email sending to a customer. When true, no marketing or transactional emails should be sent to this contact. Mapped to schema.org ContactPoint/emailOptOut (custom property)."
+                    },
+                    "smsBlacklisted": {
+                        "type": "boolean",
+                        "title": "SMS Opt-Out",
+                        "description": "SMS sending blocked for this contact\n\n- **Template:** `Splash\\Templates\\ThirdParty\\Marketing\\NoSms::class`\n- **Microdata:** `http://schema.org/ContactPoint` \u2192 `smsOptOut`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "x-schema-org-itemtype": "http://schema.org/ContactPoint",
+                        "x-schema-org-itemprop": "smsOptOut",
+                        "x-technical-description": "Boolean flag indicating if the ThirdParty has opted out of SMS communications. Used by mailers (Brevo, Mailchimp, etc.) to block all SMS sending to a customer. When true, no marketing or transactional SMS should be sent to this contact. Mapped to schema.org ContactPoint/smsOptOut (custom property)."
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Email Address",
+                        "description": "ThirdParty Email Address\n\n- **Template:** `Splash\\Templates\\ThirdParty\\Core\\Email::class`\n- **Microdata:** `http://schema.org/ContactPoint` \u2192 `email`\n- `\ud83d\udd11 Primary` `\ud83d\udd0e Indexed` `\ud83d\udccb In List`",
+                        "x-splash-type": "email",
+                        "x-schema-org-itemtype": "http://schema.org/ContactPoint",
+                        "x-schema-org-itemprop": "email",
+                        "x-technical-description": "ThirdParty primary email address. Splash type is 'email', validated as a valid email format. Mapped to schema.org ContactPoint/email. Indexed and listed by default, commonly used as a primary key for matching ThirdParties across systems. Also available via AddressFields for address contact email."
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "datetime",
+                        "title": "Date Created",
+                        "description": "Object creation date\n\n- **Template:** `Splash\\Templates\\Common\\Audit\\DateCreated::class`\n- **Microdata:** `http://schema.org/DataFeedItem` \u2192 `dateCreated`",
+                        "x-splash-type": "datetime",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
+                        "x-schema-org-itemprop": "dateCreated",
+                        "x-technical-description": "Creation datetime of the object on the remote application. Format: Splash datetime (Y-m-d H:i:s). This field is always read-only, the value is set once at object creation by the remote application. Used for audit trail purposes and to determine object age. This field is mapped to schema.org DataFeedItem/dateCreated. Available on all object types (ThirdParty, Address, Product, Order, Invoice). If the remote application does not track creation dates, this field should not be exposed.",
+                        "example": "2026-09-24 19:42:55"
+                    },
+                    "modifiedAt": {
+                        "type": "string",
+                        "format": "datetime",
+                        "title": "Date Modified",
+                        "description": "Last modification date\n\n- **Template:** `Splash\\Templates\\Common\\Audit\\DateModified::class`\n- **Microdata:** `http://schema.org/DataFeedItem` \u2192 `dateModified`",
+                        "x-splash-type": "datetime",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
+                        "x-schema-org-itemprop": "dateModified",
+                        "x-technical-description": "Last modification datetime of the object on the remote application. Format: Splash datetime (Y-m-d H:i:s). This field is always read-only, the value is managed by the remote application. This field is purely informational, it is NOT used for change detection. Splash only triggers synchronization when a commit notification is received from the remote application. This field is mapped to schema.org DataFeedItem/dateModified. Available on all object types (ThirdParty, Address, Product, Order, Invoice). If the remote application does not track modification dates, this field should not be exposed.",
+                        "example": "2026-09-24 19:42:55"
+                    },
+                    "lists": {
+                        "type": "string",
+                        "title": "Lists",
+                        "description": "List to which the contact belongs\n\n- **Prefer Read** \u2014 field should only be read & exported to other servers",
+                        "x-splash-type": "inline",
+                        "format": "inline"
+                    }
+                },
+                "required": [
+                    "email"
+                ]
+            },
+            "ThirdPartyListItem": {
+                "type": "object",
+                "title": "Customer (List Item)",
+                "description": "Fields returned by objects list requests \u2014 fields flagged `In List` only.",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "title": "Email Address"
+                    }
+                }
+            },
+            "WebHook": {
+                "type": "object",
+                "title": "WebHook",
+                "description": "Brevo WebHook",
+                "x-splash-type": "WebHook",
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "format": "url",
+                        "title": "Url",
+                        "description": "WebHook endpoint URL\n\n- `\ud83d\udccb In List`",
+                        "x-splash-type": "url"
+                    },
+                    "description": {
+                        "type": "string",
+                        "title": "Description",
+                        "description": "WebHook description\n\n- `\ud83d\udccb In List`",
+                        "x-splash-type": "varchar",
+                        "format": "varchar"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Type",
+                        "description": "WebHook type",
+                        "x-splash-type": "varchar",
+                        "format": "varchar",
+                        "enum": [
+                            "marketing",
+                            "transactional",
+                            "inbound"
+                        ]
+                    },
+                    "events": {
+                        "type": "string",
+                        "title": "Events",
+                        "description": "WebHook events",
+                        "x-splash-type": "inline",
+                        "format": "inline",
+                        "enum": [
+                            "sent",
+                            "request",
+                            "delivered",
+                            "hardBounce",
+                            "softBounce",
+                            "blocked",
+                            "spam",
+                            "invalid",
+                            "deferred",
+                            "click",
+                            "opened",
+                            "uniqueOpened",
+                            "unsubscribed",
+                            "listAddition",
+                            "inboundEmailProcessed",
+                            "contactUpdated",
+                            "contactDeleted"
+                        ]
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "datetime",
+                        "title": "Date Created",
+                        "description": "Object creation date\n\n- **Template:** `Splash\\Templates\\Common\\Audit\\DateCreated::class`\n- **Microdata:** `http://schema.org/DataFeedItem` \u2192 `dateCreated`",
+                        "x-splash-type": "datetime",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
+                        "x-schema-org-itemprop": "dateCreated",
+                        "x-technical-description": "Creation datetime of the object on the remote application. Format: Splash datetime (Y-m-d H:i:s). This field is always read-only, the value is set once at object creation by the remote application. Used for audit trail purposes and to determine object age. This field is mapped to schema.org DataFeedItem/dateCreated. Available on all object types (ThirdParty, Address, Product, Order, Invoice). If the remote application does not track creation dates, this field should not be exposed.",
+                        "example": "2026-09-24 19:42:55"
+                    },
+                    "modifiedAt": {
+                        "type": "string",
+                        "format": "datetime",
+                        "title": "Date Modified",
+                        "description": "Last modification date\n\n- **Template:** `Splash\\Templates\\Common\\Audit\\DateModified::class`\n- **Microdata:** `http://schema.org/DataFeedItem` \u2192 `dateModified`",
+                        "x-splash-type": "datetime",
+                        "readOnly": true,
+                        "x-schema-org-itemtype": "http://schema.org/DataFeedItem",
+                        "x-schema-org-itemprop": "dateModified",
+                        "x-technical-description": "Last modification datetime of the object on the remote application. Format: Splash datetime (Y-m-d H:i:s). This field is always read-only, the value is managed by the remote application. This field is purely informational, it is NOT used for change detection. Splash only triggers synchronization when a commit notification is received from the remote application. This field is mapped to schema.org DataFeedItem/dateModified. Available on all object types (ThirdParty, Address, Product, Order, Invoice). If the remote application does not track modification dates, this field should not be exposed.",
+                        "example": "2026-09-24 19:42:55"
+                    }
+                },
+                "required": [
+                    "url"
+                ]
+            },
+            "WebHookListItem": {
+                "type": "object",
+                "title": "WebHook (List Item)",
+                "description": "Fields returned by objects list requests \u2014 fields flagged `In List` only.",
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "format": "uri",
+                        "title": "Url"
+                    },
+                    "description": {
+                        "type": "string",
+                        "title": "Description"
+                    }
+                }
+            }
+        }
+    }
+}
