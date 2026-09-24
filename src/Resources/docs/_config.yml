@@ -20,7 +20,7 @@
 ################################################################################
 
 # Title of the Bundle / Module
-title: SendInBlue Connector
+title: Brevo Connector
 repository: SplashSync/Brevo-Bundle
 # Subtitle of the Site (Generally DOC)
 subtitle: DOC
